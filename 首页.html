@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" href="img/favicon.ico" type="img/x-ico" />
+		<link rel="stylesheet" href="css/index.css" />
+		<title>德召文首页</title>
+		<style>
+			.el-header,
+			.el-footer {
+				background-color: #B3C0D1;
+				color: #333;
+				text-align: center;
+				line-height: 60px;
+			}
+			
+			.el-aside {
+				background-color: #D3DCE6;
+				color: #333;
+				text-align: center;
+				line-height: 200px;
+			}
+			
+			.el-main {
+				background-color: #E9EEF3;
+				color: #333;
+				text-align: center;
+				line-height: 160px;
+			}
+
+			body>.el-container {
+				margin-bottom: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="hlsy">
+			<el-container>
+				<el-header>Header</el-header>
+				<el-container>
+					<el-aside>Aside</el-aside>
+					<el-main>Main</el-main>
+				</el-container>
+				<el-footer>Footer</el-footer>
+			</el-container>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+	<script>
+		var vm = new Vue({
+			data: {}
+		}).$mount("#hlsy");
+	</script>
+
+</html>
