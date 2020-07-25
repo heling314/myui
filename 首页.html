@@ -16,7 +16,7 @@
 				padding: 0px;
 			}
 			
-			.el-aside {		
+			.el-aside {
 				color: #333;
 			}
 			
@@ -40,7 +40,6 @@
 				background: #99a9bf;
 				min-height: 600px;
 			}
-			  
 		</style>
 	</head>
 
@@ -58,7 +57,7 @@
 						<el-menu-item index="4">客服</el-menu-item>
 						<el-menu-item index="5">数据</el-menu-item>
 						<el-menu-item index="6">人事</el-menu-item>
-						<el-menu-item index="7"  @click="zti"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
+						<el-menu-item index="7" @click="zti"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
 						<el-menu-item index="8"><span class="el-icon-s-tools"></span>操作</el-menu-item>
 						<el-menu-item>
 							<el-radio-group v-model="isCollapse">
@@ -68,8 +67,9 @@
 						</el-menu-item>
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
-								<span class="el-icon-s-custom"></span>
-								登录</i></span>
+								<span class="el-icon-s-custom"></span> {{staff.staffname}}
+							</i>
+							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item>个人信息</el-dropdown-item>
 								<el-dropdown-item>注销</el-dropdown-item>
@@ -82,13 +82,13 @@
 					<el-aside width="200px">
 						<el-row class="tac">
 							<el-col :span="24">
-								<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse"  style="height: 700px;"  :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
-									<el-submenu index="1"  >
-										<template slot="title" >
-											<i class="el-icon-location" ></i>
+								<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
+									<el-submenu index="1">
+										<template slot="title">
+											<i class="el-icon-location"></i>
 											<span slot="title">导航一</span>
-										</template >
-										<el-menu-item-group >
+										</template>
+										<el-menu-item-group>
 											<span slot="title">分组一</span>
 											<el-menu-item index="1-1">选项1</el-menu-item>
 											<el-menu-item index="1-2">选项2</el-menu-item>
@@ -138,13 +138,27 @@
 	<script>
 		var vm = new Vue({
 			data: {
-				backgroundcolor:'',
-				textcolor:'',
-				activetextcolor:'',
+				backgroundcolor: '',
+				textcolor: '',
+				activetextcolor: '',
 				activeIndex: '1',
 				activeIndex2: '1',
 				isCollapse: true,
-				zhuti : '主题颜色(白色)'
+				zhuti: '主题颜色(白色)',
+				staff: {}
+			},
+			mounted() {
+				let _this = this;
+				$.ajax(`http://localhost:9999/api/show/denglu2`, {
+					type: "post",
+					dataType: "json",
+					success(message) {
+						if(message != null) {
+							_this.staff = message;
+						}
+					}
+				});
+
 			},
 			methods: {
 				handleSelect(key, keyPath) {
@@ -157,15 +171,15 @@
 					console.log(key, keyPath);
 				},
 				//跟换主题方法
-				zti(){
+				zti() {
 					let _this = this;
-					if ( _this.zhuti == '主题颜色(白色)') {
+					if(_this.zhuti == '主题颜色(白色)') {
 						_this.zhuti = '主题颜色(黑色)';
 						_this.backgroundcolor = '#1a1e1a';
 						_this.textcolor = '#fff';
 						_this.activetextcolor = '#ffd04b';
 
-					}else if ( _this.zhuti == '主题颜色(黑色)') {
+					} else if(_this.zhuti == '主题颜色(黑色)') {
 						_this.zhuti = '主题颜色(白色)';
 						_this.backgroundcolor = '';
 						_this.textcolor = '';
@@ -174,10 +188,6 @@
 				}
 			}
 		}).$mount("#hlsy");
-		
-		
-		
-		
 	</script>
 
 </html>
