@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>组织机构</title>
+		<title>人事</title>
 		<link rel="stylesheet" href="../css/index.css" />
 	</head>
 	<body>
@@ -17,10 +17,10 @@
 									<span>员工资料</span>
 								</template>
 								<el-menu-item-group>
-									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>组织机构</el-menu-item>
-									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>岗位定义</el-menu-item>
-									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>离职登记</el-menu-item>
-									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>通讯名录</el-menu-item>
+									<el-menu-item index="1-2" @click="showView('组织机构.html')"><i class="el-icon-message"></i>组织机构</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('岗位定义.html')"><i class="el-icon-message"></i>岗位定义</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('离职登记.html')"><i class="el-icon-message"></i>离职登记</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('通讯名录.html')"><i class="el-icon-message"></i>通讯名录</el-menu-item>
 								</el-menu-item-group>
 							</el-submenu>
 							
@@ -30,9 +30,9 @@
 									<span>技工管理</span>
 								</template>
 								<el-menu-item-group>
-									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>技工星际</el-menu-item>
-									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>班组技工</el-menu-item>
-									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>外勤车辆</el-menu-item>
+									<el-menu-item index="1-2" @click="showView('技工星级.html')"><i class="el-icon-message"></i>技工星际</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('班组技工.html')"><i class="el-icon-message"></i>班组技工</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('外勤车辆.html')"><i class="el-icon-message"></i>外勤车辆</el-menu-item>
 								</el-menu-item-group>
 							</el-submenu>
 							
@@ -79,7 +79,11 @@
 	<script type="text/javascript" src="../js/index.js" ></script>
 	<script>
 		new Vue({
-			
+			methods:{
+				showView(url) {
+					$('#cnt').load(url);
+				}
+			}
 		}).$mount("#appw")
 	</script>
 </html>
