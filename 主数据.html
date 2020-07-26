@@ -11,7 +11,7 @@
 	</head>
 
 	<body>
-		<div id="hl">
+		<div id="sj">
 			<el-row class="tac">
 				<el-col :span="24">
 					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
@@ -21,23 +21,23 @@
 							<span slot="title">首页</span>
 						</el-menu-item>
 						
-						<el-menu-item index="2">
+						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">发动机品牌</span>
 						</el-menu-item>
-						<el-menu-item index="3">
+						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">车型档案</span>
 						</el-menu-item>
-						<el-menu-item index="4">
+						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">维修项目</span>
 						</el-menu-item>
-						<el-menu-item index="5">
+						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">商品资料</span>
 						</el-menu-item>
-						<el-menu-item index="6">
+						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">供货单位</span>
 						</el-menu-item>
@@ -64,15 +64,21 @@
 	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script>
-		var vm = new Vue({
+		var vmsj = new Vue({
 			data: {
 				backgroundcolor: '',
 				textcolor: '',
 				activetextcolor: '',
-				isCollapse: true
+				isCollapse: true,
+				qxkz: {}
 			},
 			mounted() {
-
+				let _this = this;
+				let id = vmsy.staff.staffid;
+				/*查询用户是否拥有此权限*/
+				$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + id + '', function(qxkz) {
+					_this.qxkz = qxkz;
+				});
 			},
 			methods: {
 				handleOpen(key, keyPath) {
@@ -80,14 +86,20 @@
 				},
 				handleClose(key, keyPath) {
 					console.log(key, keyPath);
-				},yanse(){
+				},
+				yansehei() {
 					let _this = this;
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
+				},yansebai(){
+					let _this = this;
+					_this.backgroundcolor = '';
+					_this.textcolor = '';
+					_this.activetextcolor = '';
 				}
 			}
-		}).$mount("#hl");
+		}).$mount("#sj");
 	</script>
 
 </html>

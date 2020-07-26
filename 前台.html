@@ -11,7 +11,7 @@
 	</head>
 
 	<body>
-		<div id="hl">
+		<div id="qt">
 			<el-row class="tac">
 				<el-col :span="24">
 					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
@@ -21,23 +21,17 @@
 							<span slot="title">首页</span>
 						</el-menu-item>
 						
-						<el-menu-item index="2">
+						<el-menu-item index="2" :disabled="qxkz.jszx == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">结算中心</span>
 						</el-menu-item>
-						<!--<el-submenu index="2">
+						<el-submenu index="3" :disabled="qxkz.hycx == 0 ? true : false">
 							<template slot="title">
 								<i class="el-icon-location"></i>
-								<span slot="title">结算中心</span>
+								<span slot="title">会员卡充值管理</span>
 							</template>
-							<el-menu-item index="1-1">维修接车</el-menu-item>
-							<el-menu-item index="1-2">竣工检验</el-menu-item>
-						
-						</el-submenu>-->
-						<el-menu-item index="3">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">会员卡充值管理</span>
-						</el-menu-item>
+							<el-menu-item index="1-1" :disabled="qxkz.jfzs == 0 ? true : false">积分赠送</el-menu-item>					
+						</el-submenu>
 					</el-menu>
 				</el-col>
 			</el-row>
@@ -49,15 +43,21 @@
 	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script>
-		var vm = new Vue({
+		var vmqt = new Vue({
 			data: {
 				backgroundcolor: '',
 				textcolor: '',
 				activetextcolor: '',
-				isCollapse: true
+				isCollapse: true,
+				qxkz: {}
 			},
 			mounted() {
-
+				let _this = this;
+				let id = vmsy.staff.staffid;
+				/*查询用户是否拥有此权限*/
+				$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + id + '', function(qxkz) {
+					_this.qxkz = qxkz;
+				});
 			},
 			methods: {
 				handleOpen(key, keyPath) {
@@ -65,14 +65,20 @@
 				},
 				handleClose(key, keyPath) {
 					console.log(key, keyPath);
-				},yanse(){
+				},
+				yansehei() {
 					let _this = this;
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
+				},yansebai(){
+					let _this = this;
+					_this.backgroundcolor = '';
+					_this.textcolor = '';
+					_this.activetextcolor = '';
 				}
 			}
-		}).$mount("#hl");
+		}).$mount("#qt");
 	</script>
 
 </html>

@@ -83,7 +83,7 @@
 						<el-row class="tac">
 							<el-col :span="24">
 								<!--:collapse="isCollapse"-->
-								<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"  style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
+								<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 									<!--首页显示营业报表,今日营业情况-->
 									<el-menu-item index="1">
 										<i class="el-icon-platform-eleme"></i>
@@ -120,7 +120,7 @@
 	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script>
-		var vm = new Vue({
+		var vmsy = new Vue({
 			data: {
 				backgroundcolor: '',
 				textcolor: '',
@@ -137,20 +137,25 @@
 			},
 			methods: {
 				handleSelect(key, keyPath) {
-					if(key==2){
+					let _this = this;
+					if(key == 2) {
 						$(".elaside").load("维修.html"); //ajax加载页面信息
-					}else if(key==1){
+						/*if(_this.zhuti == '主题颜色(白色)') {
+							vmwx.yansebai();
+						} else if(_this.zhuti == '主题颜色(黑色)') {
+							vmwx.yansehei();
+						}*/
+					} else if(key == 1) {
 						$(".elaside").load("公告.html"); //ajax加载页面信息
-					}else if(key==3){
+					} else if(key == 3) {
 						$(".elaside").load("前台.html"); //ajax加载页面信息
-					}else if(key==4){
+					} else if(key == 4) {
 						$(".elaside").load("客服.html"); //ajax加载页面信息
-					}
-					else if(key==5){
+					} else if(key == 5) {
 						$(".elaside").load("主数据.html"); //ajax加载页面信息
-					}else if(key==6){
+					} else if(key == 6) {
 						$(".elaside").load("人事.html"); //ajax加载页面信息
-					}else if(key==8){
+					} else if(key == 8) {
 						$(".elaside").load("操作.html"); //ajax加载页面信息
 					}
 				},
@@ -168,16 +173,21 @@
 						_this.backgroundcolor = '#1a1e1a';
 						_this.textcolor = '#fff';
 						_this.activetextcolor = '#ffd04b';
-
-
+					vmwx.yansehei();
+						vmqt.yansehei();
+						vmkf.yansehei();
+						vmsj.yansehei();
+						vmcz.yansehei();
 					} else if(_this.zhuti == '主题颜色(黑色)') {
 						_this.zhuti = '主题颜色(白色)';
 						_this.backgroundcolor = '';
 						_this.textcolor = '';
 						_this.activetextcolor = '';
-						hl.backgroundcolor='';
-						hl.textcolor='';
-						hl.activetextcolor='';
+					vmwx.yansebai();
+						vmqt.yansebai();
+						vmkf.yansebai();
+						vmsj.yansebai();
+						vmcz.yansebai();
 					}
 				},
 				user() {
@@ -200,16 +210,6 @@
 				}
 			}
 		}).$mount("#hlsy");
-		
-		
-		/*$(function(){
-			let url = "page1.html";
-			$(".tab-content").load(url); //ajax加载页面信息
-		});*/
-		/*$(".xuanze").click(function() {
-			let url = $(this).text();
-			
-		});*/
 	</script>
 
 </html>
