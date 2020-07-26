@@ -16,14 +16,14 @@
 				padding: 0px;
 			}
 			
-			.el-aside {
+			/*.el-aside {
 				color: #333;
 			}
 			
 			.el-main {
 				color: #333;
 				text-align: center;
-				line-height: 160px;
+		
 			}
 			
 			body>.el-container {
@@ -39,7 +39,7 @@
 			.grid-content {
 				background: #99a9bf;
 				min-height: 600px;
-			}
+			}*/
 		</style>
 	</head>
 
@@ -104,7 +104,7 @@
 					<el-main>
 						<el-row>
 							<el-col :span="22">
-								<div class="grid-content bg-purple-dark">
+								<div class="grid-content bg-purple-dark nerong">
 									内容
 								</div>
 							</el-col>
@@ -202,7 +202,7 @@
 								/*查询用户是否拥有此权限*/
 								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
 									_this.qxkz = qxkz;
-									alert(JSON.stringify(_this.qxkz));
+									
 								});
 							}
 						}
