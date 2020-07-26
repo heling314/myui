@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>组织机构</title>
+		<link rel="stylesheet" href="../css/index.css" />
+	</head>
+	<body>
+		<div id="appw">
+			<el-container style='height:95vh; border: 1px solid #eee'>
+				<el-container>
+					<el-aside width="200px">
+						<el-menu>
+							<el-submenu index="1">
+								<template slot="title">
+									<el-avatar size="small" src="../img/dezhaowen2.jpg"></el-avatar>
+									<span>员工资料</span>
+								</template>
+								<el-menu-item-group>
+									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>组织机构</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>岗位定义</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>离职登记</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>通讯名录</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+							
+							<el-submenu index="2">
+								<template slot="title">
+									<el-avatar size="small" src="../img/dezhaowen2.jpg"></el-avatar>
+									<span>技工管理</span>
+								</template>
+								<el-menu-item-group>
+									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>技工星际</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>班组技工</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>外勤车辆</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+							
+							<el-submenu index="3">
+								<template slot="title">
+									<el-avatar size="small" src="../img/dezhaowen2.jpg"></el-avatar>
+									<span>维修工具</span>
+								</template>
+								<el-menu-item-group>
+									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>维修工具入库</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>维修工具领用</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>工具入库统计</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>工具领用统计</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>工具库存统计</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>工具用品统计</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+							
+							<el-submenu index="4">
+								<template slot="title">
+									<el-avatar size="small" src="../img/dezhaowen2.jpg"></el-avatar>
+									<span>办公管理</span>
+								</template>
+								<el-menu-item-group>
+									<el-menu-item index="1-2" @click="showView('add.html')"><i class="el-icon-message"></i>办公用品入库</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>办公用品领用</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>用品入库统计</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>用品领用统计</el-menu-item>
+									<el-menu-item index="1-1" @click="showView('person.html')"><i class="el-icon-message"></i>用品库存统计</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+						</el-menu>
+					</el-aside>
+					<el-main>
+						<div id="cnt"></div>
+					</el-main>
+				</el-container>
+			</el-container>
+		</div>
+	</body>
+	<script type="text/javascript" src="../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js" ></script>
+	<script type="text/javascript" src="../js/vue.js" ></script>
+	<script type="text/javascript" src="../js/index.js" ></script>
+	<script>
+		new Vue({
+			
+		}).$mount("#appw")
+	</script>
+</html>
