@@ -6,6 +6,7 @@
 		<link rel="icon" href="img/favicon.ico" type="img/x-ico" />
 		<link rel="stylesheet" href="css/index.css" />
 		<title>德召文首页</title>
+<<<<<<< HEAD
 
 		
 		<style>
@@ -19,6 +20,8 @@
 			}
 		</style>
 
+=======
+>>>>>>> hl
 	</head>
 
 	<body>
@@ -37,12 +40,7 @@
 						<el-menu-item index="6" class="xuanze">人事</el-menu-item>
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
-						<!--<el-menu-item>
-							<el-radio-group v-model="isCollapse">
-								<el-radio-button :label="false">展开</el-radio-button>
-								<el-radio-button :label="true">收起</el-radio-button>
-							</el-radio-group>
-						</el-menu-item>-->
+					
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}}
@@ -123,11 +121,7 @@
 					let _this = this;
 					if(key == 2) {
 						$(".elaside").load("维修.html"); //ajax加载页面信息
-						/*if(_this.zhuti == '主题颜色(白色)') {
-							vmwx.yansebai();
-						} else if(_this.zhuti == '主题颜色(黑色)') {
-							vmwx.yansehei();
-						}*/
+
 					} else if(key == 1) {
 						$(".elaside").load("公告.html"); //ajax加载页面信息
 					} else if(key == 3) {
