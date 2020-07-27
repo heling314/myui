@@ -14,7 +14,7 @@
 				<el-col :span="7" style="background-color: #d6dfe7; height: 700px; padding: 10px;">
 					<el-col :span="24">
 						<div class="grid-content bg-purple">
-							<el-form :inline="true" :model="formInline" class="demo-form-inline">
+							<el-form :inline="true" :model="pageInfo.list" class="demo-form-inline">
 								<el-form-item label="审批人">
 									<el-input v-model="staffname" placeholder="审批人"></el-input>
 								</el-form-item>
@@ -357,7 +357,7 @@
 					qxid: 0,
 					staffid: 0,
 					postname: 0,
-					zzjg: 1,
+					zzjg: 0,
 					gwdy: 0,
 					lzdj: 0,
 					txml: 0,
@@ -375,7 +375,7 @@
 					hycx: 0,
 					jszx: 0,
 					wxjc: 0,
-					jgjy: '',
+					jgjy: 0,
 					bz1: '',
 					bz2: '',
 					bz3: ''
