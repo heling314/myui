@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+		<div id="appe">
+			<h1 style="background: silver;">组织机构</h1>
+			<el-container>
+				<el-aside width="200px">
+					<el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick"></el-tree>
+				</el-aside>
+				<el-main>
+					<el-row>
+						<el-button type="primary" disabled style="margin-left: 10px;">部门名称：</el-button>
+						<el-input v-model="sectionName" style="width: 200px;" placeholder="请输入部门名称"></el-input>
+						<el-button type="primary" disabled style="margin-left: 50px;">员工姓名：</el-button>
+						<el-input v-model="staffName" style="width: 200px;" placeholder="请输入员工姓名"></el-input>
+						<el-button type="primary" style="margin-left: 100px;">查询</el-button>
+						<el-button type="primary">增加部门</el-button>
+						<el-button type="primary">增加员工</el-button>
+					</el-row>
+					<!--
+            	作者：1994463099@qq.com
+            	时间：2020-07-27
+            	描述：//:data="pageInfo.list"
+            -->
+					<el-table :data="pageInfo.list" style="width:100%;margin-top: 50px;" border fixed>
+						<el-table-column prop="sectionname" label="机构"></el-table-column>
+						<el-table-column prop="staffid" label="部门编号"></el-table-column>
+						<el-table-column prop="staffname" label="部门名称"></el-table-column>
+						<el-table-column prop="tstore" label="编号"></el-table-column>
+						<el-table-column prop="school" label="姓名"></el-table-column>
+						<el-table-column prop="staff" label="性别"></el-table-column>
+						<el-table-column prop="xjdz" label="身体状况"></el-table-column>
+						<el-table-column prop="xjdz" label="身高"></el-table-column>
+						<el-table-column prop="xjdz" label="籍贯"></el-table-column>
+						<el-table-column prop="xjdz" label="民族"></el-table-column>
+						<el-table-column prop="xjdz" label="婚姻状况"></el-table-column>
+						<el-table-column prop="xjdz" label="学历"></el-table-column>
+						<el-table-column prop="xjdz" label="毕业学校"></el-table-column>
+						<el-table-column prop="xjdz" label="专业"></el-table-column>
+						<el-table-column prop="xjdz" label="专业资格"></el-table-column>
+						<el-table-column prop="xjdz" label="学位"></el-table-column>
+						<el-table-column prop="xjdz" label="编制"></el-table-column>
+						<el-table-column prop="xjdz" label="身份证号"></el-table-column>
+						<el-table-column prop="xjdz" label="户口地址"></el-table-column>
+						<el-table-column prop="xjdz" label="邮编"></el-table-column>
+						<el-table-column prop="xjdz" label="现住地址"></el-table-column>
+						<el-table-column prop="xjdz" label="联系电话"></el-table-column>
+						<el-table-column prop="xjdz" label="手机号码"></el-table-column>
+						<el-table-column prop="xjdz" label="Email"></el-table-column>
+						<el-table-column prop="xjdz" label="现在何处"></el-table-column>
+						<el-table-column prop="xjdz" label="试用日期"></el-table-column>
+						<el-table-column prop="xjdz" label="入职日期"></el-table-column>
+						<el-table-column prop="xjdz" label="出身日期"></el-table-column>
+						<el-table-column prop="xjdz" label="合同开始日期"></el-table-column>
+						<el-table-column prop="xjdz" label="合同结束日期"></el-table-column>
+						<el-table-column prop="xjdz" label="生日"></el-table-column>
+						<el-table-column prop="xjdz" label="年龄"></el-table-column>
+						<el-table-column label="操作">
+							<!--作用域插槽-->
+							<template slot-scope="temp">
+								<el-button circle @click="xiugai(temp.row.postid)"></el-button>
+								<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.postid)"></el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</el-main>
+			</el-container>
+		</div>
+	</body>
+	<script>
+		new Vue({
+			data: {
+				data: [{
+					label: '株洲酒廊山汽修',
+					children: [{
+							label: '人事部',
+						},
+						{
+							label: '财务部',
+						},
+						{
+							label: '销售部',
+						},
+						{
+							label: '总经办',
+						}
+					]
+				}],
+				defaultProps: {
+					children: 'children',
+					label: 'label'
+				},
+				pageInfo:{}
+			},
+			methods: {
+				handleNodeClick(data) {
+					console.log(data);
+				}
+			}
+		}).$mount("#appe")
+	</script>
+
+</html>
