@@ -6,7 +6,20 @@
 		<link rel="icon" href="img/favicon.ico" type="img/x-ico" />
 		<link rel="stylesheet" href="css/index.css" />
 		<title>德召文首页</title>
+<<<<<<< HEAD
 		
+=======
+		<style>
+			.el-header,
+			.el-footer {
+				background-color: #B3C0D1;
+				color: #333;
+				text-align: center;
+				line-height: 60px;
+				padding: 0px;
+			}
+		</style>
+>>>>>>> 56162aa34db0f0903667c7bd2f2a3d80298fdfdf
 	</head>
 
 	<body>
@@ -69,9 +82,15 @@
 					</el-aside>
 					<el-main>
 						<el-row>
+<<<<<<< HEAD
 							<el-col :span="20">
 								<div class="grid-content bg-purple-dark " id="nei">
 									
+=======
+							<el-col :span="22">
+								<div class="grid-content bg-purple-dark nerong">
+									内容
+>>>>>>> 56162aa34db0f0903667c7bd2f2a3d80298fdfdf
 								</div>
 							</el-col>
 						</el-row>
@@ -170,7 +189,7 @@
 //								alert(_this.staff.staffid);
 								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
 									_this.qxkz = qxkz;
-									alert(JSON.stringify(_this.qxkz));
+									
 								});
 							}
 						}
