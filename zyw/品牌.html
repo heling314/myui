@@ -4,11 +4,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" href="../css/index.css" />
+		<style>
+			#pp{
+			margin-left: 50px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div id="pp">
+		<div id="pp"><template>
 			<el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item label="品牌名称">
     <el-input v-model="formInline.ppname" placeholder="品牌名称"></el-input>
@@ -23,8 +27,8 @@
    <el-button type="success" @click="insert">新增</el-button>
   </el-form-item>
   </el-form>
-			<template>
-				<el-table :data="tableData.list" style="width: 50%">
+			
+				<el-table :data="tableData.list" style="width: 100%">
 					<el-table-column prop="clppid" label="品牌id" width="180">
 					</el-table-column>
 					<el-table-column prop="clppname" label="品牌名称" width="180">
@@ -33,15 +37,31 @@
 					</el-table-column>
 					<el-table-column label="操作">
 						<template slot-scope="temp">
-							<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row.clppid)"></el-button>
+							<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row)"></el-button>
 							<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.clppid)"></el-button>
 						</template>
 					</el-table-column>
 				</el-table>
+				
 				<div class="block">
 					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 					</el-pagination>
-					<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+						<el-dialog title="修改" :visible.sync="xgai" width="30%" :before-close="handleClose">
+						<el-form ref="form" :model="cl" label-width="100px">
+							<el-form-item label="品牌名称">
+								<el-input v-model="cl.clppname"></el-input>
+							</el-form-item>
+							<el-form-item label="品牌首字母">
+								<el-input v-model="cl.clppszm"></el-input>
+							</el-form-item>
+						</el-form>
+						<span slot="footer" class="dialog-footer">
+    <el-button @click="xiu">取 消</el-button>
+    <el-button type="primary"  @click="x">确 定</el-button>
+  </span>
+					</el-dialog>
+					
+					<el-dialog title="新增" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 						<el-form ref="form" :model="clpp" label-width="100px">
 							<el-form-item label="品牌名称">
 								<el-input v-model="clpp.clppname"></el-input>
@@ -65,10 +85,10 @@
 		</div>
 
 	</body>
-	<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+	<!--<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="../js/vue.js"></script>
 	<script type="text/javascript" src="../js/index.js"></script>
-	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>-->
 	<script>
 		new Vue({
 			el: "#pp",
@@ -76,11 +96,16 @@
 				return {
 					tableData: [],
 					dialogVisible: false,
+					xgai:false,
 					pagen:"",
 					clpp: {
 						clppname: "",
 						clppszm: ""
-					},formInline:{
+					},cl: {
+						clppname: "",
+						clppszm: ""
+					},
+					formInline:{
 						ppname:"",
 						szm:""
 					}
@@ -94,9 +119,31 @@
 					})
 				},onSubmit(){
 					this.cha(1);
+				},xiu(){
+					this.cha(1);
+					this.xgai = false;
 				},
 				insert() {
 					this.dialogVisible = true;
+				},xg(i){
+					this.cl=i;
+					this.xgai = true;
+				},x(){
+						let _this = this;
+					$.ajax('http://127.0.0.1:9999/api/zyw/upda', {
+						type: "post",
+						data: _this.cl,
+						success(message) {
+							if(message == 1) {
+								_this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								_this.xgai=false;
+								_this.cha(1);
+							}
+						}
+					});
 				},
 				ins() {
 					let _this = this;
@@ -110,6 +157,8 @@
 									type: 'success'
 								});
 								_this.dialogVisible=false;
+								_this.clpp.clppname="";
+									_this.clpp.clppszm="";
 								_this.cha(1);
 							}
 						}
@@ -129,6 +178,7 @@
         console.log(`当前页: ${val}`);
       },sc(i){
       	let _this=this;
+//    	alert(i)
       	$.getJSON("http://127.0.0.1:9999/api/zyw/sc?ppid=" + i, function(it) {
 						_this.$message({
 									message: '删除成功',

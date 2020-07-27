@@ -23,7 +23,7 @@
 						
 						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">发动机品牌</span>
+							<span slot="title" @click="pp">发动机品牌</span>
 						</el-menu-item>
 						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
@@ -81,6 +81,9 @@
 				});
 			},
 			methods: {
+				pp(){
+				$("#nei").load("zyw/品牌.html");	
+				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
 				},

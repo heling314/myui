@@ -6,47 +6,13 @@
 		<link rel="icon" href="img/favicon.ico" type="img/x-ico" />
 		<link rel="stylesheet" href="css/index.css" />
 		<title>德召文首页</title>
-		<style>
-			.el-header,
-			.el-footer {
-				background-color: #B3C0D1;
-				color: #333;
-				text-align: center;
-				line-height: 60px;
-				padding: 0px;
-			}
-			
-			.el-aside {
-				color: #333;
-			}
-			
-			.el-main {
-				color: #333;
-				text-align: center;
-				line-height: 160px;
-			}
-			
-			body>.el-container {
-				margin-bottom: 40px;
-			}
-			
-			.el-menu-vertical-demo:not(.el-menu--collapse) {
-				width: 199px;
-				min-height: 400px;
-			}
-			
-			.bg-purple-dark,
-			.grid-content {
-				background: #99a9bf;
-				min-height: 600px;
-			}
-		</style>
+		
 	</head>
 
 	<body>
 		<div id="hlsy" style=" box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
 			<el-container>
-				<el-header>
+				<el-header style="padding: 0px;">
 					<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 						<el-menu-item>
 							<img src="img/logo.gif" width="160px" height="40px" />
@@ -103,9 +69,9 @@
 					</el-aside>
 					<el-main>
 						<el-row>
-							<el-col :span="22">
-								<div class="grid-content bg-purple-dark">
-									内容
+							<el-col :span="20">
+								<div class="grid-content bg-purple-dark " id="nei">
+									
 								</div>
 							</el-col>
 						</el-row>
@@ -199,7 +165,9 @@
 						success(message) {
 							if(message != null) {
 								_this.staff = message;
+								
 								/*查询用户是否拥有此权限*/
+//								alert(_this.staff.staffid);
 								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
 									_this.qxkz = qxkz;
 									alert(JSON.stringify(_this.qxkz));

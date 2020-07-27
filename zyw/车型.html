@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../css/index.css" />
+	</head>
+	<body>
+		<div id="cx">
+						<el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item label="品牌名称">
+    <el-input v-model="formInline.ppname" placeholder="车型名称"></el-input>
+  </el-form-item>
+   <el-form-item>
+    <el-button type="success" @click="onSubmit">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+   <el-button type="success" @click="insert">新增</el-button>
+  </el-form-item>
+  </el-form>
+		<template>
+				<el-table :data="tableData.list" style="width: 100%">
+					<el-table-column prop="chexingid" label="车型ID" width="180">
+					</el-table-column>
+					<el-table-column prop="chexingname" label="车型名称" width="180">
+					</el-table-column>
+					<el-table-column prop="khclpp" label="车辆品牌名称" width="180">
+					</el-table-column>
+					<el-table-column prop="fdjpp" label="发动机品牌名称" width="180">
+					</el-table-column>
+					<el-table-column prop="chexingpice" label="参考价格" width="180">
+					</el-table-column>
+					<el-table-column prop="bz1" label="进口国产" width="180">
+					</el-table-column>
+			
+					<el-table-column label="操作">
+						<template slot-scope="temp">
+							<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row.clppid)"></el-button>
+							<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.clppid)"></el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[1,2,3]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+					</el-pagination>
+			</template>
+			
+		</div>
+	<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/index.js"></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>
+<script>
+	new Vue({ 
+	el:"#cx",
+	data:{
+		tableData:{},
+		formInline:{},
+		sizes:3,
+		pagen:1
+	},methods:{
+				cha(i,f) {
+					let _this = this;
+					$.getJSON("http://127.0.0.1:9999/api/zyw/chexing?pageNum=" + i+"&size="+f, function(it) {
+						_this.tableData = it;
+					})
+				},handleSizeChange(val) {
+					this.sizes=val;
+                console.log(`每页 ${val} 条`);
+                     this.cha(this.pagen,this.sizes);
+      },
+      handleCurrentChange(val) {
+      	this.pagen=val;
+      	this.cha(val,this.sizes);
+        console.log(`当前页: ${val}`);
+      }
+	},
+	mounted(){
+		this.cha(this.pagen,this.sizes);
+	}
+	})
+</script>
+	</body>
+</html>
