@@ -23,11 +23,11 @@
 						
 						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="pp">发动机品牌</span>
+							<span slot="title" @click="pp">车辆品牌</span>
 						</el-menu-item>
 						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">车型档案</span>
+							<span slot="title" @click="cheliang">车型档案</span>
 						</el-menu-item>
 						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
@@ -39,7 +39,7 @@
 						</el-menu-item>
 						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">供货单位</span>
+							<span slot="title" @click="gonghuo">供货单位</span>
 						</el-menu-item>
 						<!--<el-submenu index="2">
 							<template slot="title">
@@ -84,6 +84,12 @@
 				pp(){
 				$(".nerong").load("zyw/品牌.html");	
 				},
+				cheliang(){
+					$(".nerong").load("zyw/车型.html");	
+				},gonghuo(){
+					$(".nerong").load("zyw/供货单位.html");
+				}
+				,
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
 				},

@@ -11,5 +11,5 @@ jQuery.ajaxSetup({
 //全局异常处理
 jQuery(document).ajaxError(function(ex) {
 	console.log(ex);
-	alert("服务器正忙....");
+//	alert("服务器正忙....");
 });

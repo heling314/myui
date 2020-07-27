@@ -44,7 +44,7 @@
 				</el-table>
 				
 				<div class="block">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+					<el-pagination style="padding-left: 150px;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 					</el-pagination>
 						<el-dialog title="修改" :visible.sync="xgai" width="30%" :before-close="handleClose">
 						<el-form ref="form" :model="cl" label-width="100px">
