@@ -1,21 +1,147 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<link rel="stylesheet" href="../css/index.css" />
 	</head>
-	<div>
-		
-	</div>
-	<body>
 
+	<body>
+		<div id="pp">
+			<el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item label="品牌名称">
+    <el-input v-model="formInline.ppname" placeholder="品牌名称"></el-input>
+  </el-form-item>
+   <el-form-item label="首字母">
+    <el-input v-model="formInline.szm" placeholder="首字母"></el-input>
+  </el-form-item>
+   <el-form-item>
+    <el-button type="success" @click="onSubmit">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+   <el-button type="success" @click="insert">新增</el-button>
+  </el-form-item>
+  </el-form>
+			<template>
+				<el-table :data="tableData.list" style="width: 50%">
+					<el-table-column prop="clppid" label="品牌id" width="180">
+					</el-table-column>
+					<el-table-column prop="clppname" label="品牌名称" width="180">
+					</el-table-column>
+					<el-table-column prop="clppszm" label="品牌首字母" width="180">
+					</el-table-column>
+					<el-table-column label="操作">
+						<template slot-scope="temp">
+							<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row.clppid)"></el-button>
+							<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.clppid)"></el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="block">
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+					</el-pagination>
+					<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+						<el-form ref="form" :model="clpp" label-width="100px">
+							<el-form-item label="品牌名称">
+								<el-input v-model="clpp.clppname"></el-input>
+							</el-form-item>
+							<el-form-item label="品牌首字母">
+								<el-input v-model="clpp.clppszm"></el-input>
+							</el-form-item>
+						</el-form>
+						<span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary"  @click="ins">确 定</el-button>
+  </span>
+					</el-dialog>
+				</div>
+			</template>
+			<el-row style="margin-top: 20px;">
+
+				
+
+			</el-row>
+		</div>
 
 	</body>
-				<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
-	<script type="text/javascript" src="js/vue.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/index.js"></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>
 	<script>
-		
+		new Vue({
+			el: "#pp",
+			data() {
+				return {
+					tableData: [],
+					dialogVisible: false,
+					pagen:"",
+					clpp: {
+						clppname: "",
+						clppszm: ""
+					},formInline:{
+						ppname:"",
+						szm:""
+					}
+				}
+			},
+			methods: {
+				cha(i) {
+					let _this = this;
+					$.getJSON("http://127.0.0.1:9999/api/zyw/pp?pageNum=" + i+"&name="+_this.formInline.ppname+"&szm="+_this.formInline.szm, function(it) {
+						_this.tableData = it;
+					})
+				},onSubmit(){
+					this.cha(1);
+				},
+				insert() {
+					this.dialogVisible = true;
+				},
+				ins() {
+					let _this = this;
+					$.ajax('http://127.0.0.1:9999/api/zyw/ins', {
+						type: "post",
+						data: _this.clpp,
+						success(message) {
+							if(message == 1) {
+								_this.$message({
+									message: '新增成功',
+									type: 'success'
+								});
+								_this.dialogVisible=false;
+								_this.cha(1);
+							}
+						}
+					});
+				},  handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+     },handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+      	this.pagen=val;
+      	this.cha(val);
+        console.log(`当前页: ${val}`);
+      },sc(i){
+      	let _this=this;
+      	$.getJSON("http://127.0.0.1:9999/api/zyw/sc?ppid=" + i, function(it) {
+						_this.$message({
+									message: '删除成功',
+									type: 'success'
+							});
+								_this.cha(_this.pagen);
+					})
+      }
+			},
+			mounted() {
+				this.cha(1);
+			}
+		})
 	</script>
+
 </html>

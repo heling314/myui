@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>权限管理</title>
+
+	</head>
+
+	<body>
+		<div id="qxgl">
+
+			<el-row>
+				<el-col :span="7" style="background-color: #d6dfe7; height: 660px; padding: 10px;">
+					<el-col :span="24">
+						<div class="grid-content bg-purple">
+							<el-form :inline="true" :model="pageInfo.list" class="demo-form-inline">
+								<el-form-item label="审批人">
+									<el-input v-model="staffname" placeholder="审批人"></el-input>
+								</el-form-item>
+								<el-form-item>
+									<el-button type="primary" @click="onSubmit">查询</el-button>
+								</el-form-item>
+							</el-form>
+						</div>
+					</el-col>
+					<el-col :span="24">
+						<template>
+							<el-table :data="pageInfo.list" border style="width: 100%">
+								<el-table-column prop="staffname" label="用户名">
+								</el-table-column>
+								<el-table-column label="操作">
+									<template slot-scope="scope">
+										<el-button @click="handleClick(scope.row.staffid)" type="text" size="small">查看</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+					</el-col>
+					<el-col :span="24">
+						<div class="block" style="margin-top: 20px; text-align: center;">
+							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.pageNum" :page-sizes="[1, 2, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
+							</el-pagination>
+						</div>
+					</el-col>
+				</el-col>
+				<el-col :span="17" style="background-color: #efeff7; height: 660px; padding: 10px;">
+					<div class="grid-content bg-purple-light">
+						<el-form ref="form" :model="qxkz" label-width="80px">
+							<el-row>
+								<el-col :span="24">
+									<div class="grid-content bg-purple">
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>员工资料</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+
+																<el-checkbox v-model="qxkz.zzjg == 1? true:false" label="组织机构" @change="zzjg" border></el-checkbox>
+
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.gwdy == 1? true:false" label="岗位定义" @change="gwdy" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row style="margin: 10px 0px ">
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.lzdj==1? true:false" value="1" label="离职登录" @change="lzdj" border></el-checkbox>
+															</div>
+														</el-col>
+
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.txml==1? true:false" value="1" label="通讯名录" @change="txml" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+												</div>
+											</div>
+										</el-col>
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>技工管理</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.jgxj == 1? true:false" label="技工星级" @change="jgxj" border></el-checkbox>
+
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.bzjg == 1? true:false" label="班组技工" @change="bzjg" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row style="margin: 10px 0px ">
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.wqcl == 1? true:false" label="外勤车辆" @change="wqcl" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+												</div>
+											</div>
+										</el-col>
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>主数据</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.fdjpp == 1? true:false" label="发动机品牌" @change="fdjpp" border></el-checkbox>
+
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.cxda == 1? true:false" label="车型档案" @change="cxda" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row style="margin: 10px 0px ">
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.wxxmid == 1? true:false" label="维修项目" @change="wxxmid" border></el-checkbox>
+															</div>
+														</el-col>
+
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.sqzl == 1? true:false" label="商品资料" @change="sqzl" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row style="margin: 10px 0px ">
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.ghdwid == 1? true:false" label="供货单位" @change="ghdwid" border></el-checkbox>
+															</div>
+														</el-col>
+
+													</el-row>
+												</div>
+											</div>
+										</el-col>
+									</div>
+								</el-col>
+								<el-col :span="24">
+									<div class="grid-content bg-purple">
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>客户档案</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.khzl == 1? true:false" label="客户资料" @change="khzl" border></el-checkbox>
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.clzl == 1? true:false" label="客户车辆" @change="clzl" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+
+												</div>
+											</div>
+										</el-col>
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>会员管理</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.jfzs == 1? true:false" label="积分赠送" @change="jfzs" border></el-checkbox>
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.hycx == 1? true:false" label="会员查询" @change="hycx" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+
+												</div>
+											</div>
+										</el-col>
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>前台结算</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.jszx == 1? true:false" label="结算中心" @change="jszx" border></el-checkbox>
+															</div>
+														</el-col>
+
+													</el-row>
+
+												</div>
+											</div>
+										</el-col>
+									</div>
+								</el-col>
+								<el-col :span="24">
+									<div class="grid-content bg-purple">
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 300px;  margin: 20px 25px;">
+												<div style="text-align: center; padding: 10px;">
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<span>维修救援</span>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="24">
+															<div class="grid-content bg-purple-dark">
+																<el-divider></el-divider>
+															</div>
+														</el-col>
+													</el-row>
+													<el-row>
+														<el-col :span="12">
+															<div class="grid-content bg-purple">
+																<el-checkbox v-model="qxkz.wxjc == 1? true:false" label="救援接车" @change="wxjc" border></el-checkbox>
+
+															</div>
+														</el-col>
+														<el-col :span="12">
+															<div class="grid-content bg-purple-light">
+																<el-checkbox v-model="qxkz.jgjy == 1? true:false" label="竣工检验" @change="jgjy" border></el-checkbox>
+															</div>
+														</el-col>
+													</el-row>
+
+												</div>
+											</div>
+										</el-col>
+										<el-col :span="8">
+											<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; width: 650px; height: 150px;  margin: 20px  25px;">
+												<el-form-item>
+													<el-button type="primary" @click="genxinquanxian" style="width: 200px; height: 40px; margin-top:60px;">更新权限</el-button>
+													<el-button @click="quxiaogenxinquanxian(qxkz.staffid)" style="width: 200px; height: 40px;  margin-top:60px;">取消</el-button>
+												</el-form-item>
+											</div>
+										</el-col>
+									</div>
+								</el-col>
+							</el-row>
+					</div>
+				</el-col>
+			</el-row>
+
+		</div>
+	</body>
+	<!--	<script type="text/javascript" src="../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/index.js"></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>
+	-->
+	<script>
+		var vmqxgl = new Vue({
+			data: {
+				qxkz: {
+					qxid: 0,
+					staffid: 0,
+					postname: 0,
+					zzjg: 0,
+					gwdy: 0,
+					lzdj: 0,
+					txml: 0,
+					jgxj: 0,
+					bzjg: 0,
+					wqcl: 0,
+					fdjpp: 0,
+					cxda: 0,
+					wxxmid: 0,
+					sqzl: 0,
+					ghdwid: 0,
+					khzl: 0,
+					clzl: 0,
+					jfzs: 0,
+					hycx: 0,
+					jszx: 0,
+					wxjc: 0,
+					jgjy: 0,
+					bz1: '',
+					bz2: '',
+					bz3: ''
+				},
+				staffid: '',
+				staffname: '',
+				pageInfo: {
+
+				},
+				formInline: {
+					user: '',
+					region: ''
+				},
+				checka: 1,
+				checkb: 0
+			},
+			mounted() {
+				this.goToPage(1, 3);
+			},
+			methods: {
+				handleClick(row) {
+					let _this = this; //非常重要
+					$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + row + '', function(data) {
+						_this.qxkz = data;
+					});
+				},
+				goToPage(p, s) {
+					let _this = this; //非常重要
+					$.getJSON("http://127.0.0.1:9999/api/hl/query/", "pageNum=" + p + "&pageSize=" + s + "&staffname=" + _this.staffname + "", function(data) {
+						_this.pageInfo = data;
+					});
+				},
+				handleSizeChange(val) {
+					console.log(`每页 ${val} 条`);
+					this.pageInfo.pageSize = val;
+					this.goToPage(this.pageInfo.pageNum, val);
+				},
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.pageInfo.pageNum = val;
+					this.goToPage(val, this.pageInfo.pageSize);
+				},
+				quxiaogenxinquanxian(row) {
+					let _this = this; //非常重要
+
+					$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + row + '', function(data) {
+						_this.qxkz = data;
+						vmqxgl.$message({
+									message: '权限还原成功',
+									type: 'success'
+						});
+					});
+				},
+				onSubmit() {
+
+					this.goToPage(1, 3);
+				},
+				genxinquanxian() {
+					let _this = this; //非常重要
+					$.ajax('http://localhost:9999/api/hl/updateByPrimaryKeySelective', {
+						type: 'Put',
+						data: JSON.stringify(_this.qxkz),
+						dataType: 'json',
+						contentType: 'application/json',
+						success(msg) {
+							if(msg.code == "200") {
+
+								vmqxgl.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+							}
+						}
+					});
+				},
+				zzjg(value) {
+					if(value) {
+						this.qxkz.zzjg = this.checka;
+					} else {
+
+						this.qxkz.zzjg = this.checkb;
+					}
+
+				},
+				gwdy(value) {
+					if(value) {
+						this.qxkz.gwdy = this.checka;
+					} else {
+
+						this.qxkz.gwdy = this.checkb;
+					}
+
+				},
+				lzdj(value) {
+					if(value) {
+						this.qxkz.lzdj = this.checka;
+					} else {
+
+						this.qxkz.lzdj = this.checkb;
+					}
+
+				},
+				txml(value) {
+					if(value) {
+						this.qxkz.txml = this.checka;
+					} else {
+
+						this.qxkz.txml = this.checkb;
+					}
+
+				},
+				jgxj(value) {
+					if(value) {
+						this.qxkz.jgxj = this.checka;
+					} else {
+
+						this.qxkz.jgxj = this.checkb;
+					}
+
+				},
+				bzjg(value) {
+					if(value) {
+						this.qxkz.bzjg = this.checka;
+					} else {
+
+						this.qxkz.bzjg = this.checkb;
+					}
+
+				},
+				wqcl(value) {
+					if(value) {
+						this.qxkz.wqcl = this.checka;
+					} else {
+
+						this.qxkz.wqcl = this.checkb;
+					}
+
+				},
+				fdjpp(value) {
+					if(value) {
+						this.qxkz.fdjpp = this.checka;
+					} else {
+
+						this.qxkz.fdjpp = this.checkb;
+					}
+
+				},
+				cxda(value) {
+					if(value) {
+						this.qxkz.cxda = this.checka;
+					} else {
+
+						this.qxkz.cxda = this.checkb;
+					}
+
+				},
+				wxxmid(value) {
+					if(value) {
+						this.qxkz.wxxmid = this.checka;
+					} else {
+
+						this.qxkz.wxxmid = this.checkb;
+					}
+
+				},
+				sqzl(value) {
+					if(value) {
+						this.qxkz.sqzl = this.checka;
+					} else {
+
+						this.qxkz.sqzl = this.checkb;
+					}
+
+				},
+				ghdwid(value) {
+					if(value) {
+						this.qxkz.ghdwid = this.checka;
+					} else {
+
+						this.qxkz.ghdwid = this.checkb;
+					}
+
+				},
+				khzl(value) {
+					if(value) {
+						this.qxkz.khzl = this.checka;
+					} else {
+
+						this.qxkz.khzl = this.checkb;
+					}
+
+				},
+				clzl(value) {
+					if(value) {
+						this.qxkz.clzl = this.checka;
+					} else {
+
+						this.qxkz.clzl = this.checkb;
+					}
+
+				},
+				jfzs(value) {
+					if(value) {
+						this.qxkz.jfzs = this.checka;
+					} else {
+
+						this.qxkz.jfzs = this.checkb;
+					}
+
+				},
+				hycx(value) {
+					if(value) {
+						this.qxkz.hycx = this.checka;
+					} else {
+
+						this.qxkz.hycx = this.checkb;
+					}
+
+				},
+				jszx(value) {
+					if(value) {
+						this.qxkz.jszx = this.checka;
+					} else {
+
+						this.qxkz.jszx = this.checkb;
+					}
+
+				},
+				wxjc(value) {
+					if(value) {
+						this.qxkz.wxjc = this.checka;
+					} else {
+
+						this.qxkz.wxjc = this.checkb;
+					}
+
+				},
+				jgjy(value) {
+					if(value) {
+						this.qxkz.jgjy = this.checka;
+					} else {
+
+						this.qxkz.jgjy = this.checkb;
+					}
+
+				},
+				sqzl(value) {
+					if(value) {
+						this.qxkz.sqzl = this.checka;
+					} else {
+
+						this.qxkz.sqzl = this.checkb;
+					}
+
+				}
+			}
+		}).$mount("#qxgl");
+	</script>
+
+</html>
