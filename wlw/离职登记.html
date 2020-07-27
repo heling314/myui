@@ -5,5 +5,50 @@
 		<title></title>
 	</head>
 	<body>
+		<div id="appt">
+			<h1 style="background: silver;">通讯名录</h1>
+			<el-row style="margin-top: 40px;">
+				<el-button type="primary" disabled style="margin-left: 10px;">部门名称：</el-button>
+				<el-input v-model="sectionName" style="width: 200px;" placeholder="请输入部门名称"></el-input>
+				<el-button type="primary" disabled style="margin-left: 50px;">员工姓名：</el-button>
+				<el-input v-model="staffName" style="width: 200px;" placeholder="请输入员工姓名"></el-input>
+				<el-button type="primary" style="margin-left: 100px;">离职</el-button>
+				<el-button type="primary">查询信息</el-button>
+			</el-row>
+			<!--
+            	作者：1994463099@qq.com
+            	时间：2020-07-27
+            	描述：//:data="pageInfo.list"
+            -->
+			<el-table :data="pageInfo.list" style="width:100%;margin-top: 50px;" border>
+				<el-table-column prop="sectionname" label="部门"></el-table-column>
+				<el-table-column prop="staffid" label="员工编号"></el-table-column>
+				<el-table-column prop="staffname" label="姓名"></el-table-column>
+				<el-table-column prop="tstore" label="性别"></el-table-column>
+				<el-table-column prop="school" label="职位"></el-table-column>
+				<el-table-column prop="staff" label="离职日期"></el-table-column>
+				<el-table-column prop="xjdz" label="离职原因"></el-table-column>
+				<el-table-column label="操作">
+					<!--作用域插槽-->
+					<template slot-scope="temp">
+						<el-button  circle @click="xiugai(temp.row.postid)"></el-button>
+						<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.postid)"></el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!--<div class="block" style="margin-top: 20px; text-align: center;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="[1, 2, 3 , 4, 5, 6, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
+				</el-pagination>
+			</div>-->
+		</div>
 	</body>
+	<script>
+		new Vue({
+			data:{
+				sectionName:"",				
+				staffName:"",
+				pageInfo:{}
+			}
+		}).$mount("#appt")
+	</script>
 </html>
