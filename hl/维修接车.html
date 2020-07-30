@@ -23,8 +23,8 @@
 										<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 											<el-row>
 												<el-col :span="6">
-													<el-form-item label="选择技工" prop="region">
-														<el-select  placeholder="请选择活动区域">
+													<el-form-item  label="选择技工" prop="region">
+														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
 															 <el-option v-for="val in staff" :key="val.staffname" :value="val.staffname" :label="val.staffname" />
 														</el-select>
 													</el-form-item>
