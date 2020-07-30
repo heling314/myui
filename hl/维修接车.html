@@ -8,34 +8,112 @@
 
 	<body>
 		<div id="wxjc" style="background-color:  #efeff7;height: 650px; padding: 10px;">
-
 			<el-row>
 				<el-col :span="24">
-					<span>接车登记</span>
-					<el-divider></el-divider>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="24">
-					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-						<el-form-item label="活动名称" prop="name">
-							<el-input v-model="ruleForm.name"></el-input>
-						</el-form-item>
-						<el-form-item label="活动区域" prop="region">
-							<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-								<el-option label="区域一" value="shanghai"></el-option>
-								<el-option label="区域二" value="beijing"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-							<el-button @click="resetForm('ruleForm')">重置</el-button>
-						</el-form-item>
-					</el-form>
-					
-					
-					
-					
+					<template>
+						<el-tabs type="border-card">
+							<!--
+                            	作者：1170546521@qq.com
+                            	时间：2020-07-30
+                            	描述：站内维修
+                            -->
+							<el-tab-pane label="站内维修">
+								<el-row>
+									<el-col :span="24">
+										<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="选择技工" prop="region">
+														<el-select  placeholder="请选择活动区域">
+															 <el-option v-for="val in staff" :key="val.staffname" :value="val.staffname" :label="val.staffname" />
+														</el-select>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="车辆品牌" prop="region">
+														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+															<el-option label="区域一" value="shanghai"></el-option>
+															<el-option label="区域二" value="beijing"></el-option>
+														</el-select>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="选择客户" prop="region">
+														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+															<el-option label="区域一" value="shanghai"></el-option>
+															<el-option label="区域二" value="beijing"></el-option>
+														</el-select>
+													</el-form-item>
+												</el-col>
+											</el-row>
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="驾驶人" prop="name">
+														<el-input v-model="ruleForm.name"></el-input>
+													</el-form-item>
+												</el-col>
+											</el-row>
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="备注" prop="desc">
+														<el-input type="textarea" v-model="ruleForm.desc"></el-input>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+												</el-col>
+												<el-col :span="6">
+													<el-form-item>
+														<el-button type="primary" @click="submitForm('ruleForm')">创建订单</el-button>
+														<el-button @click="resetForm('ruleForm')">重置</el-button>
+													</el-form-item>
+												</el-col>
+											</el-row>
+										</el-form>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<template>
+											<el-table :data="tableData" border style="width: 100%">
+												<el-table-column fixed prop="date" label="日期" width="150">
+												</el-table-column>
+												<el-table-column prop="name" label="姓名" width="120">
+												</el-table-column>
+												<el-table-column prop="province" label="省份" width="120">
+												</el-table-column>
+												<el-table-column prop="city" label="市区" width="120">
+												</el-table-column>
+												<el-table-column prop="address" label="地址" width="300">
+												</el-table-column>
+												<el-table-column prop="zip" label="邮编" width="120">
+												</el-table-column>
+												<el-table-column label="操作" width="100">
+													<template slot-scope="scope">
+														<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+														<el-button type="text" size="small">编辑</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</template>
+									</el-col>
+								</el-row>
+								<el-row style="margin: 20px; 0px;">
+									<el-col :span="24">
+										<el-button type="primary">新增维修项</el-button>
+										<el-button type="success" style="margin-left: 500px;">创建维修订单</el-button>
+									</el-col>
+								</el-row>
+							</el-tab-pane>
+							<!--
+                            	作者：1170546521@qq.com
+                            	时间：2020-07-30
+                            	描述：站内维修
+                            -->
+							<el-tab-pane label="外援接车">
+								配置管理
+							</el-tab-pane>
+						</el-tabs>
+					</template>
 				</el-col>
 			</el-row>
 
@@ -44,6 +122,28 @@
 	<script>
 		var vmwxjc = new Vue({
 			data: {
+				staff:[],
+				weixiujl:{
+					khclid:'',
+					weixiujlbm:'',
+					weixiujlname:'',
+					weixiujlpice:'',
+					weixiujlhyj:'',
+					weixiujlvipj:'',
+					weixiujlxyj:'',
+					weixiujlbz:'',
+					weixiujlzt:'',
+					weixiujlfg:'',
+					weixiuzrr:'',
+					weixiucfje:'',
+					weixiucgcs:'',
+					weixiutype:'',
+					weixiulic:'',
+					weixiujg:'',
+					starttime:'',
+					endstart:''
+				},
+				activeName: 'second',
 				ruleForm: {
 					name: '',
 					region: '',
@@ -100,10 +200,29 @@
 						message: '请填写活动形式',
 						trigger: 'blur'
 					}]
-				}
+				},
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					province: '上海',
+					city: '普陀区',
+					address: '上海市普陀区金沙江路 1518 弄',
+					zip: 200333
+				}, {
+					date: '2016-05-04',
+					name: '王小虎',
+					province: '上海',
+					city: '普陀区',
+					address: '上海市普陀区金沙江路 1517 弄',
+					zip: 200333
+				}]
 			},
-			methods() {
-
+			 mounted(){
+			 	let _this = this;
+				$.getJSON('http://127.0.0.1:9999/api/hl/selecBybzjg', function(staff) {
+					_this.staff = staff;
+					alert(JSON.stringify(_this.staff));
+				});
 			},
 			methods: {
 				submitForm(formName) {
@@ -118,6 +237,12 @@
 				},
 				resetForm(formName) {
 					this.$refs[formName].resetFields();
+				},
+				handleClick(row) {
+					console.log(row);
+				},
+				handleClick(tab, event) {
+					console.log(tab, event);
 				}
 			}
 		}).$mount("#wxjc");
