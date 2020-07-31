@@ -7,8 +7,7 @@
 	</head>
 
 	<body>
-		<div id="wxjc" style="background-color:  #efeff7;height: 660px; padding: 10px;">
-			
+		<div id="wxjc" style="background-color:  #efeff7;height: 650px; padding: 10px;">
 			<el-row>
 				<el-col :span="24">
 					232
@@ -17,22 +16,315 @@
 			<el-row>
 				<el-col :span="24">
 					232232
+					<template>
+						<el-tabs type="border-card">
+							<!--
+                            	作者：1170546521@qq.com
+                            	时间：2020-07-30
+                            	描述：站内维修
+                            -->
+							<el-tab-pane label="站内维修">
+								<el-row>
+									<el-col :span="24">
+										<el-form :model="weixiujl" :rules="rules" ref="weixiujl" label-width="100px" class="demo-ruleForm">
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="选择技工">
+														<el-select v-model="weixiujl.weixiuzrr" placeholder="请选择技工">
+															<el-option v-for="val in staff" :key="val.staffname" :value="val.staffname" :label="val.staffname" />
+														</el-select>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="维修编码">
+														<el-input v-model="weixiujl.weixiujlbm" :disabled="true"></el-input>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="车辆品牌">
+														<el-autocomplete popper-class="my-autocomplete" v-model="sname" :fetch-suggestions="querySearchAsync" placeholder="输入车牌编号" @select="handleSelect">
+															<template slot-scope="props">
+																<div class="name">
+																	{{ props.item.jiescph }}
+																</div>
+															</template>
+														</el-autocomplete>
+													</el-form-item>
+												</el-col>
+
+											</el-row>
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="车辆主人">
+														<el-input v-model="Kehu.kehumc" :disabled="true"></el-input>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="车辆驾驶员">
+														<el-input v-model="Khcl.khcljsy" :disabled="true"></el-input>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item label="车辆品牌">
+														<el-input v-model="Khcl.khclpp" :disabled="true"></el-input>
+													</el-form-item>
+												</el-col>
+											</el-row>
+											<el-row>
+												<el-col :span="6">
+													<el-form-item label="备注">
+														<el-input type="textarea" v-model="Khcl.weixiujlbz"></el-input>
+													</el-form-item>
+												</el-col>
+												<el-col :span="6">
+													<el-form-item>
+														<el-button type="primary" @click="xinzengweixiujilu">立即创建</el-button>
+
+													</el-form-item>
+												</el-col>
+											</el-row>
+										</el-form>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<template>
+											<el-table :data="Weixiusp" show-summary border style="width: 100%">
+												<el-table-column fixed prop="weixiujlid" label="单号">
+												</el-table-column>
+												<el-table-column prop="weixiuspname" label="项目名称">
+												</el-table-column>
+												<el-table-column prop="weixiuspbzpice" label="价格">
+												</el-table-column>
+												<el-table-column fixed="right" label="操作">
+													<template slot-scope="scope">
+														<el-button @click="deletesp(scope.row)" type="text" size="small">删除</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</template>
+									</el-col>
+								</el-row>
+								<el-row style="margin: 20px; 0px;">
+									<el-col :span="24">
+										<el-button type="primary" @click="dialogV">新增维修商品</el-button>
+										<!--<el-button type="success" style="margin-left: 500px;">创建维修订单</el-button>-->
+
+										<el-dialog title="提示" :visible.sync="dialogVisible" width="70%" :before-close="handleClose">
+											<span>
+												<el-row >
+													<el-col :span="4">
+														<el-input v-model="wxxmname" placeholder="请输入项目"></el-input>
+													</el-col>
+													<el-col :span="6" style="margin-left: 10px;">
+														<el-button type="primary" @click="dialogV">查询</el-button>
+													</el-col>
+												</el-row>
+												<el-row >
+													<el-col :span="24" style="margin-top: 20px;">
+														<template>
+															<el-table :data="wxxm"  border style="width: 100%">
+															<el-table-column fixed prop="wxxmname" label="商品名称">
+													        </el-table-column>
+															<el-table-column prop="bzjia" label="商品标准价">
+															</el-table-column>
+															<el-table-column prop="hyjia" label="商品会员价">
+															</el-table-column>
+															<el-table-column prop="vipjia" label="vip价格">
+															</el-table-column>
+															<el-table-column prop="xyijia" label="协议价格">
+															</el-table-column>
+															<el-table-column fixed="right" label="操作">
+															<template slot-scope="scope">
+														<el-button @click="handleClick(scope.row)" type="text" size="small">添加商品</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</template>
+													</el-col>
+												</el-row>
+											</span>
+											<span slot="footer" class="dialog-footer">
+    										<el-button @click="dialogVisible = false">取 消</el-button>
+    										<el-button type="primary" @click="tuichuqieding">确 定</el-button>
+  											</span>
+										</el-dialog>
+									</el-col>
+								</el-row>
+							</el-tab-pane>
+							<!--
+                            	作者：1170546521@qq.com
+                            	时间：2020-07-30
+                            	描述：站内维修
+                            -->
+							<el-tab-pane label="外援接车">
+								配置管理
+							</el-tab-pane>
+						</el-tabs>
+					</template>
 				</el-col>
 			</el-row>
-			
+
 		</div>
 	</body>
 	<script>
 		var vmwxjc = new Vue({
 			data: {
-				
-
+				wxxmname: '',
+				dialogVisible: false,
+				sname: '',
+				staff: [],
+				Clpp: [],
+				weixiujl: {
+					khclid: '',
+					weixiujlbm: '',
+					weixiujlname: '',
+					weixiujlpice: '',
+					weixiujlhyj: '',
+					weixiujlvipj: '',
+					weixiujlxyj: '',
+					weixiujlbz: '',
+					weixiujlzt: '',
+					weixiujlfg: '',
+					weixiuzrr: '',
+					weixiucfje: '',
+					weixiucgcs: '',
+					weixiutype: '',
+					weixiulic: '',
+					weixiujg: '',
+					starttime: '',
+					endstart: '',
+					weixiubz: '121'
+				},
+				Kehu: {},
+				Khcl: {},
+				Weixiusp: [],
+				wxxm: []
 			},
-			methods() {
+			mounted() {
+				let _this = this;
+				$.getJSON('http://127.0.0.1:9999/api/hl/selecBybzjg', function(staff) {
+					_this.staff = staff;
+
+				});
+
+				$.getJSON('http://127.0.0.1:9999/api/hl/selectpp', function(clpp) {
+					_this.Clpp = clpp;
+
+				});
+
+				var time = Math.round(new Date() / 1000);
+				new Date(parseInt(time * 1000)).toLocaleDateString();
+				_this.weixiujl.weixiujlbm = time;
 
 			},
 			methods: {
-				
+
+				querySearchAsync(queryString, cb) {
+					var sr = [];
+					
+					if(queryString != undefined && queryString.length > 0) {
+						$.getJSON('http://127.0.0.1:9999/api/hl/select1/'+queryString+'', function(khcl) {
+							cb(khcl);
+						});
+					} else {
+						cb(sr);
+					}
+				},
+				handleSelect(item) {
+					this.sname = item.jiescph;
+					let _this = this;
+					_this.weixiujl.khclid = item.khclid;
+					$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey2/' + item.kehuid + '', function(Kehu) {
+						_this.Kehu = Kehu;
+
+					});
+					$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey1/' + item.khclid + '', function(Khcl) {
+						_this.Khcl = Khcl;
+
+					});
+				},
+				handleClick(row) {
+					console.log(row);
+
+					let _this = this;
+
+					$.getJSON('http://127.0.0.1:9999/api/hl/insertSele/' + row.wxxmname + '/' + row.bzjia + '/' + _this.Weixiusp[0].weixiujlid + '', function(msg) {
+						if(msg.code == "200") {
+							vmsy.$message({
+								message: '恭喜你，新增成功',
+								type: 'success'
+							});
+
+						}
+					});
+				},
+				deletesp(row) {
+					console.log(row);
+					let _this = this;
+					let weixiujlid = row.weixiuspid;
+					if(row.weixiuspname == '技工费') {
+						vmsy.$message.error('错了哦，不能删除这条');
+					} else {
+						$.getJSON('http://127.0.0.1:9999/api/hl/deleteBs/' + weixiujlid + '', function(msg) {
+							if(msg.code == "200") {
+								vmsy.$message({
+									message: '恭喜你，删除成功',
+									type: 'success'
+								});
+								_this.chaxunshangp(_this.Weixiusp[0].weixiujlid);
+							}
+						});
+					}
+
+				},
+				xinzengweixiujilu() {
+					let _this = this;
+
+					$.ajax('http://localhost:9999/api/hl/insertSelective', {
+						type: 'post',
+						data: JSON.stringify(_this.weixiujl),
+						dataType: 'json',
+						contentType: 'application/json',
+						success(msg) {
+							if(msg.code == "200") {
+								vmsy.$message({
+									message: '恭喜你，创建成功',
+									type: 'success'
+								});
+								_this.chaxunshangp(msg.weixiujlid);
+							}
+						}
+					});
+				},
+				chaxunshangp(weixiujlid) {
+					let _this = this;
+					$.getJSON('http://127.0.0.1:9999/api/hl/selectByKey/' + weixiujlid + '', function(Weixiusp) {
+						_this.Weixiusp = Weixiusp;
+					});
+				},
+				handleClose(done) {
+					this.$confirm('确认关闭？')
+						.then(_ => {
+							done();
+						})
+						.catch(_ => {});
+				},
+				dialogV() {
+
+					let _this = this;
+					_this.dialogVisible = true;
+
+					$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxxmname=" + _this.wxxmname + "", function(clpp) {
+						_this.wxxm = clpp;
+					});
+				},
+				tuichuqieding() {
+					let _this = this;
+					_this.chaxunshangp(_this.Weixiusp[0].weixiujlid);
+					_this.dialogVisible = false;
+				}
+
 			}
 		}).$mount("#wxjc");
 	</script>
