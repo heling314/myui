@@ -31,7 +31,7 @@
 						</el-menu-item>
 						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">维修项目</span>
+							<span slot="title" @click="weixiu">维修项目</span>
 						</el-menu-item>
 						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
@@ -83,6 +83,9 @@
 			methods: {
 				pp(){
 				$(".nerong").load("zyw/品牌.html");	
+				},
+				weixiu(){
+				$(".nerong").load("zyw/维修项目.html");	
 				},
 				cheliang(){
 					$(".nerong").load("zyw/车型.html");	
