@@ -14,7 +14,7 @@
 			<el-autocomplete popper-class="my-autocomplete" v-model="sname" :fetch-suggestions="querySearchAsync" placeholder="搜索国家，比如意大利" @select="handleSelect">
 				<template slot-scope="props">
 					<div class="name">
-						<img :src="props.item.avatar" class="img-rounded" style="width: 25px;height: 25px">&nbsp; {{ props.item.label }}
+						 {{ props.item.label }}
 					</div>
 				</template>
 			</el-autocomplete>

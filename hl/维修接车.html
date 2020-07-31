@@ -20,52 +20,52 @@
 							<el-tab-pane label="站内维修">
 								<el-row>
 									<el-col :span="24">
-										<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+										<el-form :model="weixiujl" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 											<el-row>
 												<el-col :span="6">
 													<el-form-item  label="选择技工" prop="region">
-														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+														<el-select v-model="weixiujl.weixiuzrr" placeholder="请选择活动区域">
 															 <el-option v-for="val in staff" :key="val.staffname" :value="val.staffname" :label="val.staffname" />
 														</el-select>
 													</el-form-item>
 												</el-col>
 												<el-col :span="6">
 													<el-form-item label="车辆品牌" prop="region">
-														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-															<el-option label="区域一" value="shanghai"></el-option>
-															<el-option label="区域二" value="beijing"></el-option>
+														<el-select v-model="weixiujl.khclId" placeholder="请选择活动区域">
+															<el-option v-for="val in Clpp" :key="val.clppname" :value="val.clppname" :label="val.clppname" />
+															
 														</el-select>
 													</el-form-item>
 												</el-col>
 												<el-col :span="6">
-													<el-form-item label="选择客户" prop="region">
+													<!--<el-form-item label="选择客户" prop="region">
 														<el-select v-model="ruleForm.region" placeholder="请选择活动区域">
 															<el-option label="区域一" value="shanghai"></el-option>
 															<el-option label="区域二" value="beijing"></el-option>
 														</el-select>
-													</el-form-item>
+													</el-form-item>-->
 												</el-col>
 											</el-row>
 											<el-row>
 												<el-col :span="6">
-													<el-form-item label="驾驶人" prop="name">
+													<!--<el-form-item label="驾驶人" prop="name">
 														<el-input v-model="ruleForm.name"></el-input>
-													</el-form-item>
+													</el-form-item>-->
 												</el-col>
 											</el-row>
 											<el-row>
 												<el-col :span="6">
-													<el-form-item label="备注" prop="desc">
+													<!--<el-form-item label="备注" prop="desc">
 														<el-input type="textarea" v-model="ruleForm.desc"></el-input>
-													</el-form-item>
+													</el-form-item>-->
 												</el-col>
 												<el-col :span="6">
 												</el-col>
 												<el-col :span="6">
-													<el-form-item>
+													<!--<el-form-item>
 														<el-button type="primary" @click="submitForm('ruleForm')">创建订单</el-button>
 														<el-button @click="resetForm('ruleForm')">重置</el-button>
-													</el-form-item>
+													</el-form-item>-->
 												</el-col>
 											</el-row>
 										</el-form>
@@ -73,7 +73,7 @@
 								</el-row>
 								<el-row>
 									<el-col :span="24">
-										<template>
+										<!--<template>
 											<el-table :data="tableData" border style="width: 100%">
 												<el-table-column fixed prop="date" label="日期" width="150">
 												</el-table-column>
@@ -94,7 +94,7 @@
 													</template>
 												</el-table-column>
 											</el-table>
-										</template>
+										</template>-->
 									</el-col>
 								</el-row>
 								<el-row style="margin: 20px; 0px;">
@@ -123,6 +123,7 @@
 		var vmwxjc = new Vue({
 			data: {
 				staff:[],
+				Clpp:[],
 				weixiujl:{
 					khclid:'',
 					weixiujlbm:'',
@@ -142,7 +143,7 @@
 					weixiujg:'',
 					starttime:'',
 					endstart:''
-				},
+				}/*,
 				activeName: 'second',
 				ruleForm: {
 					name: '',
@@ -200,8 +201,8 @@
 						message: '请填写活动形式',
 						trigger: 'blur'
 					}]
-				},
-				tableData: [{
+				},*/
+				/*tableData: [{
 					date: '2016-05-02',
 					name: '王小虎',
 					province: '上海',
@@ -215,17 +216,22 @@
 					city: '普陀区',
 					address: '上海市普陀区金沙江路 1517 弄',
 					zip: 200333
-				}]
+				}]*/
 			},
 			 mounted(){
 			 	let _this = this;
 				$.getJSON('http://127.0.0.1:9999/api/hl/selecBybzjg', function(staff) {
 					_this.staff = staff;
-					alert(JSON.stringify(_this.staff));
+					
+				});
+				
+				$.getJSON('http://127.0.0.1:9999/api/hl/selectpp', function(clpp) {
+					_this.Clpp = clpp;
+					
 				});
 			},
 			methods: {
-				submitForm(formName) {
+			 /*	submitForm(formName) {
 					this.$refs[formName].validate((valid) => {
 						if(valid) {
 							alert('submit!');
@@ -243,7 +249,7 @@
 				},
 				handleClick(tab, event) {
 					console.log(tab, event);
-				}
+				}*/
 			}
 		}).$mount("#wxjc");
 	</script>
