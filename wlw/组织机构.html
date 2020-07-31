@@ -16,7 +16,8 @@
 			<h1 style="background: silver;">组织机构</h1>
 			<el-container>
 				<el-aside width="200px">
-					<el-tree :data="data" :props="defaultProps" accordion @node-click="handleNodeClick"></el-tree>
+					<el-tree :data="data"  accordion @node-click="handleNodeClick">
+					</el-tree>
 				</el-aside>
 				<el-main>
 					<el-row>
@@ -25,8 +26,8 @@
 						<el-button type="primary" disabled style="margin-left: 50px;">员工姓名：</el-button>
 						<el-input v-model="staffName" style="width: 200px;" placeholder="请输入员工姓名"></el-input>
 						<el-button type="primary" style="margin-left: 100px;">查询</el-button>
-						<el-button type="primary">增加部门</el-button>
-						<el-button type="primary">增加员工</el-button>
+						<el-button type="primary" @click="dialogVisible=true">增加部门</el-button>
+						<el-button type="primary" @click="dialogVisiblea=true">增加员工</el-button>
 					</el-row>
 					<!--
             	作者：1994463099@qq.com
@@ -67,6 +68,107 @@
 					</div>
 				</el-main>
 			</el-container>
+			<!--描述：模态框：新增部门--> 
+			<el-dialog title="新增部门" :visible.sync="dialogVisible" width="30%" >
+				<el-form  label-width="80px">
+					<el-form-item label="部门编号">
+						<el-input v-model="Section.sectionbh"></el-input>
+					</el-form-item>
+					<el-form-item label="部门名称">
+						<el-input v-model="Section.sectionname"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisible = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="addSection">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
+			
+			<!--描述：模态框：新增员工--> 
+			<el-dialog title="新增员工" :visible.sync="dialogVisiblea" width="30%" >
+				<el-form  label-width="80px">
+
+					<el-form-item label="*员工姓名">
+						<el-input v-model="staff.staffname"></el-input>
+					</el-form-item>
+					<el-form-item label="*员工性别">
+						<template>
+ 							 <el-select v-model="staff.staffsex" placeholder="请选择">
+   								<el-option  key="0"  label="男" value="0">
+   							 	</el-option>
+   							 	<el-option  key="1"  label="女" value="1">
+   							 	</el-option>
+  							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="所在门店">
+						<el-input v-model="staff.tstore"></el-input>
+					</el-form-item>
+					<el-form-item label="*部门">
+						<template>
+ 							 <el-select v-model="staff.sectionid" placeholder="请选择">
+   								<el-option v-for="item in Section" :key="item.sectionbh"  :label="item.sectionname" :value="item.sectionbh">
+   							 	</el-option>
+  							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="职位">
+						<template>
+ 							 <el-select v-model="staff.postid" placeholder="请选择">
+   								<el-option v-for="item in Post" :key="item.postid"  :label="item.postname" :value="item.postid">
+   							 	</el-option>
+  							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="学历">
+						<el-input v-model="staff.education"></el-input>
+					</el-form-item>
+					<el-form-item label="毕业学校">
+						<el-input v-model="staff.school"></el-input>
+					</el-form-item>
+					<el-form-item label="专业">
+						<el-input v-model="staff.specialty"></el-input>
+					</el-form-item>
+					<el-form-item label="专业资格">
+						<el-input v-model="staff.edtype"></el-input>
+					</el-form-item>
+					<el-form-item label="*身份证号">
+						<el-input v-model="staff.sfid"></el-input>
+					</el-form-item>
+					<el-form-item label="户口地址">
+						<el-input v-model="staff.yhdz"></el-input>
+					</el-form-item>
+					<el-form-item label="现居地址">
+						<el-input v-model="staff.xjdz"></el-input>
+					</el-form-item>
+					<el-form-item label="*联系电话">
+						<el-input v-model="staff.staff"></el-input>
+					</el-form-item>
+					<el-form-item label="*入职日期">
+						<el-input v-model="staff.entrytime"></el-input>
+
+					<el-form-item>
+						<el-button @click="dialogVisiblea = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="addStaff(staff)">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
+			
+			<!--描述：模态框：查看员工--> 
+			<el-dialog title="新增部门" :visible.sync="dialogVisibleb" width="30%" >
+				<el-form  label-width="80px">
+					<el-form-item label="部门编号">
+						<el-input v-model="Section.sectionbh"></el-input>
+					</el-form-item>
+					<el-form-item label="部门名称">
+						<el-input v-model="Section.sectionname"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisible = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="addSection">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
 		</div>
 	</body>
 	<script>
@@ -92,10 +194,19 @@
 					children: 'children',
 					label: 'label'
 				},
-				pageInfo:{}
+				pageInfo:{},
+				Section:{},
+				dialogVisible:false,
+				dialogVisiblea:false,
+				dialogVisibleb:false,
+				sectionName:"",
+				staffName:"",
+				Post:{},
+				staff:{}
 			},
 			methods: {
 				handleNodeClick(data) {
+					
 					console.log(data);
 				},
 				goToPage(p,s) {
@@ -117,10 +228,60 @@
 				},
 				deletel(staffid){
 					
+				},
+				addSection(){
+					
+					let _this = this; //非常重要
+					Section=_this.Section;
+					alert(JSON.stringify(Section))
+					$.ajax('http://127.0.0.1:9999/api/wlw/addSection', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.Section),
+						dataType: "json",
+						success(message) {
+							if(message.code==200) {
+								_this.$message({
+         							message: '新增成功',
+         						 	type: 'success'
+        						});
+        						_this.dialogVisible=false;
+							}
+						}
+					});
+				},
+				addStaff(staff){
+					let _this = this; //非常重要
+					staff=_this.staff;
+					$.ajax('http://127.0.0.1:9999/api/wlw/addStaff', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.staff),
+						dataType: "json",
+						success(message) {
+							if(message.code==200) {
+								_this.$message({
+         							message: '新增成功',
+         						 	type: 'success'
+        						});
+        						_this.dialogVisible=false;
+        						_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					});
 				}
 			},
 			mounted() {
+				let _this=this;
 				this.goToPage(1, 3);
+				$.getJSON('http://127.0.0.1:9999/api/wlw/querySection', function(data) {
+						_this.Section= data;
+						_this.data.children=data;
+				});
+				
+				$.getJSON('http://127.0.0.1:9999/api/wlw/queryPosts', function(data) {
+						_this.Post= data;
+				});
 			},
 			filters:{
 				chesex(val){
