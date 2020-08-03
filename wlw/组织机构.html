@@ -57,7 +57,7 @@
 						<el-table-column width="120px" label="操作">
 							<!--作用域插槽-->
 							<template slot-scope="temp">
-								<el-button circle icon="el-icon-search" @click="xiugai(temp.row.postid)"></el-button>
+								<el-button circle icon="el-icon-search" @click="xiugai(temp.row.staffid)"></el-button>
 								<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.staffid)"></el-button>
 							</template>
 						</el-table-column>
@@ -153,7 +153,76 @@
 			</el-dialog>
 
 			<!--描述：模态框：查看员工-->
+			<el-dialog title="查看员工" :visible.sync="dialogVisibleb" width="30%">
+				<el-form label-width="80px">
 
+					<el-form-item label="*员工姓名">
+						<el-input v-model="Staffs.staffname"></el-input>
+					</el-form-item>
+					<el-form-item label="*员工性别">
+						<template>
+							<el-select v-model="Staffs.staffsex" placeholder="请选择">
+								<el-option key="0" label="男" value="0">
+								</el-option>
+								<el-option key="1" label="女" value="1">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="*所在门店">
+						<el-input v-model="Staffs.tstore"></el-input>
+					</el-form-item>
+					<el-form-item label="*部门">
+						<template>
+							<el-select v-model="Staffs.sectionid" placeholder="请选择">
+								<el-option v-for="item in Section" :key="item.sectionbh" :label="item.sectionname" :value="item.sectionbh">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="职位">
+						<template>
+							<el-select v-model="Staffs.postid" placeholder="请选择">
+								<el-option v-for="item in Post" :key="item.postid" :label="item.postname" :value="item.postid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="学历">
+						<el-input v-model="Staffs.education"></el-input>
+					</el-form-item>
+					<el-form-item label="毕业学校">
+						<el-input v-model="Staffs.school"></el-input>
+					</el-form-item>
+					<el-form-item label="专业">
+						<el-input v-model="Staffs.specialty"></el-input>
+					</el-form-item>
+					<el-form-item label="专业资格">
+						<el-input v-model="Staffs.edtype"></el-input>
+					</el-form-item>
+					<el-form-item label="*身份证号">
+						<el-input v-model="Staffs.sfid"></el-input>
+					</el-form-item>
+					<el-form-item label="户口地址">
+						<el-input v-model="Staffs.yhdz"></el-input>
+					</el-form-item>
+					<el-form-item label="现居地址">
+						<el-input v-model="Staffs.xjdz"></el-input>
+					</el-form-item>
+					<el-form-item label="*联系电话">
+						<el-input v-model="Staffs.staff"></el-input>
+					</el-form-item>
+					<el-form-item label="*入职日期">
+						<el-date-picker v-model="Staffs.entrytime" type="date" placeholder="选择日期">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisibleb = false">取 消</el-button>
+						<el-button type="primary" @click="updateStaff(Staffs)">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
+			
 		</div>
 	</body>
 	<script>
@@ -188,7 +257,8 @@
 				sectionName: "",
 				staffName: "",
 				Post: {},
-				staff: {}
+				staff: {},
+				Staffs:{}
 			},
 			methods: {
 				handleNodeClick(data) {
@@ -210,10 +280,25 @@
 					this.goToPage(val, this.pageInfo.pageSize);
 				},
 				xiugai(staffid) {
-
+					
+					let _this = this;
+					_this.dialogVisibleb = true;
+					$.getJSON('http://127.0.0.1:9999/api/wlw/queryByStaff/'+staffid+'', function(data) {
+					_this.Staffs = data;
+					});
+					
 				},
 				deletel(staffid) {
-
+					let _this = this; //非常重要
+					$.ajax('http://127.0.0.1:9999/api/wlw/deleteStaff/'+staffid+'', {
+						type: "get",
+						success(message) {
+							if(message.code == "200") {
+								_this.$message.error('删除成功');
+								_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					}); 
 				},
 				addSection() {
 					let _this = this; //非常重要
@@ -287,8 +372,24 @@
 						}
 					});
 				},
-				deletel(staffid){
-					alert(staffid);
+				updateStaff(Staffs){
+					let _this = this; //非常重要				
+					$.ajax('http://127.0.0.1:9999/api/wlw/updateStaff', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.Staffs),
+						dataType: "json",
+						success(message) {
+							if(message.code == 200) {
+								_this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								_this.dialogVisibleb = false;
+								_this.goToPage(_this.pageInfo.pageNum, _this.pageInfo.pageSize);
+							}
+						}
+					});
 				}
 			},
 			mounted() {
