@@ -343,6 +343,7 @@
 					alert(item);
 					this.sname = item.jiescph;
 					let _this = this;
+					_this.weixiujl.khclph=item.jiescph;
 					_this.weixiujl.khclid = item.khclid;
 					$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey2/' + item.kehuid + '', function(Kehu) {
 						_this.Kehu = Kehu;
@@ -391,20 +392,48 @@
 						alert("库存不足");
 					} else {
 						let _this = this;
-						console.log(index, row);
-						var obj = {};
-						obj['weixiuspname'] = row.wxxmname;
-						obj['weixiuspsum'] = row.bz2;
-						obj['weixiuspbzpice'] = row.bzjia * obj.weixiuspsum;
-						_this.Weixiusp.push(obj);
-						$.getJSON("http://127.0.0.1:9999/api/hl/updateBy/" + (row.bz1 - row.bz2) + "/" + row.wxxmid + "", function(msg) {
-							if(msg.code == "200") {
-								vmsy.$message({
-									message: '恭喜你，创建成功',
-									type: 'success'
-								});
-							}
+
+						let obj = this.Weixiusp.find((item) => { //this.ruleForm
+							return item.weixiuspname === row.wxxmname; //筛选出匹配数据
 						});
+
+						if(obj == null) {
+							alert("112");
+							console.log(index, row);
+							var objl = {};
+							objl['weixiuspname'] = row.wxxmname;
+							objl['weixiuspsum'] = row.bz2;
+							objl['weixiuspbzpice'] = row.bzjia * objl.weixiuspsum;
+							_this.Weixiusp.push(objl);
+							$.getJSON("http://127.0.0.1:9999/api/hl/updateBy/" + (row.bz1 - row.bz2) + "/" + row.wxxmid + "", function(msg) {
+								if(msg.code == "200") {
+									vmsy.$message({
+										message: '恭喜你，创建成功',
+										type: 'success'
+									});
+								}
+							});
+						} else {
+							this.Weixiusp.forEach((item, index, array) => {
+								if(item.weixiuspname == row.wxxmname) {
+									alert("已经添加");
+									item.weixiuspsum = item.weixiuspsum + row.bz2;
+									$.getJSON("http://127.0.0.1:9999/api/hl/updateBy/" + (row.bz1 - row.bz2) + "/" + row.wxxmid + "", function(msg) {
+										if(msg.code == "200") {
+											vmsy.$message({
+												message: '恭喜你，创建成功',
+												type: 'success'
+											});
+										}
+									});
+								}
+							});
+						}
+
+						$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxtypeid=" + _this.wxtypeid + "", function(clpp) {
+							_this.wxxm = clpp;
+						});
+
 					}
 
 				},
