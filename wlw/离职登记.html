@@ -5,15 +5,13 @@
 		<title></title>
 	</head>
 	<body>
-		<div id="appt">
+		<div id="appts">
 			<h1 style="background: silver;">通讯名录</h1>
 			<el-row style="margin-top: 40px;">
-				<el-button type="primary" disabled style="margin-left: 10px;">部门名称：</el-button>
-				<el-input v-model="sectionName" style="width: 200px;" placeholder="请输入部门名称"></el-input>
-				<el-button type="primary" disabled style="margin-left: 50px;">员工姓名：</el-button>
-				<el-input v-model="staffName" style="width: 200px;" placeholder="请输入员工姓名"></el-input>
-				<el-button type="primary" style="margin-left: 100px;">离职</el-button>
-				<el-button type="primary">查询信息</el-button>
+				<el-button type="primary" disabled >员工姓名：</el-button>
+				<el-input v-model="staffname" style="width: 200px;" placeholder="请输入员工姓名"></el-input>
+				<el-button type="primary" @click="dialogVisibles=true" style="margin-left: 100px;">离职</el-button>
+				<el-button type="primary" @click="query">查询信息</el-button>
 			</el-row>
 			<!--
             	作者：1994463099@qq.com
@@ -24,15 +22,18 @@
 				<el-table-column prop="sectionname" label="部门"></el-table-column>
 				<el-table-column prop="staffid" label="员工编号"></el-table-column>
 				<el-table-column prop="staffname" label="姓名"></el-table-column>
-				<el-table-column prop="tstore" label="性别"></el-table-column>
-				<el-table-column prop="school" label="职位"></el-table-column>
-				<el-table-column prop="staff" label="离职日期"></el-table-column>
-				<el-table-column prop="xjdz" label="离职原因"></el-table-column>
+				<el-table-column label="性别">
+					<template slot-scope="temp">
+						{{temp.row.staffsex | chesex}}
+					</template>
+				</el-table-column>
+				<el-table-column prop="postname" label="职位"></el-table-column>
+				<el-table-column prop="dimissiontime" label="离职日期"></el-table-column>
+				<el-table-column prop="cause" label="离职原因"></el-table-column>
 				<el-table-column label="操作">
 					<!--作用域插槽-->
 					<template slot-scope="temp">
-						<el-button  circle @click="xiugai(temp.row.postid)"></el-button>
-						<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.postid)"></el-button>
+						<el-button circle icon="el-icon-search" @click="xiugai(temp.row.staffid)"></el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -40,16 +41,116 @@
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="[1, 2, 3 , 4, 5, 6, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
 				</el-pagination>
 			</div>-->
+			
+			<!--描述：模态框--> 
+			<el-dialog title="离职登记" :visible.sync="dialogVisibles" width="30%" >
+				<el-form  label-width="80px">
+					<el-form-item label="员工姓名">
+						<template>
+							<el-select v-model="Staffs.staffid" placeholder="请选择">
+								<el-option v-for="item in Staff" :key="item.staffid" :label="item.staffname" :value="item.staffid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="离职原因">
+						<el-input v-model="Staffs.cause"></el-input>
+					</el-form-item>
+					<el-form-item label="*离职日期">
+						<el-date-picker v-model="Staffs.dimissiontime" type="date" placeholder="选择日期">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisibles = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="onSubmit">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
 		</div>
 		
 	</body>
 	<script>
 		new Vue({
 			data:{
+				dialogVisibles:false,
 				sectionName:"",				
-				staffName:"",
-				pageInfo:{}
+				staffname:"",
+				pageInfo:{},
+				Staff:{},
+				Staffs:{}
+			},
+			methods:{
+				goToPage(p, s) {
+					let _this = this; //非常重要
+					$.getJSON('http://127.0.0.1:9999/api/wlw/queryStaffs/' + p + '/' + s + '', function(data) {
+						_this.pageInfo = data;
+					});
+				},
+				handleSizeChange(val) {
+					console.log(`每页 ${val} 条`);
+					this.goToPage(this.pageInfo.pageNum, val);
+				},
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.goToPage(val, this.pageInfo.pageSize);
+				},
+				deletel(staffid){
+					let _this = this; //非常重要				
+					$.ajax('http://127.0.0.1:9999/api/wlw/DeStaff/'+staffid+'', {
+						type: "get",
+						success(message) {
+							if(message.code == "200") {
+								_this.$message.error('删除成功');
+								_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					});
+				},
+				onSubmit(){
+					let _this = this; //非常重要				
+					$.ajax('http://127.0.0.1:9999/api/wlw/XgStaff', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.Staffs),
+						dataType: "json",
+						success(message) {
+							if(message.code == 200) {
+								_this.$message({
+									message: '离职登记成功',
+									type: 'success'
+								});
+								_this.dialogVisibles = false;
+								_this.goToPage(_this.pageInfo.pageNum, _this.pageInfo.pageSize);
+							}
+						}
+					});
+				},
+				query(){
+					let _this=this;
+					
+					if(_this.staffname==""){
+						_this.goToPage(1, 3);
+						return;
+					}
+					$.getJSON('http://127.0.0.1:9999/api/wlw/queryByName/'+_this.staffname+'', function(data) {
+					_this.pageInfo.list=data;
+					});
+				}
+			},
+			mounted() {
+				this.goToPage(1, 3);
+				let _this = this;
+				$.getJSON('http://127.0.0.1:9999/api/wlw/query', function(data) {
+					_this.Staff=data;
+				});
+				
+				
+			},
+			filters: {
+				chesex(val) {
+					return val == 0 ? '男' : '女'
+				}
 			}
-		}).$mount("#appt")
+		}).$mount("#appts");
 	</script>
 </html>
