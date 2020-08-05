@@ -2,8 +2,52 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>
+		</title>
 	</head>
 	<body>
+		<div id="appy">
+			<h1 style="background: silver;">技工星级</h1>
+			<el-row>
+				<el-button type="primary" @click="dialogVisible=true">新增技工星级</el-button>
+			</el-row>
+			<el-table :data="pageInfo.list" style="width:100%" border>
+				<el-table-column prop="xjid" label="等级编号"></el-table-column>
+				<el-table-column prop="xjname" label="等级名称"></el-table-column>
+				<el-table-column prop="xjfei" label="提成权重"></el-table-column>
+				<el-table-column label="操作">
+					<!--作用域插槽-->
+					<template slot-scope="temp">
+						<el-button  icon="el-icon-edit" circle @click="xiugai(temp.row.postid)"></el-button>
+						<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.postid)"></el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!--
+            	作者：1994463099@qq.com
+            	时间：2020-07-27
+            	描述：//:data="pageInfo.list"
+            -->
+			<el-table :data="pageInfo.list" style="width:100%;margin-top: 50px;" border>
+				<el-table-column prop="sectionname" label="等级编号"></el-table-column>
+				<el-table-column prop="staffid" label="等级名称"></el-table-column>
+				<el-table-column prop="xjtime" label="时长"></el-table-column>
+				<el-table-column prop="xjfei" label="提出权重"></el-table-column>
+				<el-table-column label="操作">
+					<!--作用域插槽-->
+					<template slot-scope="temp">
+						<el-button  circle @click="xiugai(temp.row.postid)"></el-button>
+						<el-button type="danger" icon="el-icon-delete" circle @click="deletel(temp.row.postid)"></el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
 	</body>
+	<script>
+		new Vue({
+			data:{
+				pageInfo:{}
+			}
+		}).$mount("#appy")
+	</script>
 </html>
