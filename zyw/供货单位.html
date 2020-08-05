@@ -1,13 +1,236 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+
 	<body>
-		
+		<div id="wee">
+
+			<el-container>
+				<el-aside width="250px">
+					<el-select v-model="dizhi" placeholder="请选择" @change="diz">
+						<el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
+						</el-option>
+					</el-select>
+
+				</el-aside>
+				<el-main>
+						<el-form :inline="true" :model="gh" class="demo-form-inline">
+								<el-form-item label="">
+									<el-input v-model="gh.name" placeholder="供应商名称"></el-input>
+								</el-form-item>
+								<el-form-item>
+									<el-button type="primary" @click="ons">查询</el-button>
+								</el-form-item>
+								<el-form-item>
+									<el-button type="primary" @click="ins">新增</el-button>
+								</el-form-item>
+							</el-form>
+								<el-dialog title="新增" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+								<el-form ref="form" :model="ghdw" label-width="100px">
+									<el-form-item label="供货商名称">
+										<el-input v-model="ghdw.ghdwName"></el-input>
+									</el-form-item>
+									<el-form-item label="供货商地址">
+										<el-select v-model="ghdw.ghdwpawss" placeholder="请选择">
+											<el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
+											</el-option>
+										</el-select>
+									</el-form-item>
+
+									<el-form-item label="厂商编码">
+										<el-input v-model="ghdw.spxxcsbm"></el-input>
+									</el-form-item>
+									<el-form-item label="网址">
+										<el-input v-model="ghdw.ghdwurl"></el-input>
+									</el-form-item>
+									<el-form-item label="公司电话">
+										<el-input v-model="ghdw.ghdwgsdh"></el-input>
+									</el-form-item>
+									<el-form-item label="联系人">
+										<el-input v-model="ghdw.ghdwlxr"></el-input>
+									</el-form-item>
+									</el-form-item>
+									<el-form-item label="供货备注">
+										<el-input v-model="ghdw.ghdwbz"></el-input>
+									</el-form-item>
+								</el-form>
+								<span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary"  @click="que">确 定</el-button>
+  </span>
+							</el-dialog>
+									<el-dialog title="修改" :visible.sync="dialogVisible1" width="30%" :before-close="handleClose">
+								<el-form ref="form" :model="ghdw" label-width="100px">
+									<el-form-item label="供货商名称">
+										<el-input v-model="ghdw.ghdwName"></el-input>
+									</el-form-item>
+									<el-form-item label="供货商地址">
+										<el-select v-model="ghdw.ghdwpawss" placeholder="请选择">
+											<el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
+											</el-option>
+										</el-select>
+									</el-form-item>
+
+									<el-form-item label="厂商编码">
+										<el-input v-model="ghdw.spxxcsbm"></el-input>
+									</el-form-item>
+									<el-form-item label="网址">
+										<el-input v-model="ghdw.ghdwurl"></el-input>
+									</el-form-item>
+									<el-form-item label="公司电话">
+										<el-input v-model="ghdw.ghdwgsdh"></el-input>
+									</el-form-item>
+									<el-form-item label="联系人">
+										<el-input v-model="ghdw.ghdwlxr"></el-input>
+									</el-form-item>
+									</el-form-item>
+									<el-form-item label="供货备注">
+										<el-input v-model="ghdw.ghdwbz"></el-input>
+									</el-form-item>
+								</el-form>
+								<span slot="footer" class="dialog-footer">
+    <el-button @click="qxghdw">取 消</el-button>
+    <el-button type="primary"  @click="updateghdw">确 定</el-button>
+  </span>
+							</el-dialog>
+					<el-table :data="tableData.list" style="width: 100%">
+						<el-table-column prop="ghdwname" label="供货商名称" width="120">
+						</el-table-column>
+						<el-table-column prop="ghdwpawss" label="供货商地址" width="100">
+						</el-table-column>
+						<el-table-column prop="spxxcsbm" label="厂商编码" width="100">
+						</el-table-column>
+						<el-table-column prop="ghdwurl" label="网址" width="120">
+						</el-table-column>
+						<el-table-column prop="ghdwgsdh" label="公司电话" width="100">
+						</el-table-column>
+						<el-table-column prop="ghdwlxr" label="联系人" width="100">
+						</el-table-column>
+						<el-table-column prop="ghdwlxdh" label="联系电话" width="120">
+						</el-table-column>
+						<el-table-column label="操作" width="120">
+							<template slot-scope="temp">
+								<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row)"></el-button>
+								<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.wxxmid)"></el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<el-pagination style="padding-left: 150px;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+					</el-pagination>
+
+				</el-main>
+			</el-container>
+		</div>
 		<script>
-			
+			new Vue({
+				el: "#wee",
+				data: {
+					dizhi: "",
+					ghdw:{},
+					gh:{},
+					options: [{
+						name: "北京"
+					}, {
+						name: "上海"
+					}, {
+						name: "湖南"
+					}, {
+						name: "西安"
+					}, {
+						name: "广州"
+					}, ],
+					tableData: [],
+					pages: 1,
+					dialogVisible:false,
+					dialogVisible1:false
+				},
+				methods: {
+					diz() {
+						let _this = this;
+						$.getJSON("http://127.0.0.1:9999/api/zyw/ghdwquery?pageNum=" + _this.pages + "&wxdz=" + _this.dizhi, function(it) {
+							_this.tableData = it
+						})
+					},xg(i){
+						this.ghdw=i;
+						this.dialogVisible1=true;
+					},
+					sc(i){
+							let _this = this;
+						$.getJSON("http://127.0.0.1:9999/api/zyw/ghdwdel?id=" + i, function(it) {
+								_this.$message({
+							message: '删除成功',
+							type: 'success'
+						});
+						_this.diz();
+						})
+					},qxghdw(){
+this.ghdw={};						
+						this.dialogVisible1=false;
+					},
+					ons(){
+						this.diz();
+					},ins(){
+						this.dialogVisible=true;
+					},updateghdw(){
+								let _this = this;
+					$.ajax('http://127.0.0.1:9999/api/zyw/updateghdw', {
+						type: "post",
+						data: _this.ghdw,
+						success(message) {
+							if(message == 1) {
+								_this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								_this.dialogVisible1 = false;
+								_this.ghdw = {};
+								_this.diz();
+							}
+						}
+					});
+					},que(){
+							let _this = this;
+					$.ajax('http://127.0.0.1:9999/api/zyw/insghdw', {
+						type: "post",
+						data: _this.ghdw,
+						success(message) {
+							if(message == 1) {
+								_this.$message({
+									message: '新增成功',
+									type: 'success'
+								});
+								_this.dialogVisible = false;
+								_this.ghdw = {};
+								_this.diz();
+							}
+						}
+					});
+					},
+					handleSizeChange(val) {
+						console.log(`每页 ${val} 条`);
+					},
+					handleCurrentChange(val) {
+						this.pages = val;
+						this.diz(val);
+						console.log(`当前页: ${val}`);
+					},
+					handleClose(done) {
+						this.$confirm('确认关闭？')
+							.then(_ => {
+								done();
+							})
+							.catch(_ => {});
+					}
+				
+			}, mounted() {
+
+			}
+			})
 		</script>
 	</body>
+
 </html>
