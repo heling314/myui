@@ -20,7 +20,7 @@
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">首页</span>
 						</el-menu-item>
-						
+
 					</el-menu>
 				</el-col>
 			</el-row>
@@ -37,10 +37,13 @@
 				backgroundcolor: '',
 				textcolor: '',
 				activetextcolor: '',
-				isCollapse: true
+				isCollapse: true,
+				caiDanList2: [],
+				caidanid: "",
 			},
 			mounted() {
-
+				this.caidanid = vmsy.caidanid;
+				this.caiDanList2 = vmsy.caiDanList;
 			},
 			methods: {
 				handleOpen(key, keyPath) {
@@ -48,7 +51,8 @@
 				},
 				handleClose(key, keyPath) {
 					console.log(key, keyPath);
-				},yanse(){
+				},
+				yanse() {
 					let _this = this;
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
