@@ -6,7 +6,7 @@ var menuMapping = {
 	"yj004": "hl/维修接车.html",//维修接车
 	"yj005": "hl/竣工检验.html",//竣工检验
 	"yj006": "前台.html",
-	"yj007": "yj/结算中心.html",
+	"yj0033": "yj/结算中心.html",
 	"yj008": "",//会员管理
 	"yj009": "yj/会员查询.html",
 	"yj0010": "",
