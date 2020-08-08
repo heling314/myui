@@ -16,20 +16,32 @@
 				<el-col :span="24">
 					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 						<!--首页显示营业报表,今日营业情况-->
-						<el-menu-item index="0">
+						<el-menu-item index="1">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">首页</span>
 						</el-menu-item>
 
-						<el-submenu :index="i+1" v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
+						<!--<el-menu-item index="2">
+							<i class="el-icon-platform-eleme"></i>
+							<span slot="title">发动机品牌</span>
+						</el-menu-item>-->
+
+						<el-submenu index="2">
 							<template slot="title">
 								<i class="el-icon-location"></i>
-								<span slot="title">{{item.menuname}}</span>
+								<span slot="title">员工资料</span>
 							</template>
+<<<<<<< HEAD
 							<el-menu-item index="1-1" :disabled="qxkz.zzjg == 0 ? true : false" @click="zuzhi">组织机构</el-menu-item>
 							<el-menu-item index="1-2" :disabled="qxkz.gwdy == 0 ? true : false" @click="gangwei">岗位定义</el-menu-item>
 							<el-menu-item index="1-3" :disabled="qxkz.lzdj == 0 ? true : false" @click="lizhi">离职登记</el-menu-item>
 							<el-menu-item index="1-4" :disabled="qxkz.txml == 0 ? true : false" @click="tongxun">通讯名单</el-menu-item>
+=======
+							<el-menu-item index="1-1" :disabled="qxkz.zzjg == 0 ? true : false">组织机构</el-menu-item>
+							<el-menu-item index="1-2" :disabled="qxkz.gwdy == 0 ? true : false">岗位定义</el-menu-item>
+							<el-menu-item index="1-3" :disabled="qxkz.lzdj == 0 ? true : false">离职登录</el-menu-item>
+							<el-menu-item index="1-4" :disabled="qxkz.txml == 0 ? true : false">通讯名单</el-menu-item>
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 						</el-submenu>
 
 						<el-submenu index="3">
@@ -37,12 +49,23 @@
 								<i class="el-icon-location"></i>
 								<span slot="title">技工管理</span>
 							</template>
+<<<<<<< HEAD
 							<el-menu-item index="1-1" :disabled="qxkz.jgxj == 0 ? true : false" @click="jigong">技工星级</el-menu-item>
 							<el-menu-item index="1-2" :disabled="qxkz.bzjg == 0 ? true : false" @click="banzu">班组技工</el-menu-item>
 							<el-menu-item index="1-3" :disabled="qxkz.wqcl == 0 ? true : false" @click="waiqing">外勤车辆</el-menu-item>
 						</el-submenu>
 							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid" index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc">{{item.menuname}}</el-menu-item>
 					</el-submenu>
+=======
+							<el-menu-item index="1-1" :disabled="qxkz.jgxj == 0 ? true : false">技工星级</el-menu-item>
+							<el-menu-item index="1-2" :disabled="qxkz.bzjg == 0 ? true : false">班组技工</el-menu-item>
+							<el-menu-item index="1-3" :disabled="qxkz.wqcl == 0 ? true : false">外勤车辆</el-menu-item>
+						</el-submenu>
+						<!--<el-menu-item index="3">
+							<i class="el-icon-platform-eleme"></i>
+							<span slot="title">会员卡充值管理</span>
+						</el-menu-item>-->
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 					</el-menu>
 				</el-col>
 			</el-row>
@@ -60,14 +83,15 @@
 				textcolor: '',
 				activetextcolor: '',
 				isCollapse: true,
-				qxkz: {},
-				caiDanList2: [],
-				caidanid: "",
+				qxkz: {}
 			},
 			mounted() {
 				let _this = this;
-				_this.caidanid = vmsy.caidanid;
-				_this.caiDanList2 = vmsy.caiDanList;
+				let id = vmsy.staff.staffid;
+				/*查询用户是否拥有此权限*/
+				$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + id + '', function(qxkz) {
+					_this.qxkz = qxkz;
+				});
 			},
 			methods: {
 				handleOpen(key, keyPath) {
@@ -81,8 +105,7 @@
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
-				},
-				yansebai() {
+				},yansebai(){
 					let _this = this;
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
