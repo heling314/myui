@@ -25,9 +25,9 @@
 								<i class="el-icon-location"></i>
 								<span slot="title">维修救援</span>
 							</template>
-							<el-menu-item  index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc">维修接车</el-menu-item>
-							<el-menu-item  :disabled="qxkz.jgjy == 0 ? true : false" index="2-2" @click="weixiu">竣工检验</el-menu-item>
-							<el-menu-item  :disabled="qxkz.jgjy == 0 ? true : false" index="2-3" @click="linshi">临时显示</el-menu-item>
+							<el-menu-item index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc">维修接车</el-menu-item>
+							<el-menu-item :disabled="qxkz.jgjy == 0 ? true : false" index="2-2" @click="weixiu">竣工检验</el-menu-item>
+							<el-menu-item :disabled="qxkz.jgjy == 0 ? true : false" index="2-3" @click="linshi">临时显示</el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</el-col>
@@ -59,29 +59,33 @@
 			},
 			methods: {
 				handleOpen(key, keyPath) {
-			
+
 				},
 				handleClose(key, keyPath) {
-					
+
 				},
 				yansehei() {
 					let _this = this;
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
-				},yansebai(){
+				},
+				yansebai() {
 					let _this = this;
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
-				},wxjc(){
+				},
+				wxjc() {
 					$(".nerong").load("hl/接车订单.html"); //ajax加载页面信息
-				},linshi(){
-					$(".nerong").load("hl/站外接车.html"); //ajax加载页面信息
-				},weixiu(){
-					$(".nerong").load("hl/维修接车.html"); //ajax加载页面信息
+				},
+				linshi() {
+					/*$(".nerong").load("hl/站外接车.html"); //ajax加载页面信息*/
+				},
+				weixiu() {
+					$(".nerong").load("hl/竣工检验.html"); //ajax加载页面信息
 				}
-				
+
 			}
 		}).$mount("#wx");
 	</script>

@@ -27,47 +27,42 @@
 			<el-form ref="form" :model="form" label-width="80px">
 				<el-row>
 
-					<el-col :span="4">
+					<el-col :span="5">
 						<div class="grid-content bg-purple-dark">
 							<el-form-item label="维修编码">
-								<el-input v-model="form.name"></el-input>
+								<el-input v-model="form.weixiujlbm"></el-input>
 							</el-form-item>
 						</div>
 					</el-col>
-					<el-col :span="4">
+					<el-col :span="5">
 						<div class="grid-content bg-purple-dark">
 							<el-form-item label="客户车牌">
-								<el-input v-model="form.name"></el-input>
+								<el-input v-model="form.khclph"></el-input>
 							</el-form-item>
 						</div>
 					</el-col>
-					<el-col :span="4">
+					<el-col :span="5">
 						<div class="grid-content bg-purple-dark">
 							<el-form-item label="客户名称">
-								<el-input v-model="form.name"></el-input>
+								<el-input v-model="form.clzr"></el-input>
 							</el-form-item>
 						</div>
 					</el-col>
-					<el-col :span="4">
+					<el-col :span="5">
 						<div class="grid-content bg-purple-dark">
 							<el-form-item label="状态">
-								<el-select v-model="form.region" placeholder="请选择活动区域">
-									<el-option label="区域一" value="shanghai"></el-option>
-									<el-option label="区域二" value="beijing"></el-option>
+								<el-select v-model="form.wxjlzt" placeholder="请选择活动区域" @change="selectWorkName">
+									<el-option key="全部" value="0" label="全部" />
+									<el-option label="已竣工" value="1"></el-option>
+									<el-option label="未竣工" value="2"></el-option>
+									<el-option label="返工" value="3"></el-option>
 								</el-select>
-							</el-form-item>
-						</div>
-					</el-col>
-					<el-col :span="4">
-						<div class="grid-content bg-purple-dark">
-							<el-form-item label="电话">
-								<el-input v-model="form.name"></el-input>
 							</el-form-item>
 						</div>
 					</el-col>
 					<el-col :span="3" :offset="1">
 						<div class="grid-content bg-purple-dark">
-							<el-button type="primary" icon="el-icon-search">搜索</el-button>
+							<el-button type="primary" icon="el-icon-search" @click="sousuo">搜索</el-button>
 						</div>
 					</el-col>
 
@@ -87,11 +82,10 @@
 													<span>{{ item.weixiuspname }}</span>
 												</el-form-item>
 												<el-form-item label="商品价格">
-												<span>{{ item.weixiuspbzpice }}</span>
+													<span>{{ item.weixiuspbzpice }}</span>
 												</el-form-item>
 											</el-form>
 										</div>
-
 									</template>
 								</el-table-column>
 								<el-table-column label="维修记录编码" prop="weixiujlbm">
@@ -108,7 +102,7 @@
 								</el-table-column>
 								<el-table-column label="开始时间" prop="starttime">
 								</el-table-column>
-								<el-table-column label="结束时间" prop="endstart">
+								<el-table-column label="结束时间" prop="endtime">
 								</el-table-column>
 								<el-table-column label="车辆主人" prop="clzr">
 								</el-table-column>
@@ -116,13 +110,200 @@
 								</el-table-column>
 								<el-table-column label="车辆品牌" prop="clpp">
 								</el-table-column>
+								<el-table-column label="操作">
+									<!--作用域插槽-->
+									<template slot-scope="temp">
+										<el-button el-button round @click="fangongdanhao(temp.row.weixiutype,temp.row.weixiujlzt,temp.row.weixiujlbm)">
+											{{temp.row.weixiujlzt | zhuangtai}}
+										</el-button>
+									</template>
+								</el-table-column>
 							</el-table>
 						</template>
+
+						<el-dialog title="德召文汽修单号" :visible.sync="zhangdan" width="80%" :before-close="handleClose">
+							<el-form label-position="left" v-model="weixiujl" inline class="demo-table-expand">
+								<el-row>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="编码">
+											<span>{{ weixiujl.weixiujlbm }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="技工">
+											<span>{{ weixiujl.weixiuzrr }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="车牌">
+											<span>{{ weixiujl.khclph }}</span>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="车辆主人">
+											<span>{{ weixiujl.clzr }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="车辆驾驶员">
+											<span>{{ weixiujl.cljsy }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="车辆品牌">
+											<span>{{ weixiujl.clpp }}</span>
+										</el-form-item>
+									</el-col>
+
+								</el-row>
+								<el-row>
+									<el-col :span="7" :offset="1">
+										<el-form-item label="店铺地址">
+											<span>{{ weixiujl.weixiujygs }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" >
+										<el-form-item label="救援里程">
+											<span>{{ weixiujl.weixiulic }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6" :offset="1">
+										<el-form-item label="救援费用">
+											<span>{{ weixiujl.weixiujg }}</span>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+
+									<el-col :span="6" :offset="1">
+										<el-form-item label="备注">
+											<span>{{ weixiujl.weixiujlbz }}</span>
+										</el-form-item>
+									</el-col>
+									<el-col :span="10" :offset="1">
+										<el-form-item label="救援地址">
+											<span>{{ weixiujl.weixiujydz }}</span>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+							</el-form>
+							<el-row>
+
+								<el-col :span="15" :offset="1">
+									<template>
+										<el-table :data="weixiujl.weixiusp" style="width: 100%;">
+											<el-table-column fixed label="单号">
+												<!--作用域插槽-->
+												<template slot-scope="temp">
+													{{temp.$index+1}}
+												</template>
+											</el-table-column>
+											<el-table-column prop="weixiuspname" label="项目名称">
+											</el-table-column>
+											<el-table-column prop="weixiuspbzpice" label="价格">
+											</el-table-column>
+											<el-table-column prop="weixiuspsum" label="数量">
+											</el-table-column>
+										</el-table>
+									</template>
+								</el-col>
+							</el-row>
+							<el-row>
+
+								<el-col :span="4" :offset="20">
+									<el-button round>总金额:{{weixiujl.weixiujlpice}}元</el-button>
+								</el-col>
+							</el-row>
+						</el-dialog>
+
+						<el-dialog title="德召文汽修单号" :visible.sync="zhannei" width="60%" :before-close="handleClose">
+								<el-form label-position="left" v-model="weixiujl" inline class="demo-table-expand">
+									<el-row>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="编码">
+												<span>{{ weixiujl.weixiujlbm }}</span>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="技工">
+												<span>{{ weixiujl.weixiuzrr }}</span>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="车牌">
+												<span>{{ weixiujl.khclph }}</span>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="车辆主人">
+												<span>{{ weixiujl.clzr }}</span>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="车辆驾驶员">
+												<span>{{ weixiujl.cljsy }}</span>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" :offset="1">
+											<el-form-item label="车辆品牌">
+												<span>{{ weixiujl.clpp }}</span>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+									
+									<el-row>
+
+										<el-col :span="6" :offset="1">
+											<el-form-item label="备注">
+												<span>{{ weixiujl.weixiujlbz }}</span>
+											</el-form-item>
+										</el-col>
+							
+									</el-row>
+
+								</el-form>
+								<el-row>
+
+									<el-col :span="15" :offset="1">
+										<template>
+											<el-table :data="weixiujl.weixiusp" style="width: 100%;">
+												<el-table-column fixed label="单号">
+													<!--作用域插槽-->
+													<template slot-scope="temp">
+														{{temp.$index+1}}
+													</template>
+												</el-table-column>
+												<el-table-column prop="weixiuspname" label="项目名称">
+												</el-table-column>
+												<el-table-column prop="weixiuspbzpice" label="价格">
+												</el-table-column>
+												<el-table-column prop="weixiuspsum" label="数量">
+												</el-table-column>
+											</el-table>
+										</template>
+									</el-col>
+								</el-row>
+								<el-row>
+
+									<el-col :span="4" :offset="20">
+										<el-button round>总金额:{{weixiujl.weixiujlpice}}元</el-button>
+									</el-col>
+								</el-row>
+							</el-dialog>
+
+
+
 					</el-col>
 				</el-row>
 				<el-row style="margin-top: 10px;">
 					<el-col :span="10" :offset="6">
-						<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+						<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.pageNum" :page-sizes="[1, 3, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
 						</el-pagination>
 					</el-col>
 
@@ -130,10 +311,10 @@
 
 				<el-row style="margin-top: 40px;">
 					<el-col :span="4" :offset="5">
-						<el-button type="primary">主要按钮</el-button>
+						<el-button type="primary" @click="zhanneijieche">站内接车</el-button>
 					</el-col>
 					<el-col :span="4" :offset="5">
-						<el-button type="primary">主要按钮</el-button>
+						<el-button type="primary" @click="zhanwaijieche">站外接车</el-button>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -144,70 +325,98 @@
 			data: {
 				//临时form数据
 				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
+					//查询条件
+					weixiujlbm: '',
+					khclph: '',
+					clzr: '',
+					weixiujlzt: 0,
+					wxjlzt: ''
 				},
 
-				//临时table数据
-				tableData: [{
-					id: '12987122',
-					name: '好滋好味鸡蛋仔',
-					category: '江浙小吃、小吃零食',
-					desc: '荷兰优质淡奶，奶香浓而不腻',
-					address: '上海市普陀区真北路',
-					shop: '王小虎夫妻店',
-					shopId: '10333'
-				}, {
-					id: '12987123',
-					name: '好滋好味鸡蛋仔',
-					category: '江浙小吃、小吃零食',
-					desc: '荷兰优质淡奶，奶香浓而不腻',
-					address: '上海市普陀区真北路',
-					shop: '王小虎夫妻店',
-					shopId: '10333'
-				}, {
-					id: '12987125',
-					name: '好滋好味鸡蛋仔',
-					category: '江浙小吃、小吃零食',
-					desc: '荷兰优质淡奶，奶香浓而不腻',
-					address: '上海市普陀区真北路',
-					shop: '王小虎夫妻店',
-					shopId: '10333'
-				}, {
-					id: '12987126',
-					name: '好滋好味鸡蛋仔',
-					category: '江浙小吃、小吃零食',
-					desc: '荷兰优质淡奶，奶香浓而不腻',
-					address: '上海市普陀区真北路',
-					shop: '王小虎夫妻店',
-					shopId: '10333'
-				}],
 				pageInfo: {
 
-				}
+				},
+				weixiujl: {},
+				zhangdan: false,
+				zhannei:false
 			},
 			mounted() {
 				this.goToPage(1, 3);
+
 			},
 			methods: {
 				handleSizeChange(val) {
 					console.log(`每页 ${val} 条`);
+					this.pageInfo.pageSize = val;
+					this.goToPage(this.pageInfo.pageNum, val);
 				},
 				handleCurrentChange(val) {
 					console.log(`当前页: ${val}`);
+					this.pageInfo.pageNum = val;
+					this.goToPage(val, this.pageInfo.pageSize);
 				},
 				goToPage(p, s) {
 					let _this = this; //非常重要
-					$.getJSON("http://127.0.0.1:9999/api/hl/selectByPrimar", "pageNum=" + p + "&pageSize=" + s + "", function(data) {
+					alert(p);
+					alert(s);
+					$.getJSON("http://127.0.0.1:9999/api/hl/selectByPrimar", "pageNum=" + p + "&pageSize=" + s + "&weixiujlbm=" + _this.form.weixiujlbm + "&khclph=" + _this.form.khclph + "&clzr=" + _this.form.clzr + "&weixiujlzt=" + _this.form.weixiujlzt + "", function(data) {
 						_this.pageInfo = data;
 						alert(JSON.stringify(_this.pageInfo));
 					});
+				},
+				selectWorkName(val) {
+					let _this = this; //非常重要
+					_this.form.weixiujlzt = val;
+				},
+				sousuo() {
+					this.goToPage(this.pageInfo.pageNum, this.pageInfo.pageSize);
+				},
+				zhanneijieche() {
+					$(".nerong").load("hl/维修接车.html");
+				},
+				zhanwaijieche() {
+					$(".nerong").load("hl/站外接车.html");
+				},
+				fangongdanhao(pe, zt, bm) {
+					let _this = this;
+					if(zt == 3 && pe == 1) {
+						window.localStorage.bm = bm;
+						$(".nerong").load("hl/站内返工.html");
+					}
+					if(zt == 3 && pe == 2) {
+						window.localStorage.bm = bm;
+						alert("站外");
+						$(".nerong").load("hl/站外返工.html");
+
+					}
+					if(zt == 1 && pe == 2) {
+						alert("站外");
+						$.getJSON("http://127.0.0.1:9999/api/hl/querydlByweixiujlbm/" + bm + "", function(data) {
+							_this.weixiujl = data;
+							alert(JSON.stringify(_this.weixiujl));
+						});
+						_this.zhangdan = true;
+					}
+					if(zt == 1 && pe == 1) {
+						alert("站内");
+						$.getJSON("http://127.0.0.1:9999/api/hl/querydlByweixiujlbm/" + bm + "", function(data) {
+							_this.weixiujl = data;
+							alert(JSON.stringify(_this.weixiujl));
+						});
+						_this.zhannei = true;
+					}
+				}
+			},
+			filters: {
+				zhuangtai(val) {
+					if(val == 1) {
+						return '详情';
+					} else if(val == 2) {
+						return '未竣工';
+					} else {
+						return '返工';
+					}
+
 				}
 			}
 		}).$mount("#jcdd");
