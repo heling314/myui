@@ -12,10 +12,10 @@
 			<style>[v-cloak] {
 				display: none;
 			}
-			.yjcss{
+			
+			.yjcss {
 				margin-bottom: 5px;
 			}
-			
 		</style>
 		</style>
 	</head>
@@ -24,7 +24,7 @@
 		<div v-cloak>
 			<el-row id="vmdenglu">
 				<!--图片验证模态框-->
-				
+
 				<el-col :span="24">
 					<el-row style="height: 90px;">
 						<el-col :span="24">
@@ -37,12 +37,12 @@
 								<el-tab-pane label="账号密码登录" name="first" style="width:250px;color: #000000;">
 									<!--密码登录验证码-->
 									<el-form :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm">
-										<el-form-item class="yjcss"  label="账号:" prop="name" width="30px">
-											<el-input v-model="name" placeholder="请输入账号"></el-input>
+										<el-form-item class="yjcss" label="账号:" prop="name" width="30px">
+											<el-input v-model="name" placeholder="请输入账号" style="width: 240px;"></el-input>
 										</el-form-item>
 
-										<el-form-item  class="yjcss" label="密码:" prop="password1">
-											<el-input v-model="password1" placeholder="请输入密码"></el-input>
+										<el-form-item class="yjcss" label="密码:" prop="password1">
+											<el-input v-model="password1" placeholder="请输入密码" style="width: 240px;"></el-input>
 										</el-form-item>
 
 										<el-form-item class="yjcss">
@@ -63,11 +63,14 @@
 											<el-input v-model="yanzhengma" placeholder="请输入验证码" style="width: 120px;"></el-input>
 											<el-button type="info" size="mini" style="width:80px;" v-if="pan==1" type="button" @click="faosng">{{fa}}</el-button>
 											<el-button type="info" size="mini" v-if="pan==2" disabled type="button" @click="faosng">{{fa}}</el-button>
+
 										</el-form-item>
+
 										<el-form-item>
 											<el-button type="primary" style="width:200px;" @click="denglu">登录</el-button>
 										</el-form-item>
 									</el-form>
+
 								</el-tab-pane>
 							</el-tabs>
 						</el-col>
@@ -137,12 +140,12 @@
 						dataType: "json",
 						success(data) {
 							if(data.code == 200) {
-								if(null != data.data) {
-									_this.open2("登录成功");
-									location.href="../首页.html";
-								} else {
-									_this.open4("账号密码错误");
-								}
+								_this.open2("登录成功");
+								location.href="../首页.html";
+							}else  if(data.code == 301){
+								_this.open4(data.msg);
+							}else  if(data.code == 302){
+								_this.open4(data.msg);
 							}
 						}
 					})
@@ -202,7 +205,7 @@
 						//判断验证码是否正确
 						if(_this.yanzhengma2 == _this.yanzhengma) {
 							_this.open2("登录成功");
-							location.href="../首页.html";
+							location.href = "../首页.html";
 							/*if(_this.type==0) {*/
 							/*location.href = "主页.html";*/
 							/*}*/
