@@ -86,7 +86,7 @@
 				dialogFormVisibleyj: false,
 				input2: "",
 				huiYuanPage: [], //分页数据
-				maney: "",
+				maney:"",
 			},
 
 			mounted() {
@@ -96,11 +96,11 @@
 			methods: {
 				//充值
 				open(hyid) {
-					let _this = this;
+					let _this=this;
 					this.$prompt('请输入充值金额', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
-
+						
 					}).then(({
 						value
 					}) => {
@@ -109,12 +109,12 @@
 								if(yjdata.code == 200) {
 									_this.open2("充值成功");
 									_this.pagekehu(1, 4);
-								} else if(yjdata.code == 501) {
-									_this.$alert("权限不足");
+								}  else {
+									_this.open3("错误");
 								}
 							}
-						);
-
+						);		
+						
 					}).catch(() => {
 						this.$message({
 							type: 'info',
@@ -136,8 +136,8 @@
 								_this.huiYuang = {};
 								_this.pagekehu(1, 4);
 
-							} else if(yjdata.code == 501) {
-								_this.$alert("权限不足");
+							} else {
+								_this.open3("新增错误");
 							}
 						}
 					})
@@ -153,7 +153,7 @@
 									_this.pagekehu(1, 4);
 								} else if(yjdata.code == 300) {
 									_this.$alert("该会员还有余额,不能删除");
-								} else if(yjdata.code == 501) {
+								} else if(yjdata.code==501){
 									_this.$alert("权限不足");
 								}
 							}
