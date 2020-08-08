@@ -32,19 +32,8 @@
 						</el-menu-item>
 					
 						<el-menu-item v-for="(item,i) in caiDanList" v-if="item.caidanidfu==0" class="xuanze" index="i+1" @click="yjAlod(item.controlleraction,item.caidanid)">{{item.menuname}}</el-menu-item>
-						
-						<!--<el-menu-item index="2" class="xuanze">维修</el-menu-item>
-						<el-menu-item index="3" class="xuanze">前台</el-menu-item>
-						<el-menu-item index="4" class="xuanze">客服</el-menu-item>
-						<el-menu-item index="5" class="xuanze">数据</el-menu-item>
-						<el-menu-item index="6" class="xuanze">人事</el-menu-item>-->
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
-<<<<<<< HEAD
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
-					
-=======
-						<!--<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>-->
->>>>>>> yj
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}} {{staff.jiaose.jiaosename}}
@@ -69,33 +58,15 @@
 										<i class="el-icon-platform-eleme"></i>
 										<span slot="title">首页</span>
 									</el-menu-item>
-									<!--<el-submenu index="2">	
-										<template slot="title">
-											<i class="el-icon-location"></i>
-											<span slot="title">维修救援</span>
-										</template>
-										<el-menu-item index="1-1">维修接车</el-menu-item>
-										<el-menu-item index="1-2">竣工检验</el-menu-item>
-									</el-submenu>-->
 								</el-menu>
 							</el-col>
 						</el-row>
 					</el-aside>
 					<el-main>
 						<el-row>
-
-						
-									
-
 							<el-col :span="22">
 								<div class="grid-content bg-purple-dark nerong">
-<<<<<<< HEAD
-									
-
-								</div>
-=======
-
->>>>>>> yj
+							</div>
 							</el-col>
 						</el-row>
 					</el-main>
@@ -124,17 +95,6 @@
 			},
 			mounted() {
 				let _this = this;
-//				/*查询用户*/
-//				$.ajax(`http://localhost:9999/api/show/getCaiDan`, {
-//					type: "get",
-//					dataType: "json",
-//					success(message) {
-//						if(message != null) {
-//							_this.treeNodes = message;
-//							alert(JSON.stringify(_this.treeNodes));
-//						}
-//					}
-//				});
 				this.user();
 				_this.zhuti = '主题颜色(黑色)';
 						_this.backgroundcolor = '#1a1e1a';
@@ -153,42 +113,7 @@
 						
 				},
 				handleSelect(key, keyPath) {
-<<<<<<< HEAD
-					let _this = this;
-					if(key == 2) {
-						$(".elaside").load("维修.html"); //ajax加载页面信息
 
-					} else if(key == 1) {
-						$(".elaside").load("公告.html"); //ajax加载页面信息
-					} else if(key == 3) {
-						$(".elaside").load("前台.html"); //ajax加载页面信息
-					} else if(key == 4) {
-						$(".elaside").load("客服.html"); //ajax加载页面信息
-					} else if(key == 5) {
-						$(".elaside").load("主数据.html"); //ajax加载页面信息
-					} else if(key == 6) {
-						$(".elaside").load("人事.html"); //ajax加载页面信息
-					} else if(key == 8) {
-						$(".elaside").load("操作.html"); //ajax加载页面信息
-					}
-=======
-//					let _this = this;
-//					if(key == 2) {
-//						$(".elaside").load("维修.html"); //ajax加载页面信息
-//					} else if(key == 1) {
-//						$(".elaside").load("公告.html"); //ajax加载页面信息
-//					} else if(key == 3) {
-//						$(".elaside").load("前台.html"); //ajax加载页面信息
-//					} else if(key == 4) {
-//						$(".elaside").load("客服.html"); //ajax加载页面信息
-//					} else if(key == 5) {
-//						$(".elaside").load("主数据.html"); //ajax加载页面信息
-//					} else if(key == 6) {
-//						$(".elaside").load("人事.html"); //ajax加载页面信息
-//					} else if(key == 8) {
-//						$(".elaside").load("操作.html"); //ajax加载页面信息
-//					}
->>>>>>> yj
 				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
@@ -230,17 +155,7 @@
 						success(message) {
 							if(message != null) {
 								_this.staff = message;
-<<<<<<< HEAD
-								
-								/*查询用户是否拥有此权限*/
-//								alert(_this.staff.staffid);
-								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
-									_this.qxkz = qxkz;
-									
-								});
-=======
 								_this.caiDanList = message.jiaose.listCaiDan;
->>>>>>> yj
 							}
 						}
 					});
