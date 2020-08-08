@@ -31,6 +31,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 					
 						<el-menu-item v-for="(item,i) in caiDanList" v-if="item.caidanidfu==0" class="xuanze" index="i+1" @click="yjAlod(item.controlleraction,item.caidanid)">{{item.menuname}}</el-menu-item>
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
@@ -40,6 +41,8 @@
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+>>>>>>> parent of 5026a32... 杨剑提交
 						<el-menu-item index="1"><span class="el-icon-message-solid"></span>公告栏</el-menu-item>
 						<el-menu-item index="2" class="xuanze">维修</el-menu-item>
 						<el-menu-item index="3" class="xuanze">前台</el-menu-item>
@@ -48,6 +51,7 @@
 						<el-menu-item index="6" class="xuanze">人事</el-menu-item>
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
+<<<<<<< HEAD
 						<!--<el-menu-item>
 							<el-radio-group v-model="isCollapse">
 								<el-radio-button :label="false">展开</el-radio-button>
@@ -61,6 +65,9 @@
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+					
+>>>>>>> parent of 5026a32... 杨剑提交
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}}
@@ -96,6 +103,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 							</div>
 =======
 									内容
@@ -109,6 +117,11 @@
 									内容
 								</div>
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+									
+
+								</div>
+>>>>>>> parent of 5026a32... 杨剑提交
 							</el-col>
 						</el-row>
 					</el-main>
@@ -138,6 +151,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				let _this = this;
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
@@ -145,10 +159,13 @@
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+>>>>>>> parent of 5026a32... 杨剑提交
 				this.user();
 			},
 			methods: {
 				handleSelect(key, keyPath) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -158,6 +175,8 @@
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+>>>>>>> parent of 5026a32... 杨剑提交
 					let _this = this;
 					if(key == 2) {
 						$(".elaside").load("维修.html"); //ajax加载页面信息
@@ -181,11 +200,14 @@
 					}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
 =======
 >>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+>>>>>>> parent of 5026a32... 杨剑提交
 				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
@@ -227,6 +249,10 @@
 						success(message) {
 							if(message != null) {
 								_this.staff = message;
+<<<<<<< HEAD
+=======
+								
+>>>>>>> parent of 5026a32... 杨剑提交
 								/*查询用户是否拥有此权限*/
 								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
 									_this.qxkz = qxkz;
