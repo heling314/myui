@@ -4,6 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<link rel="stylesheet" href="../css/index.css" />
 
 		<style>
 			[v-cloak] {
@@ -21,7 +22,7 @@
 	</head>
 
 	<body>
-		<div id="vmkehu" v-cloak style="border: 1px #C0C0C0 solid;padding: 30px; ">
+		<div id="vmkehu" v-cloak>
 			<el-row>
 				<el-row>
 
@@ -40,42 +41,35 @@
 							<el-row style="margin-top: 7px;">
 								<el-col :span="24" align="right">
 									<el-button type="primary" @click="dialogFormVisible = true" size="mini"><i class="el-icon-edit"></i>添加客户</el-button>
-
+									<el-button type="success" size="mini"><i class="el-icon-s-help"></i>车资料</el-button>
+									<el-button type="info" size="mini"><i class="el-icon-video-camera-solid"></i>客户分类</el-button>
 								</el-col>
 							</el-row>
 						</el-header>
 						<el-main>
-							<el-table :data="this.Pageinfo.list" border style="width: 100%;" @row-click="chakancl">
-
-								<el-table-column label="序号" width="70px">
-									<template slot-scope="item">
+							<el-table :data="kehuziliao" border style="width: 100%">
+								<el-table-column label="序号" width="80px">
+									<template slot-scope="temp">
 										{{item.$index+1}}
 									</template>
 								</el-table-column>
-
-								<el-table-column prop="kehubm" label="客户编码" width="90px">
+								<el-table-column prop="" label="客户编码">
 								</el-table-column>
-								<el-table-column prop="kehumc" label="客户名称" width="90px">
+								<el-table-column prop="" label="客户名称">
 								</el-table-column>
-								<el-table-column prop="kehudz" label="详细地址">
+								<el-table-column prop="" label="详细地址">
 								</el-table-column>
-								<el-table-column prop="kehusjhm" label="手机号码" width="120px">
+								<el-table-column prop="" label="手机号码">
 								</el-table-column>
-								<el-table-column prop="kehujrsj" label="加入时间" width="180px">
+								<el-table-column prop="" label="加入时间">
 								</el-table-column>
-								<el-table-column prop="kehubz" label="客户备注">
+								<el-table-column prop="" label="是否会员">
 								</el-table-column>
-								<el-table-column label="操作" width="150px">
-									<template slot-scope="item">
-										<el-button size="mini" type="info" @click="xiuGaiKeHu(item.row,item.$index)">修改</el-button>
-										<el-button size="mini" type="danger" @click="delekehu(item.row)">删除</el-button>
-
-									</template>
-
+								<el-table-column prop="" label="操作">
 								</el-table-column>
 							</el-table>
-							<el-row style="margin-top: 20px;">
-								<el-col :span="10" :push="7">
+							<el-row>
+								<el-col :span="10" :push="9">
 									<el-pagination v-if="Pageinfo.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="Pageinfo.pageNum" :page-size="Pageinfo.pageSize" :total="Pageinfo.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
 									</el-pagination>
 								</el-col>
@@ -84,7 +78,7 @@
 
 					</el-container>
 					<!--车辆分页-->
-					<el-row style="border-top: 1px #C0C0C0 solid;">
+					<el-row>
 						<el-col :span="24">
 							<el-container>
 								<el-header style="height: 85px;">
@@ -94,14 +88,13 @@
 									</el-row>
 									<el-row style="margin-top: 7px;" align="right">
 										<el-col :span="24" align="right">
-											<el-button type="primary" size="mini" @click="insertClopen"><i class="el-icon-edit"></i>添加车辆</el-button>
+											<el-button type="primary" size="mini"><i class="el-icon-edit"></i>添加车辆</el-button>
 
 										</el-col>
 									</el-row>
 								</el-header>
 								<el-main>
-									<el-table :data="Pageinfo2.list.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width:1100px;border: 1px #CCCCCC solid;">
-
+									<el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
 										<el-table-column label="序号" width="80px">
 											<template slot-scope="temp">
 												{{temp.$index+1}}
@@ -122,15 +115,14 @@
 												<el-input v-model="chepaihao" size="mini" placeholder="输入车牌号搜索" />
 											</template>
 											<template slot-scope="scope">
-												<el-button type="info" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-												<el-button size="mini" type="danger" @click="handleDelete(scope.row.khclid)">删除</el-button>
+												<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+												<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 											</template>
 										</el-table-column>
-
 									</el-table>
-									<el-row style="margin-top: 20px;">
-										<el-col :span="10" :push="7">
-											<el-pagination v-if="Pageinfo2.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="Pageinfo2.pageNum" :page-size="Pageinfo2.pageSize" :total="Pageinfo2.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
+									<el-row>
+										<el-col :span="10" :push="9">
+											<el-pagination v-if="Pageinfo2.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="Pageinfo2.pageNum" :page-size="Pageinfo2.pageSize" :total="Pageinfo2.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
 											</el-pagination>
 										</el-col>
 									</el-row>
@@ -152,7 +144,7 @@
 							<el-form-item label="手机号码" class="yjcs2">
 								<el-input v-model="kehu.kehusjhm" size="mini" placeholder="手机号码" class="yjcs1"></el-input>
 							</el-form-item>
-							<el-form-item label="地址:   " class="yjcs2">
+							<el-form-item label="地址:    省" class="yjcs2">
 								<el-input v-model="kehu.kehushen" size="mini" placeholder="省" class="yjcs1"></el-input>
 							</el-form-item>
 							<el-form-item label="市" class="yjcs2">
@@ -177,14 +169,14 @@
 									</el-form-item>-->
 
 						</el-form>
-						<el-form :inline="true" :model="kehu.khcl" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;">
+						<el-form :inline="true" :model="khcl" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;">
 							<h4>车辆信息</h4>
 
 							<el-form-item label="车牌号" class="yjcs2">
-								<el-input v-model="kehu.khcl.jiescph" size="mini" placeholder="车牌号" class="yjcs1"></el-input>
+								<el-input v-model="khcl.jiescph" size="mini" placeholder="车牌号" class="yjcs1"></el-input>
 							</el-form-item>
 							<el-form-item label="车辆品牌" class="yjcs2">
-								<el-select v-model="kehu.khcl.khclpp" placeholder="选择品牌" size="mini">
+								<el-select v-model="khcl.khclpp" placeholder="选择品牌" size="mini">
 
 									<el-option label="玛莎拉蒂" value="玛莎拉蒂"></el-option>
 									<el-option label="保时捷" value="保时捷"></el-option>
@@ -194,113 +186,39 @@
 
 							</el-form-item>
 							<el-form-item label="驾驶员" class="yjcs2">
-								<el-input v-model="kehu.khcl.khcljsy" size="mini" placeholder="驾驶员" class="yjcs1"></el-input>
+								<el-input v-model="khcl.khcljsy" size="mini" placeholder="驾驶员" class="yjcs1"></el-input>
 							</el-form-item>
 							<el-form-item label="驾驶员电话" class="yjcs2">
-								<el-input v-model="kehu.khcl.khcldh" size="mini" placeholder="驾驶员电话" class="yjcs1"></el-input>
+								<el-input v-model="khcl.khcldh" size="mini" placeholder="驾驶员电话" class="yjcs1"></el-input>
 							</el-form-item>
 							<el-form-item label="客户车辆进厂日期" class="yjcs2">
-								<input type="date" v-model="kehu.khcl.khcljcr" size="mini" placeholder="客户车辆进厂日期" class="yjcs1" />
+								<input type="date" v-model="khcl.khcljcr" size="mini" placeholder="客户车辆进厂日期" class="yjcs1" />
 							</el-form-item>
 							<el-form-item label="购买日期" class="yjcs2">
-								<input type="date" v-model="kehu.khcl.khclrq" size="mini" placeholder="购买日期" class="yjcs1" />
+								<input type="date" v-model="khcl.khclrq" size="mini" placeholder="购买日期" class="yjcs1" />
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
 							<el-button @click="dialogFormVisible = false">取 消</el-button>
-							<el-button type="primary" @click="insertkehu">确 定</el-button>
+							<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
 						</div>
 					</el-dialog>
-					<!--新增车俩模态框-->
-					<el-dialog title="录入车辆信息" :visible.sync="dialogFormVisible2" width="800px" style="">
 
-						<el-form :inline="true" :model="kehu.khcl" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;">
-							<h4>车辆信息</h4>
-
-							<el-form-item label="车牌号" class="yjcs2">
-								<el-input v-model="kehu.khcl.jiescph" size="mini" placeholder="车牌号" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="车辆品牌" class="yjcs2">
-								<el-select v-model="kehu.khcl.khclpp" placeholder="选择品牌" size="mini">
-
-									<el-option label="玛莎拉蒂" value="玛莎拉蒂"></el-option>
-									<el-option label="保时捷" value="保时捷"></el-option>
-									<el-option label="路虎" value="玛莎拉蒂"></el-option>
-									<el-option label="法拉利" value="保时捷"></el-option>
-								</el-select>
-
-							</el-form-item>
-							<el-form-item label="驾驶员" class="yjcs2">
-								<el-input v-model="kehu.khcl.khcljsy" size="mini" placeholder="驾驶员" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="驾驶员电话" class="yjcs2">
-								<el-input v-model="kehu.khcl.khcldh" size="mini" placeholder="驾驶员电话" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="客户车辆进厂日期" class="yjcs2">
-								<input type="date" v-model="kehu.khcl.khcljcr" size="mini" placeholder="客户车辆进厂日期" class="yjcs1" />
-							</el-form-item>
-							<el-form-item label="购买日期" class="yjcs2">
-								<input type="date" v-model="kehu.khcl.khclrq" size="mini" placeholder="购买日期" class="yjcs1" />
-							</el-form-item>
-						</el-form>
-						<div slot="footer" class="dialog-footer">
-							<el-button @click="dialogFormVisible2 = false">取 消</el-button>
-							<el-button type="primary" @click="insertCl">确 定</el-button>
-						</div>
-					</el-dialog>
-					<!--修改客户模态框-->
-
-					<el-dialog title="添加客户与车辆信息" :visible.sync="dialogFormVisible3" width="800px" style="">
-						<el-form :inline="true" :model="kehu2" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;margin-bottom: 10px;">
-							<h4>客户信息</h4>
-							<el-form-item label="客户编码" class="yjcs2">
-								<el-input v-model="kehu2.kehubm" size="mini" placeholder="客户编码" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="客户名称" class="yjcs2">
-								<el-input v-model="kehu2.kehumc" size="mini" placeholder="客户名称" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="手机号码" class="yjcs2">
-								<el-input v-model="kehu2.kehusjhm" size="mini" placeholder="手机号码" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="地址:   " class="yjcs2">
-								<el-input v-model="kehu2.kehushen" size="mini" placeholder="省" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="市" class="yjcs2">
-								<el-input v-model="kehu2.kehushi" size="mini" placeholder="市" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="区" class="yjcs2">
-								<el-input v-model="kehu2.kehuqu" size="mini" placeholder="区" class="yjcs1"></el-input>
-							</el-form-item>
-							<el-form-item label="详细地址" class="yjcs2">
-								<textarea rows="2" v-model="kehu2.kehudz" cols="20" placeholder="详细地址"></textarea>
-
-							</el-form-item>
-							<el-form-item label="备注" class="yjcs2">
-								<textarea rows="2" cols="40" v-model="kehu2.kehubz" placeholder="备注"></textarea>
-							</el-form-item>
-						</el-form>
-						<div slot="footer" class="dialog-footer">
-							<el-button @click="dialogFormVisible3 = false">取 消</el-button>
-							<el-button type="primary" @click="xiuGaiKeHu2">确 定</el-button>
-						</div>
-					</el-dialog>
 				</el-row>
-
-		</div>
-
 		</div>
 	</body>
+	<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/index.js"></script>
 
 	<script>
 		var vmkehu = new Vue({
 			data: {
 				dialogFormVisible: false,
-				dialogFormVisible2: false,
-				dialogFormVisible3: false,//修改模态框
 				formLabelWidth: "100px",
 				shousuozhi: "",
-				chepaihao: "", //车牌号搜索
-				kehuid2: "",
+				chepaihao:"",//车牌号搜索
 				kehu: {
 					kehubm: "", //编码
 					kehumc: "", //名称
@@ -310,231 +228,27 @@
 					kehuqu: "",
 					kehudz: "", //详细地址
 					kehubz: "", //备注
-					kehujrsj: "",
-					khcl: {
-						kehuid: "", //客户id
-						jiescph: "", //车牌
-						khclpp: "", //平牌
-						khcljsy: "", //驾驶员
-						khcldh: "", //手机号
-						khcljcr: "",
-						khclrq: "",
-					},
-
 				},
-				kehu2: {}, //修改用来存客户信息
-				Pageinfo: [], //客户分页数据
-				Pageinfo2: {
-					list: [],
-				}, //车辆分页数据
-				kehuid: "",
+				khcl: {
+					jiescph: "", //车牌
+					khclpp: "", //平牌
+					khcljsy: "", //驾驶员
+					khcldh: "", //手机号
+					khcljcr: "",
+					khclrq: "",
+				},
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄',
+				}],
+				Pageinfo: "", //分页数据
+				Pageinfo2: "", //车辆分页数据
 			},
-
 			methods: {
-				//点击修改客户
-				xiuGaiKeHu(kehu,i) {
-					let _this = this;
-					_this.kehu2 = kehu;
-					_this.dialogFormVisible3=true;
-				},
-				//修改客户
-				xiuGaiKeHu2(){
-					let _this = this;
-					$.ajax("http://localhost:9999/api/yj/updateKeHu", {
-						type: "post",
-						contentType: "application/json",
-						data: JSON.stringify(_this.kehu2),
-						dataType: "json",
-						success(yjData) {
-							if(yjData.code == 200) {
-								_this.open2("修改成功");
-								_this.pagekehu(1, 4, _this.shousuozhi);
-							} else if(yjData.code == 400) {
-								_this.open4("修改失败");
-							}
-						}
-					});
-				},
-				//删除车俩
-				handleDelete(khclid) {
-					let _this = this;
-					this.$confirm('是否删除').then(() => {
-						$.ajax("http://localhost:9999/api/yj/deleteKhcl", {
-							type: "get",
-							data: {
-								"khclid": khclid
-							},
-							dataType: "json",
-							success(yjData) {
-								if(yjData.code == 200) {
-									_this.pagekhcl(1, 2, _this.kehuid2);
-									_this.open2("删除成功");
-									_this.dialogFormVisible2=false;
-								} else if(yjData.code == 400) {
-									_this.open4("删除失败");
-								}
-							}
-						});
-					}).catch(() => {
-						_this.open4("取消");
-					})
-
-				},
-				//判断新增车俩时是否选中用户
-				insertClopen() {
-					if(this.kehu.khcl.kehuid != "") {
-						this.dialogFormVisible2 = true;
-					} else {
-						this.open4("请先选择客户");
-					}
-				},
-				//新增车俩
-				insertCl() {
-					let _this = this;
-					$.ajax("http://localhost:9999/api/yj/insertcl", {
-						type: "post",
-						contentType: "application/json",
-						data: JSON.stringify(_this.kehu.khcl),
-						dataType: "json",
-						success(yjData) {
-							if(yjData.code == 200) {
-								_this.pagekhcl(1, 2, _this.kehu.khcl.kehuid);
-								_this.kehu = {
-									khcl: {}
-								};
-								_this.open2("新增成功");
-							} else if(yjData.code == 400) {
-								_this.open4("新增失败");
-							}
-						}
-					});
-				},
-				open2(me) {
-					this.$message({
-						message: me,
-						type: 'success'
-					});
-				},
-				open4(me) {
-					this.$message.error(me);
-				},
-				open3(me) {
-					this.$message({
-						message: me,
-						type: 'warning'
-					});
-				},
-				//新增客户
-				insertkehu() {
-
-					let _this = this;
-					$.ajax("http://localhost:9999/api/yj/insertkehu", {
-						type: "post",
-						data: JSON.stringify(_this.kehu),
-						contentType: "application/json",
-						dataType: "json",
-						success(yjdata) {
-							if(yjdata.code == 200) {
-								_this.open2("新增成功");
-								_this.dialogFormVisible = false,
-									_this.kehu = {
-										khcl: {}
-									};
-								_this.pagekehu(1, 4, _this.shousuozhi)
-							} else if(yjdata.code == 400) {
-								_this.open4("新增失败");
-							}
-						}
-					});
-				},
-				//删除
-				delekehu(val) {
-					let _this = this;
-					this.$confirm('是否删除').then(() => {
-						//正确
-
-						$.ajax("http://localhost:9999/api/yj/deletekehu", {
-							type: "delete",
-							data: {
-								kehuid: val.kehuid,
-							},
-							dataType: "json",
-							success(yjdata) {
-								if(yjdata.code == 200) {
-									_this.open2("删除成功");
-									_this.pagekehu(1, 4, _this.shousuozhi);
-									_this.Pageinfo2.list = [];
-								} else if(yjdata.code == 400) {
-									_this.open4("删除失败");
-								}
-							}
-						});
-					}).catch(() => {
-						//错误
-						console.debug('取消操作');
-					});
-
-				},
 				shousuo() {
-					this.pagekehu(1, 4, this.shousuozhi);
-				},
-				//查询客户分页
-				pagekehu(pageNum, pageSize, sousuo) {
 
-					let _this = this;
-					$.ajax("http://localhost:9999/api/yj/kehupage", {
-						type: "post",
-						data: {
-							"pageNum": pageNum,
-							"pageSize": pageSize,
-							"sousuo": sousuo,
-						},
-						dataType: "json",
-						success(yjdata) {
-
-							_this.Pageinfo = yjdata.data;
-
-						}
-					})
 				},
-				pagekhcl(pageNum, pageSize, kehuid) {
-					let _this = this;
-					$.ajax("http://localhost:9999/api/yj/khclpage", {
-						type: "post",
-						data: {
-							"pageNum": pageNum,
-							"pageSize": pageSize,
-							"kehuid": kehuid,
-						},
-						dataType: "json",
-						success(yjdata) {
-							_this.Pageinfo2 = yjdata.data;
-						}
-					})
-				},
-				handleCurrentChange(val) {
-					this.pagekehu(val, this.Pageinfo.pageSize, this.shousuozhi);
-				},
-				handleSizeChange(val) {
-					this.pagekehu(this.Pageinfo.pageNum, val, this.shousuozhi);
-				},
-				handleCurrentChange2(val) {
-					this.pagekhcl(val, this.Pageinfo2.pageSize, this.kehuid);
-				},
-				handleSizeChange2(val) {
-					this.pagekhcl(this.Pageinfo2.pageNum, val, this.kehuid);
-				},
-				//单击查看车辆信息
-				chakancl(val) {
-					this.kehuid = val.kehuid;
-					this.kehu.khcl.kehuid = val.kehuid;
-					this.kehuid2 = val.kehuid;
-					this.pagekhcl(1, 2, val.kehuid);
-				},
-			},
-			mounted() {
-				this.pagekehu(1, 4, this.shousuozhi);
-
 			}
 		}).$mount("#vmkehu");
 	</script>
