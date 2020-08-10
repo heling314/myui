@@ -121,8 +121,12 @@
 				shouYing(id) {
 
 				},
+				//打开子数据
 				open(id) {
-					
+					$.getJSON(`http://localhost:9999/api/yj/selectJiesJiePage/${id}`,
+					function(yjDate){
+						
+					})
 				},
 				chaXun() {
 
