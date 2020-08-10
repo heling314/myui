@@ -40,6 +40,16 @@
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
 
+<<<<<<< HEAD
+						<!--<el-menu-item>
+							<el-radio-group v-model="isCollapse">
+								<el-radio-button :label="false">展开</el-radio-button>
+								<el-radio-button :label="true">收起</el-radio-button>
+							</el-radio-group>
+						</el-menu-item>-->
+						<!--<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>-->
+=======
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}} {{staff.jiaose.jiaosename}}
@@ -73,8 +83,13 @@
 
 							<el-col :span="22">
 								<div class="grid-content bg-purple-dark nerong">
+<<<<<<< HEAD
+									内容
+							</div>
+=======
 
 								</div>
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 							</el-col>
 						</el-row>
 					</el-main>
@@ -83,14 +98,10 @@
 			</el-container>
 		</div>
 	</body>
-<<<<<<< HEAD
-
-=======
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script type="text/javascript" src="js/vue.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
->>>>>>> hl
 	<script>
 		var vmsy = new Vue({
 			data: {
@@ -123,6 +134,52 @@
 				vmsj.yansehei();
 				vmcz.yansehei();
 			},
+<<<<<<< HEAD
+			methods:{
+				yjAlod(code,caidanid){
+						this.caidanid=caidanid;
+						$(".elaside").load(menuMapping[code]);//ajax加载页面
+						
+				},
+				handleSelect(key, keyPath) {
+					let _this = this;
+					if(key == 2) {
+						$(".elaside").load("维修.html"); //ajax加载页面信息
+						/*if(_this.zhuti == '主题颜色(白色)') {
+							vmwx.yansebai();
+						} else if(_this.zhuti == '主题颜色(黑色)') {
+							vmwx.yansehei();
+						}*/
+					} else if(key == 1) {
+						$(".elaside").load("公告.html"); //ajax加载页面信息
+					} else if(key == 3) {
+						$(".elaside").load("前台.html"); //ajax加载页面信息
+					} else if(key == 4) {
+						$(".elaside").load("客服.html"); //ajax加载页面信息
+					} else if(key == 5) {
+						$(".elaside").load("主数据.html"); //ajax加载页面信息
+					} else if(key == 6) {
+						$(".elaside").load("人事.html"); //ajax加载页面信息
+					} else if(key == 8) {
+						$(".elaside").load("操作.html"); //ajax加载页面信息
+					}
+//					let _this = this;
+//					if(key == 2) {
+//						$(".elaside").load("维修.html"); //ajax加载页面信息
+//					} else if(key == 1) {
+//						$(".elaside").load("公告.html"); //ajax加载页面信息
+//					} else if(key == 3) {
+//						$(".elaside").load("前台.html"); //ajax加载页面信息
+//					} else if(key == 4) {
+//						$(".elaside").load("客服.html"); //ajax加载页面信息
+//					} else if(key == 5) {
+//						$(".elaside").load("主数据.html"); //ajax加载页面信息
+//					} else if(key == 6) {
+//						$(".elaside").load("人事.html"); //ajax加载页面信息
+//					} else if(key == 8) {
+//						$(".elaside").load("操作.html"); //ajax加载页面信息
+//					}
+=======
 			methods: {
 				yjAlod(code, caidanid) {
 					this.caidanid = caidanid;
@@ -130,6 +187,7 @@
 
 				},
 				handleSelect(key, keyPath) { 
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
@@ -170,7 +228,19 @@
 						dataType: "json",
 						success(message) {
 							if(message != null) {
+<<<<<<< HEAD
+								_this.staff = message;
+								
+								/*查询用户是否拥有此权限*/
+//								alert(_this.staff.staffid);
+								/*查询用户是否拥有此权限*/
+								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
+									_this.qxkz = qxkz;
+									
+								});
+=======
 								_this.staff = message; 
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 								_this.caiDanList = message.jiaose.listCaiDan;
 							}
 						}
