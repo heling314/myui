@@ -7,7 +7,6 @@ jQuery.ajaxSetup({
 	},
 	crossDomain: true
 });
-
 //全局异常处理
 jQuery(document).ajaxError(function(ex) {
 	console.log(ex);

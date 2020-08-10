@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		.yjcs1 {
+			width: 120px;
+		}
+	</style>
+
+	<body>
+		<div id="vmhuiYuan">
+			<el-row style="margin-bottom: 20px;">
+				<el-col :span="12" push="4">
+					<div class="grid-content bg-purple-dark">
+						<el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="input2">
+						</el-input>
+
+					</div>
+				</el-col>
+				<el-col :span="12" push="4">
+					<el-button type="primary" icon="el-icon-search" @click="sousuo">搜索</el-button>
+					<el-button type="primary" @click="dialogFormVisibleyj=true">添加会员</el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="18" push="4">
+					<el-table :data="this.huiYuanPage.list" border style="width: 100%">
+						<el-table-column fixed prop="huiyuanname" label="姓名" width="120">
+						</el-table-column>
+						<el-table-column prop="phone" label="电话" width="120">
+						</el-table-column>
+						<el-table-column prop="jifen" label="余额" width="120">
+						</el-table-column>
+						<el-table-column prop="ri" label="注册日期" width="180">
+						</el-table-column>
+						<el-table-column fixed="right" label="操作" width="190">
+							<template slot-scope="scope">
+								<el-button @click="deleteHuiYuangId(scope.row.huiyuanid)" type="danger" size="mini">删除会员</el-button>
+								<!--	<el-button type="primary" size="mini">查看消费记录</el-button>-->
+								<el-button type="primary" @click="open(scope.row.huiyuanid)" size="mini">充值</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</el-col>
+			</el-row>
+			<el-row style="margin-top: 20px;">
+				<el-col :span="10" :push="7">
+					<el-pagination v-if="huiYuanPage.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="huiYuanPage.pageNum" :page-size="huiYuanPage.pageSize" :total="huiYuanPage.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
+					</el-pagination>
+				</el-col>
+			</el-row>
+			<!--新增车俩模态框-->
+			<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
+				<el-form :inline="true" :model="huiYuang" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;" width="200">
+					<h4>录入会员</h4>
+					<el-form-item label="会员名" class="yjcs2">
+						<el-input v-model="huiYuang.huiyuanname" size="mini" placeholder="会员名" class="yjcs1"></el-input>
+					</el-form-item>
+					<el-form-item label="电话" class="yjcs2">
+						<el-input v-model="huiYuang.phone" size="mini" placeholder="电话" class="yjcs1"></el-input>
+					</el-form-item>
+					<el-form-item label="密码" class="yjcs2">
+						<el-input v-model="huiYuang.huiyuanpwd" size="mini" placeholder="密码 " class="yjcs1"></el-input>
+					</el-form-item>
+					<el-form-item label="充值金额" class="yjcs2">
+						<el-input v-model="huiYuang.jifen" size="mini" placeholder="充值金额" class="yjcs1"></el-input>
+					</el-form-item>
+					<div style="color: red;margin-bottom: 20px;margin-left: 40px;"><span>充值大于500送100</span><span>,充值大于1000送300</span></div>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
+					<el-button type="primary" @click="insertCl">确 定</el-button>
+				</div>
+			</el-dialog>
+
+		</div>
+	</body>
+	<script>
+		var vmhuiYuan = new Vue({
+			data: {
+				huiYuang: {},
+				dialogFormVisibleyj: false,
+				input2: "",
+				huiYuanPage: [], //分页数据
+				maney: "",
+			},
+
+			mounted() {
+				this.pagekehu(1, 4, this.input2);
+
+			},
+			methods: {
+				//充值
+				open(hyid) {
+					let _this = this;
+					this.$prompt('请输入充值金额', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+
+					}).then(({
+						value
+					}) => {
+						$.getJSON(`http://localhost:9999/api/yj/selectHuiYuangCZ/${value}/${hyid}`,
+							function(yjdata) {
+								if(yjdata.code == 200) {
+									_this.open2("充值成功");
+									_this.pagekehu(1, 4);
+								} else if(yjdata.code == 501) {
+									_this.$alert("权限不足");
+								}
+							}
+						);
+
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '取消输入'
+						});
+					});
+				},
+				//新增会员
+				insertCl() {
+					let _this = this;
+					$.ajax("http://localhost:9999/api/yj/insertHuiYuang", {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.huiYuang),
+						dataType: "json",
+						success(yjdata) {
+							if(yjdata.code == 200) {
+								_this.open2("新增成功");
+								_this.huiYuang = {};
+								_this.pagekehu(1, 4);
+
+							} else if(yjdata.code == 501) {
+								_this.$alert("权限不足");
+							}
+						}
+					})
+				},
+				//删除会员
+				deleteHuiYuangId(hyid) {
+					let _this = this;
+					this.$confirm('是否删除').then(() => {
+						$.getJSON(`http://localhost:9999/api/yj/deleteHuiYuangid/${hyid}`,
+							function(yjdata) {
+								if(yjdata.code == 200) {
+									_this.open2("删除成功");
+									_this.pagekehu(1, 4);
+								} else if(yjdata.code == 300) {
+									_this.$alert("该会员还有余额,不能删除");
+								} else if(yjdata.code == 501) {
+									_this.$alert("权限不足");
+								}
+							}
+						)
+					}).catch(() => {
+						_this.open4("取消");
+					})
+				},
+				sousuo() {
+					this.pagekehu(1, 4, this.input2);
+				},
+				//分页查询会员
+				pagekehu(pageNum, pageSize, input2) {
+					let _this = this;
+					$.ajax("http://localhost:9999/api/yj/selectHuiYuangPage", {
+						type: "post",
+						data: {
+							"pageNum": pageNum,
+							"pageSize": pageSize,
+							"sousuo": input2,
+						},
+						dataType: "json",
+						success(yjdata) {
+							if(yjdata.code == 200) {
+								_this.huiYuanPage = yjdata.data;
+
+							} else {
+								_this.open3("查询错误");
+							}
+						}
+					})
+				},
+				handleCurrentChange(val) {
+					this.pagekehu(val, this.huiYuanPage.pageSize, this.input2);
+				},
+				handleSizeChange(val) {
+					this.pagekehu(this.huiYuanPage.pageNum, val, this.input2);
+				},
+
+				open2(me) {
+					this.$message({
+						message: me,
+						type: 'success'
+					});
+				},
+				open4(me) {
+					this.$message.error(me);
+				},
+				open3(me) {
+					this.$message({
+						message: me,
+						type: 'warning'
+					});
+				},
+			}
+		}).$mount("#vmhuiYuan");
+	</script>
+
+</html>

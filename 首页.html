@@ -5,41 +5,60 @@
 		<meta charset="UTF-8">
 		<link rel="icon" href="img/favicon.ico" type="img/x-ico" />
 		<link rel="stylesheet" href="css/index.css" />
+		<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+		<script type="text/javascript" src="js/menu_const.js"></script>
+		<!--<script type="text/javascript" src="js/view_filter.js"></script>-->
 		<title>德召文首页</title>
 
 		
 		<style>
 			.el-header,
 			.el-footer {
-				background-color: #B3C0D1;
-				color: #333;
-				text-align: center;
-				line-height: 60px;
 				padding: 0px;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div id="hlsy" style=" box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
+		<div id="hlsy"   style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
 			<el-container>
 				<el-header style="padding: 0px;">
 					<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 						<el-menu-item>
 							<img src="img/logo.gif" width="160px" height="40px" />
 						</el-menu-item>
-						<el-menu-item index="1"><span class="el-icon-message-solid"></span>公告栏</el-menu-item>
-						<el-menu-item index="2" class="xuanze">维修</el-menu-item>
+					
+						<el-menu-item v-for="(item,i) in caiDanList" v-if="item.caidanidfu==0" class="xuanze" index="i+1" @click="yjAlod(item.controlleraction,item.caidanid)">{{item.menuname}}</el-menu-item>
+						
+						<!--<el-menu-item index="2" class="xuanze">维修</el-menu-item>
 						<el-menu-item index="3" class="xuanze">前台</el-menu-item>
 						<el-menu-item index="4" class="xuanze">客服</el-menu-item>
 						<el-menu-item index="5" class="xuanze">数据</el-menu-item>
-						<el-menu-item index="6" class="xuanze">人事</el-menu-item>
+						<el-menu-item index="6" class="xuanze">人事</el-menu-item>-->
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
+<<<<<<< HEAD
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
+<<<<<<< HEAD
 					
+=======
+<<<<<<< HEAD
+						<!--<el-menu-item>
+							<el-radio-group v-model="isCollapse">
+								<el-radio-button :label="false">展开</el-radio-button>
+								<el-radio-button :label="true">收起</el-radio-button>
+							</el-radio-group>
+						</el-menu-item>-->
+>>>>>>> parent of 7c3c284... 杨剑修改权限
+=======
+						<!--<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>-->
+>>>>>>> yj
+>>>>>>> parent of 6ddb915... s1222222
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
-								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}}
+								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}} {{staff.jiaose.jiaosename}}
 							</i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
@@ -81,24 +100,37 @@
 
 							<el-col :span="22">
 								<div class="grid-content bg-purple-dark nerong">
+<<<<<<< HEAD
 									
 
+=======
+									内容
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 								</div>
+=======
+
+>>>>>>> yj
 							</el-col>
 						</el-row>
 					</el-main>
 				</el-container>
 				<el-footer style="background-color: aquamarine;">Footer</el-footer>
 			</el-container>
-		</div>
+			</div>
 	</body>
+<<<<<<< HEAD
+
+=======
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script type="text/javascript" src="js/vue.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+>>>>>>> hl
 	<script>
 		var vmsy = new Vue({
 			data: {
+				treeNodes: {},
+				/*菜单集合*/
 				backgroundcolor: '',
 				textcolor: '',
 				activetextcolor: '',
@@ -106,18 +138,55 @@
 				activeIndex2: '1',
 				isCollapse: true,
 				zhuti: '主题颜色(白色)',
-				staff: {},
-				qxkz: {}
+				staff: {},//用户对象
+				qxkz: {},
+				caiDanList:[],/*菜单集合*/
+				caidanid:"",/*当前父菜单id*/
 			},
 			mounted() {
+				let _this = this;
+//				/*查询用户*/
+//				$.ajax(`http://localhost:9999/api/show/getCaiDan`, {
+//					type: "get",
+//					dataType: "json",
+//					success(message) {
+//						if(message != null) {
+//							_this.treeNodes = message;
+//							alert(JSON.stringify(_this.treeNodes));
+//						}
+//					}
+//				});
 				this.user();
+				_this.zhuti = '主题颜色(黑色)';
+						_this.backgroundcolor = '#1a1e1a';
+						_this.textcolor = '#fff';
+						_this.activetextcolor = '#ffd04b';
+						vmwx.yansehei();
+						vmqt.yansehei();
+						vmkf.yansehei();
+						vmsj.yansehei();
+						vmcz.yansehei();
 			},
-			methods: {
+			methods:{
+				yjAlod(code,caidanid){
+						this.caidanid=caidanid;
+						$(".elaside").load(menuMapping[code]);//ajax加载页面
+						
+				},
 				handleSelect(key, keyPath) {
+<<<<<<< HEAD
 					let _this = this;
 					if(key == 2) {
 						$(".elaside").load("维修.html"); //ajax加载页面信息
+<<<<<<< HEAD
 
+=======
+						/*if(_this.zhuti == '主题颜色(白色)') {
+							vmwx.yansebai();
+						} else if(_this.zhuti == '主题颜色(黑色)') {
+							vmwx.yansehei();
+						}*/
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 					} else if(key == 1) {
 						$(".elaside").load("公告.html"); //ajax加载页面信息
 					} else if(key == 3) {
@@ -131,6 +200,24 @@
 					} else if(key == 8) {
 						$(".elaside").load("操作.html"); //ajax加载页面信息
 					}
+=======
+//					let _this = this;
+//					if(key == 2) {
+//						$(".elaside").load("维修.html"); //ajax加载页面信息
+//					} else if(key == 1) {
+//						$(".elaside").load("公告.html"); //ajax加载页面信息
+//					} else if(key == 3) {
+//						$(".elaside").load("前台.html"); //ajax加载页面信息
+//					} else if(key == 4) {
+//						$(".elaside").load("客服.html"); //ajax加载页面信息
+//					} else if(key == 5) {
+//						$(".elaside").load("主数据.html"); //ajax加载页面信息
+//					} else if(key == 6) {
+//						$(".elaside").load("人事.html"); //ajax加载页面信息
+//					} else if(key == 8) {
+//						$(".elaside").load("操作.html"); //ajax加载页面信息
+//					}
+>>>>>>> yj
 				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
@@ -146,7 +233,7 @@
 						_this.backgroundcolor = '#1a1e1a';
 						_this.textcolor = '#fff';
 						_this.activetextcolor = '#ffd04b';
-					vmwx.yansehei();
+						vmwx.yansehei();
 						vmqt.yansehei();
 						vmkf.yansehei();
 						vmsj.yansehei();
@@ -156,7 +243,7 @@
 						_this.backgroundcolor = '';
 						_this.textcolor = '';
 						_this.activetextcolor = '';
-					vmwx.yansebai();
+						vmwx.yansebai();
 						vmqt.yansebai();
 						vmkf.yansebai();
 						vmsj.yansebai();
@@ -167,18 +254,25 @@
 					let _this = this;
 					/*查询用户*/
 					$.ajax(`http://localhost:9999/api/show/denglu2`, {
-						type: "post",
+						type: "get",
 						dataType: "json",
 						success(message) {
 							if(message != null) {
 								_this.staff = message;
+<<<<<<< HEAD
 								
 								/*查询用户是否拥有此权限*/
 //								alert(_this.staff.staffid);
+=======
+								/*查询用户是否拥有此权限*/
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 								$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + _this.staff.staffid + '', function(qxkz) {
 									_this.qxkz = qxkz;
 									
 								});
+=======
+								_this.caiDanList = message.jiaose.listCaiDan;
+>>>>>>> yj
 							}
 						}
 					});

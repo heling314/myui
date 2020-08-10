@@ -16,13 +16,15 @@
 				<el-col :span="24">
 					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 						<!--首页显示营业报表,今日营业情况-->
-						<el-menu-item index="1">
+						<el-menu-item index="0">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">首页</span>
 						</el-menu-item>
 						
+<<<<<<< HEAD
 						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
+<<<<<<< HEAD
 							<span slot="title" @click="pp">车辆品牌</span>
 						</el-menu-item>
 						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
@@ -32,6 +34,17 @@
 						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title" @click="weixiu">维修项目</span>
+=======
+							<span slot="title">发动机品牌</span>
+						</el-menu-item>
+						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
+							<i class="el-icon-platform-eleme"></i>
+							<span slot="title">车型档案</span>
+						</el-menu-item>
+						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
+							<i class="el-icon-platform-eleme"></i>
+							<span slot="title">维修项目</span>
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 						</el-menu-item>
 						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
@@ -39,20 +52,23 @@
 						</el-menu-item>
 						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
+<<<<<<< HEAD
 							<span slot="title" @click="gonghuo">供货单位</span>
+=======
+							<span slot="title">供货单位</span>
+>>>>>>> parent of 7c3c284... 杨剑修改权限
 						</el-menu-item>
 						<!--<el-submenu index="2">
 							<template slot="title">
+=======
+						<el-submenu :index="i+1"    v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
+							<template slot="title" >
+>>>>>>> yj
 								<i class="el-icon-location"></i>
-								<span slot="title">客户档案</span>
+								<span slot="title">{{item.menuname}}</span>
 							</template>
-							<el-menu-item index="1-1">客户资料</el-menu-item>
-							<el-menu-item index="1-2">客户车辆</el-menu-item>
-						</el-submenu>-->
-						<!--<el-menu-item index="3">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">会员卡充值管理</span>
-						</el-menu-item>-->
+							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="shuju(item2.controlleraction)">{{item2.menuname}}</el-menu-item>
+						</el-submenu>
 					</el-menu>
 				</el-col>
 			</el-row>
@@ -70,15 +86,14 @@
 				textcolor: '',
 				activetextcolor: '',
 				isCollapse: true,
-				qxkz: {}
+				qxkz: {},
+				caiDanList2:[],
+				caidanid:"",
 			},
 			mounted() {
-				let _this = this;
-				let id = vmsy.staff.staffid;
-				/*查询用户是否拥有此权限*/
-				$.getJSON('http://127.0.0.1:9999/api/hl/selectByPrimaryKey/' + id + '', function(qxkz) {
-					_this.qxkz = qxkz;
-				});
+			let _this = this;
+				_this.caidanid=vmsy.caidanid;		
+				_this.caiDanList2=vmsy.caiDanList;
 			},
 			methods: {
 				pp(){
@@ -109,6 +124,9 @@
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
+				},
+				shuju(code){
+					$(".nerong").load(menuMapping[code]);
 				}
 			}
 		}).$mount("#sj");

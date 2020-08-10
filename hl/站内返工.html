@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>维修接车</title>
+	</head>
+
+	<body>
+		<div id="wxjc" style="background-color:  #efeff7; height: 630px; width: 1200px; padding: 10px; margin-left: 100px;">
+			<el-tabs v-model="activeName" @tab-click="handleClick">
+
+				<!--
+                    	作者：1170546521@qq.com
+                    	时间：2020-08-01
+                    	描述：站内维修
+                    -->
+				<el-form :model="weixiujl" ref="weixiujl" label-width="100px" class="demo-weixiujl">
+					<el-row>
+						<el-col :span="6" :offset="3">
+							<el-form-item label="维修编码" prop="weixiujlbm">
+								<el-input v-model="weixiujl.weixiujlbm" :disabled="true" style="width: 200px;"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="技工">
+								<el-input v-model="weixiujl.weixiuzrr" :disabled="true" style="width: 200px;"></el-input>
+							</el-form-item>
+
+						</el-col>
+						<el-col :span="6">
+
+							<el-form-item label="牌号">
+								<el-input v-model="weixiujl.khclph" :disabled="true" style="width: 200px;"></el-input>
+							</el-form-item>
+
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="6" :offset="3">
+							<el-form-item label="车辆主人">
+								<el-input v-model="weixiujl.clzr" :disabled="disabled" style="width: 200px;"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="车辆驾驶员">
+								<el-input v-model="weixiujl.cljsy" :disabled="disabled" style="width: 220px;"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="车辆品牌">
+								<el-input v-model="weixiujl.clpp" :disabled="disabled" style="width: 200px;"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+
+					<el-row>
+						<el-col :span="6" :offset="3">
+							<el-form-item label="备注">
+								<el-input type="textarea" v-model="weixiujl.weixiujlbz"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6" :offset="3">
+							<el-form-item label="返工原因">
+								<el-input type="textarea" v-model="weixiujl.weixiujlfg"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="15" :offset="5" style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); padding: 10px;">
+							<template>
+								<el-table :data="weixiujl.weixiusp" show-summary border style="width: 100%">
+									<el-table-column fixed label="单号">
+										<!--作用域插槽-->
+										<template slot-scope="temp">
+											{{temp.$index+1}}
+										</template>
+									</el-table-column>
+									<el-table-column prop="weixiuspname" label="项目名称">
+									</el-table-column>
+									<el-table-column prop="weixiuspbzpice" label="价格">
+									</el-table-column>
+									<el-table-column prop="weixiuspsum" label="数量">
+									</el-table-column>
+									<el-table-column fixed="right" label="操作">
+										<template slot-scope="scope">
+											<el-button @click="deletesp(scope.row)" type="text" size="small">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+							</template>
+						</el-col>
+					</el-row>
+
+					<el-row style="margin: 20px; 0px;">
+						<el-col :span="24">
+							<el-button type="primary" @click="centerDialogVisib" style="margin-left: 300px;">新增维修商品</el-button>
+
+							<el-button type="success" style="margin-left: 100px;" @click="chuangjianweixiudan" >创建维修订单</el-button>
+
+							<el-dialog title="维修商品类型" :visible.sync="centerDialogVisible" width="70%" center>
+
+								<el-row class="tac">
+
+									<el-col :span="6">
+										<el-form-item label="维修类型">
+											<el-select v-model="wxxmname" placeholder="请选择维修类型" @change="selectWorkName">
+												<el-option key="全部" value="全部" label="全部" />
+												<el-option v-for="val in Wxtype" :key="val.wxtypename" :value="val.wxtypename" :label="Wxtype.wxtypeid" />
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row class="tac" style=" box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+									<el-col :span="20">
+
+										<template>
+											<el-table :data="wxxm.filter(data => !search || data.wxxmname.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
+												<el-table-column fixed prop="wxxmname" label="商品名称">
+												</el-table-column>
+												<el-table-column prop="bzjia" label="商品标准价">
+												</el-table-column>
+												<el-table-column prop="hyjia" label="商品会员价">
+												</el-table-column>
+												<el-table-column prop="vipjia" label="vip价格">
+												</el-table-column>
+												<el-table-column prop="xyijia" label="协议价格">
+												</el-table-column>
+												<el-table-column prop="bz1" label="库存">
+												</el-table-column>
+
+												<el-table-column label="调整值" width="150">
+													<template slot-scope="scope">
+														<el-input-number size="mini" @change="changeNum(scope.row.wxxmid,$event)" :step="1" :min="1" :max="scope.row.bz1" v-model="scope.row.bz2"></el-input-number>
+													</template>
+												</el-table-column>
+
+												<el-table-column align="right">
+													<template slot="header" slot-scope="scope">
+														<el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
+													</template>
+													<template slot-scope="scope">
+														<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">添加商品</el-button>
+														<!--															<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>-->
+													</template>
+												</el-table-column>
+											</el-table>
+										</template>
+									</el-col>
+								</el-row>
+
+								<span slot="footer" class="dialog-footer">
+    									<el-button @click="centerDialogVisible = false">取 消</el-button>
+    									<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  									</span>
+							</el-dialog>
+						</el-col>
+					</el-row>
+				</el-form>
+
+			</el-tabs>
+		</div>
+	</body>
+
+	<script>
+		var vmwxjc = new Vue({
+			data: {
+				//tabs切换
+				activeName: 'first',
+				//维修记录
+				weixiujl: {
+					khclid: '',
+					weixiujlbm: '',
+					weixiujlname: '',
+					weixiujlpice: '',
+					weixiujlhyj: '',
+					weixiujlvipj: '',
+					weixiujlxyj: '',
+					weixiujlbz: '',
+					weixiujlzt: 2,
+					weixiujlfg: '',
+					weixiuzrr: '',
+					weixiucfje: '',
+					weixiucgcs: '',
+					weixiutype: 1,
+					weixiulic: 0,
+					weixiujg: '',
+					starttime: '',
+					endstart: '',
+					clzr: '',
+					cljsy: '',
+					clpp: '',
+				},
+				//选择技工
+				staff: [],
+				//模糊查询车牌好
+				sname: '',
+				Kehu: {},
+				Khcl: {},
+				//禁用状态
+				disabled: true,
+				//维修消耗商品
+				Weixiusp: [],
+				//对话框状态
+				centerDialogVisible: false,
+				//维修项目
+				wxxm: [],
+
+				search: '',
+				wxxmname: '',
+				//维修类别
+				Wxtype: [],
+				//维修类别Id
+				wxtypeid: 0,
+				num: 0
+			},
+			mounted() {
+				let _this = this;
+				_this.fangongdan();
+			},
+			methods: {
+				//查询要返工德员工订单
+				fangongdan() {
+					let _this = this; //非常重要
+					var bm = window.localStorage.bm;
+					alert(bm);
+
+					$.getJSON("http://127.0.0.1:9999/api/hl/querydlByweixiujlbm/" + bm + "", function(data) {
+						_this.weixiujl = data;
+						alert(JSON.stringify(_this.weixiujl));
+					});
+				},
+				//tabs的切换方法
+				handleClick(tab, event) {
+					console.log(tab, event);
+				},
+				// 表单方法
+				submitForm(formName) {
+					this.$refs[formName].validate((valid) => {
+						if(valid) {
+							alert('submit!');
+						} else {
+							console.log('error submit!!');
+							return false;
+						}
+					});
+				},
+				resetForm(formName) {
+					this.$refs[formName].resetFields();
+					let _this = this;
+					_this.timechuo();
+				},
+
+				querySearchAsync(queryString, cb) {
+					var sr = [];
+					let _this = this;
+					if(queryString != undefined && queryString.length > 0) {
+						$.getJSON('http://127.0.0.1:9999/api/hl/select1/' + queryString + '', function(khcl) {
+							cb(khcl);
+							if(khcl != '') {
+								_this.disabled = true;
+							} else {
+								_this.disabled = false;
+							}
+						});
+					} else {
+						cb(sr);
+					}
+				}, //打开新增维修商品 and 模糊查询维修项目
+				centerDialogVisib() {
+					let _this = this;
+					_this.centerDialogVisible = true;
+					$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxtypeid=" + _this.wxtypeid + "", function(clpp) {
+						_this.wxxm = clpp;
+					});
+					//查询维修类别
+					$.getJSON("http://127.0.0.1:9999/api/hl/selectWxtype", function(Wxtype) {
+						_this.Wxtype = Wxtype;
+						/*alert(JSON.stringify(_this.Wxtype));*/
+					});
+				},
+				//临时表单查询方法
+				handleEdit(index, row) {
+
+					if(row.bz1 < 1) {
+						alert("库存不足");
+					} else {
+						let _this = this;
+						alert(JSON.stringify(row));
+						$.getJSON("http://127.0.0.1:9999/api/hl/updateBy/" + (row.bz1 - row.bz2) + "/" + row.wxxmid + "", function(msg) {
+							if(msg.code == "200") {
+								vmsy.$message({
+									message: '恭喜你，创建成功',
+									type: 'success'
+								});
+							}
+						});
+						$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxtypeid=" + _this.wxtypeid + "", function(clpp) {
+							_this.wxxm = clpp;
+						});
+
+						var Weixiusp = {};
+						Weixiusp['weixiuspname'] = row.wxxmname;
+						Weixiusp['weixiuspsum'] = row.bz2;
+						Weixiusp['weixiuspbzpice'] = row.bzjia * Weixiusp.weixiuspsum;
+						Weixiusp['weixiujlid'] =_this.weixiujl.weixiujlid;
+
+						$.ajax('http://localhost:9999/api/hl/insertadd', {
+							type: 'post',
+							data: JSON.stringify(Weixiusp),
+							dataType: 'json',
+							contentType: 'application/json',
+							success(msg) {
+								if(msg.code == "200") {
+									vmsy.$message({
+										message: '恭喜你，创建成功',
+										type: 'success'
+									});
+								}
+							}
+						});
+
+					}
+
+				},
+				selectWorkName(val) {
+					let _this = this;
+					if(val == '全部') {
+						_this.wxtypeid = 0;
+						$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxtypeid=" + _this.Wxtype.wxtypeid + "", function(clpp) {
+							_this.wxxm = clpp;
+						});
+					} else {
+						let obj = {}; //wxtypeid
+						obj = this.Wxtype.find((item) => { //this.ruleForm
+							return item.wxtypename === val; //筛选出匹配数据
+						});
+						console.log(obj.wxtypeid); //我这边的name就是对应label的
+						let _this = this;
+						$.getJSON("http://127.0.0.1:9999/api/hl/selectByP", "wxtypeid=" + obj.wxtypeid + "", function(clpp) {
+							_this.wxxm = clpp;
+						});
+					}
+				},
+				//删除维修商品
+				deletesp(row) {
+					alert(JSON.stringify(row));
+					$.getJSON("http://127.0.0.1:9999/api/hl/deleteBs/" + row.weixiuspid + "", function(msg) {
+						if(msg.code == "200") {
+							vmsy.$message({
+								message: '恭喜你，删除成功',
+								type: 'success'
+							});
+						}
+					});
+				},chuangjianweixiudan(){
+					this.$confirm('确定提交吗？').then(_ => {
+						let _this = this; //非常重要
+						$.ajax('http://localhost:9999/api/hl/updateBybm/' + 2 + '/' + _this.weixiujl.weixiujlbm + '', {
+							type: 'put',
+							dataType: 'json',
+							contentType: 'application/json',
+							success(msg) {
+								if(msg.code == "200") {
+									vmsy.$message({
+										message: '恭喜你，提交成功',
+										type: 'success'
+									});
+									
+								}
+							}
+						});
+					}).catch(_ => {});
+				}
+			}
+		}).$mount("#wxjc");
+	</script>
+
+</html>
