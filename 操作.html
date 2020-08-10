@@ -22,7 +22,9 @@
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
 							</template>
-							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid" index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc">{{item2.menuname}}</el-menu-item>
+							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid" index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="shuju(item2.controlleraction)">
+								{{item2.menuname}}
+							</el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</el-col>
@@ -65,8 +67,8 @@
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
-				},tzqxsz(){
-					$(".nerong").load("hl/权限管理.html"); //ajax加载页面信息
+				},shuju(code){
+					$(".nerong").load(menuMapping[code]); //ajax加载页面信息
 				}
 			}
 		}).$mount("#cz");

@@ -13,7 +13,6 @@
 		<!--<script type="text/javascript" src="js/view_filter.js"></script>-->
 		<title>德召文首页</title>
 
-		
 		<style>
 			.el-header,
 			.el-footer {
@@ -23,16 +22,16 @@
 	</head>
 
 	<body>
-		<div id="hlsy"   style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
+		<div id="hlsy" style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
 			<el-container>
 				<el-header style="padding: 0px;">
 					<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 						<el-menu-item>
 							<img src="img/logo.gif" width="160px" height="40px" />
 						</el-menu-item>
-					
+
 						<el-menu-item v-for="(item,i) in caiDanList" v-if="item.caidanidfu==0" class="xuanze" index="i+1" @click="yjAlod(item.controlleraction,item.caidanid)">{{item.menuname}}</el-menu-item>
-						
+
 						<!--<el-menu-item index="2" class="xuanze">维修</el-menu-item>
 						<el-menu-item index="3" class="xuanze">前台</el-menu-item>
 						<el-menu-item index="4" class="xuanze">客服</el-menu-item>
@@ -41,6 +40,7 @@
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
 						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
 
+<<<<<<< HEAD
 						<!--<el-menu-item>
 							<el-radio-group v-model="isCollapse">
 								<el-radio-button :label="false">展开</el-radio-button>
@@ -48,6 +48,8 @@
 							</el-radio-group>
 						</el-menu-item>-->
 						<!--<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>-->
+=======
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}} {{staff.jiaose.jiaosename}}
@@ -68,18 +70,10 @@
 								<!--:collapse="isCollapse"-->
 								<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" style="height: 700px;" :background-color="backgroundcolor" :text-color="textcolor" :active-text-color="activetextcolor">
 									<!--首页显示营业报表,今日营业情况-->
-									<el-menu-item index="1">
+									<el-menu-item index="0">
 										<i class="el-icon-platform-eleme"></i>
 										<span slot="title">首页</span>
 									</el-menu-item>
-									<!--<el-submenu index="2">	
-										<template slot="title">
-											<i class="el-icon-location"></i>
-											<span slot="title">维修救援</span>
-										</template>
-										<el-menu-item index="1-1">维修接车</el-menu-item>
-										<el-menu-item index="1-2">竣工检验</el-menu-item>
-									</el-submenu>-->
 								</el-menu>
 							</el-col>
 						</el-row>
@@ -87,20 +81,22 @@
 					<el-main>
 						<el-row>
 
-						
-									
-
 							<el-col :span="22">
 								<div class="grid-content bg-purple-dark nerong">
+<<<<<<< HEAD
 									内容
 							</div>
+=======
+
+								</div>
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 							</el-col>
 						</el-row>
 					</el-main>
 				</el-container>
 				<el-footer style="background-color: aquamarine;">Footer</el-footer>
 			</el-container>
-			</div>
+		</div>
 	</body>
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
@@ -118,35 +114,27 @@
 				activeIndex2: '1',
 				isCollapse: true,
 				zhuti: '主题颜色(白色)',
-				staff: {},//用户对象
+				staff: {}, //用户对象
 				qxkz: {},
-				caiDanList:[],/*菜单集合*/
-				caidanid:"",/*当前父菜单id*/
+				caiDanList: [],
+				/*菜单集合*/
+				caidanid: "",
+				/*当前父菜单id*/
 			},
 			mounted() {
 				let _this = this;
-//				/*查询用户*/
-//				$.ajax(`http://localhost:9999/api/show/getCaiDan`, {
-//					type: "get",
-//					dataType: "json",
-//					success(message) {
-//						if(message != null) {
-//							_this.treeNodes = message;
-//							alert(JSON.stringify(_this.treeNodes));
-//						}
-//					}
-//				});
 				this.user();
 				_this.zhuti = '主题颜色(黑色)';
-						_this.backgroundcolor = '#1a1e1a';
-						_this.textcolor = '#fff';
-						_this.activetextcolor = '#ffd04b';
-						vmwx.yansehei();
-						vmqt.yansehei();
-						vmkf.yansehei();
-						vmsj.yansehei();
-						vmcz.yansehei();
+				_this.backgroundcolor = '#1a1e1a';
+				_this.textcolor = '#fff';
+				_this.activetextcolor = '#ffd04b';
+				vmwx.yansehei();
+				vmqt.yansehei();
+				vmkf.yansehei();
+				vmsj.yansehei();
+				vmcz.yansehei();
 			},
+<<<<<<< HEAD
 			methods:{
 				yjAlod(code,caidanid){
 						this.caidanid=caidanid;
@@ -191,6 +179,15 @@
 //					} else if(key == 8) {
 //						$(".elaside").load("操作.html"); //ajax加载页面信息
 //					}
+=======
+			methods: {
+				yjAlod(code, caidanid) {
+					this.caidanid = caidanid;
+					$(".elaside").load(menuMapping[code]); //ajax加载页面
+
+				},
+				handleSelect(key, keyPath) { 
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
@@ -231,6 +228,7 @@
 						dataType: "json",
 						success(message) {
 							if(message != null) {
+<<<<<<< HEAD
 								_this.staff = message;
 								
 								/*查询用户是否拥有此权限*/
@@ -240,6 +238,9 @@
 									_this.qxkz = qxkz;
 									
 								});
+=======
+								_this.staff = message; 
+>>>>>>> d6ac3545e8bf3acb5bb58f4559dcd0e5e33b53e7
 								_this.caiDanList = message.jiaose.listCaiDan;
 							}
 						}

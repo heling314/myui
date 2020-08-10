@@ -20,54 +20,15 @@
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">首页</span>
 						</el-menu-item>
-						
-<<<<<<< HEAD
-						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-<<<<<<< HEAD
-							<span slot="title" @click="pp">车辆品牌</span>
-						</el-menu-item>
-						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="cheliang">车型档案</span>
-						</el-menu-item>
-						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="weixiu">维修项目</span>
-=======
-							<span slot="title">发动机品牌</span>
-						</el-menu-item>
-						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">车型档案</span>
-						</el-menu-item>
-						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">维修项目</span>
->>>>>>> parent of 7c3c284... 杨剑修改权限
-						</el-menu-item>
-						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">商品资料</span>
-						</el-menu-item>
-						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-<<<<<<< HEAD
-							<span slot="title" @click="gonghuo">供货单位</span>
-=======
-							<span slot="title">供货单位</span>
->>>>>>> parent of 7c3c284... 杨剑修改权限
-						</el-menu-item>
-						<!--<el-submenu index="2">
+
+						<el-submenu :index="i+1" v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
 							<template slot="title">
-=======
-						<el-submenu :index="i+1"    v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
-							<template slot="title" >
->>>>>>> yj
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
 							</template>
-							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="shuju(item2.controlleraction)">{{item2.menuname}}</el-menu-item>
+							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid" index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="shuju(item2.controlleraction)">
+								{{item2.menuname}}
+							</el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</el-col>
@@ -87,27 +48,27 @@
 				activetextcolor: '',
 				isCollapse: true,
 				qxkz: {},
-				caiDanList2:[],
-				caidanid:"",
+				caiDanList2: [],
+				caidanid: "",
 			},
 			mounted() {
-			let _this = this;
-				_this.caidanid=vmsy.caidanid;		
-				_this.caiDanList2=vmsy.caiDanList;
+				let _this = this;
+				_this.caidanid = vmsy.caidanid;
+				_this.caiDanList2 = vmsy.caiDanList;
 			},
 			methods: {
-				pp(){
-				$(".nerong").load("zyw/品牌.html");	
+				pp() {
+					$(".nerong").load("zyw/品牌.html");
 				},
-				weixiu(){
-				$(".nerong").load("zyw/维修项目.html");	
+				weixiu() {
+					$(".nerong").load("zyw/维修项目.html");
 				},
-				cheliang(){
-					$(".nerong").load("zyw/车型.html");	
-				},gonghuo(){
+				cheliang() {
+					$(".nerong").load("zyw/车型.html");
+				},
+				gonghuo() {
 					$(".nerong").load("zyw/供货单位.html");
-				}
-				,
+				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
 				},
@@ -119,13 +80,14 @@
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
-				},yansebai(){
+				},
+				yansebai() {
 					let _this = this;
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
 				},
-				shuju(code){
+				shuju(code) {
 					$(".nerong").load(menuMapping[code]);
 				}
 			}
