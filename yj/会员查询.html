@@ -21,27 +21,27 @@
 
 					</div>
 				</el-col>
-				<el-col :span="12" push="4">
-					<el-button type="primary" icon="el-icon-search" @click="sousuo">搜索</el-button>
-					<el-button type="primary" @click="dialogFormVisibleyj=true">添加会员</el-button>
+				<el-col :span="24" >
+					<el-button type="primary"  @click="sousuo">已结算</el-button>
+					<el-button type="primary" @click="dialogFormVisibleyj=true">未结算</el-button>
 				</el-col>
 			</el-row>
 			<el-row>
 				<el-col :span="18" push="4">
-					<el-table :data="this.huiYuanPage.list" border style="width: 100%">
-						<el-table-column fixed prop="huiyuanname" label="姓名" width="120">
+					<el-table :data="this.JieSuanPage.list" border style="width: 100%">
+						<el-table-column fixed prop="" label="姓名" width="120">
 						</el-table-column>
-						<el-table-column prop="phone" label="电话" width="120">
+						<el-table-column prop="" label="电话" width="120">
 						</el-table-column>
-						<el-table-column prop="jifen" label="余额" width="120">
+						<el-table-column prop="" label="余额" width="120">
 						</el-table-column>
-						<el-table-column prop="ri" label="注册日期" width="180">
+						<el-table-column prop="" label="注册日期" width="180">
 						</el-table-column>
 						<el-table-column fixed="right" label="操作" width="190">
 							<template slot-scope="scope">
-								<el-button @click="deleteHuiYuangId(scope.row.huiyuanid)" type="danger" size="mini">删除会员</el-button>
+								<el-button @click="deleteHuiYuangId(scope.row)" type="danger" size="mini">收银</el-button>
 								<!--	<el-button type="primary" size="mini">查看消费记录</el-button>-->
-								<el-button type="primary" @click="open(scope.row.huiyuanid)" size="mini">充值</el-button>
+								<el-button type="primary" @click="open(scope.row)" size="mini">获取数据</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -49,12 +49,12 @@
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="10" :push="7">
-					<el-pagination v-if="huiYuanPage.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="huiYuanPage.pageNum" :page-size="huiYuanPage.pageSize" :total="huiYuanPage.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
+					<el-pagination v-if="JieSuanPage.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="JieSuanPage.pageNum" :page-size="JieSuanPage.pageSize" :total="JieSuanPage.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
 					</el-pagination>
 				</el-col>
 			</el-row>
 			<!--新增车俩模态框-->
-			<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
+			<!--<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
 				<el-form :inline="true" :model="huiYuang" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;" width="200">
 					<h4>录入会员</h4>
 					<el-form-item label="会员名" class="yjcs2">
@@ -75,7 +75,7 @@
 					<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
 					<el-button type="primary" @click="insertCl">确 定</el-button>
 				</div>
-			</el-dialog>
+			</el-dialog>-->
 
 		</div>
 	</body>

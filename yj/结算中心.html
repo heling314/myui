@@ -1,45 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+
 	<body>
-<<<<<<< HEAD:yj/new_file.html
-<<<<<<< HEAD
-<<<<<<< HEAD:yj/结算中心.html
-=======
->>>>>>> parent of 6ddb915... s1222222:yj/结算中心.html
 		<div id="vmJieSuan">
 			<el-row style="margin-bottom: 20px;">
-				<el-col :span="12" push="4">
-					<div class="grid-content bg-purple-dark">
-						<el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="input2">
-						</el-input>
+				<el-col :span="11" push="4">
+					<el-input placeholder="请输入车牌号" prefix-icon="el-icon-search" v-model="input2">
+					</el-input>
 
-					</div>
 				</el-col>
-				<el-col :span="12" push="4">
-					<el-button type="primary" @click="sousuo">已结算</el-button>
-					<el-button type="primary" @click="dialogFormVisibleyj=true">未结算</el-button>
+				<el-col :span="11" push="4" style="margin-top: 10px;margin-left: 20px;">
+					<el-button type="primary" @click="weiJieSuan" size="mini">未结算</el-button>
+					<el-button type="primary" @click="yiJieSuan" size="mini">已结算</el-button>
 				</el-col>
+
 			</el-row>
 			<el-row>
 				<el-col :span="24">
-					<el-table :data="this.JieSuanPage.list" border style="width: 100%">
-						<el-table-column fixed prop="huiyuanname" label="车牌号" width="120">
+					<el-table :data="this.JieSuanPage.list" style="width: 100%">
+						<el-table-column type="expand">
+								<el-form label-position="left" inline class="demo-table-expand">
+									<el-form-item label="项目名称">
+										<span></span>
+									</el-form-item>
+									<el-form-item label="金额">
+										<span></span>
+									</el-form-item>
+								</el-form>
 						</el-table-column>
-						<el-table-column prop="phone" label="进厂日期" width="120">
+						<el-table-column label="车牌号" prop="jiescph">
 						</el-table-column>
-						<el-table-column prop="jifen" label="完工日期" width="120">
+						<el-table-column label="进厂日期" prop="jiesjcsj">
 						</el-table-column>
-						<el-table-column prop="ri" label="维修金额" width="180">
+						<el-table-column label="完工日期" prop="jieswgsj">
 						</el-table-column>
-						<el-table-column fixed="right" label="操作" width="190">
+						<el-table-column label="维修金额" prop="jieswxje">
+						</el-table-column>
+						<el-table-column label="操作">
 							<template slot-scope="scope">
-								<el-button @click="deleteHuiYuangId(scope.row.huiyuanid)" type="danger" size="mini">删除会员</el-button>
-								<!--	<el-button type="primary" size="mini">查看消费记录</el-button>-->
-								<el-button type="primary" @click="open(scope.row.huiyuanid)" size="mini">充值</el-button>
+								<el-button v-show="status2" @click="" type="primary" size="mini">回复结算</el-button>
+								<el-button v-show="status" @click="shouYing(scope.row.jiesid)" type="primary" size="mini">收银</el-button>
+								<el-button type="primary" @click="open(scope.row.jiesid)" size="mini">获取数据</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -47,12 +53,12 @@
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="10" :push="7">
-					<el-pagination v-if="huiYuanPage.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="huiYuanPage.pageNum" :page-size="huiYuanPage.pageSize" :total="huiYuanPage.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
+					<el-pagination v-if="JieSuanPage.total!=0" :background="true" :pager-count="4" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="JieSuanPage.pageNum" :page-size="JieSuanPage.pageSize" :total="JieSuanPage.total" :page-sizes="[1,2,4]" layout="total, sizes, prev, pager, next, jumper">
 					</el-pagination>
 				</el-col>
 			</el-row>
 			<!--新增车俩模态框-->
-			<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
+			<!--<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
 				<el-form :inline="true" :model="huiYuang" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;" width="200">
 					<h4>录入会员</h4>
 					<el-form-item label="会员名" class="yjcs2">
@@ -73,23 +79,85 @@
 					<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
 					<el-button type="primary" @click="insertCl">确 定</el-button>
 				</div>
-			</el-dialog>
+			</el-dialog>-->
 		</div>
 	</body>
 	<script>
-		var vmJieSuan=new Vue({
-			data:{
-				JieSuanPage:[],
+		var vmJieSuan = new Vue({
+			data: {
+				input2: "",
+				JieSuanPage: [],
+				dialogFormVisibleyj: false,
+				status: true,
+				status2: false,
 			},
-			methods:{
-				
+			methods: {
+				//分页查询会员
+				pagekehu(pageNum, pageSize, input2) {
+					let _this = this;
+					$.ajax("http://localhost:9999/api/yj/selectJiesWeiPage", {
+						type: "post",
+						data: {
+							"pageNum": pageNum,
+							"pageSize": pageSize,
+							"chePaiHao": input2,
+						},
+						dataType: "json",
+						success(yjdata) {
+							if(yjdata.code == 200) {
+								_this.JieSuanPage = yjdata.data;
+								_this.status = true;
+								_this.status2 = false;
+							}
+						}
+					})
+				},
+				handleCurrentChange(val) {
+					this.pagekehu(val, this.JieSuanPage.pageSize, this.input2);
+				},
+				handleSizeChange(val) {
+					this.pagekehu(this.JieSuanPage.pageNum, val, this.input2);
+				},
+				shouYing(id) {
+
+				},
+				open(id) {
+					
+				},
+				chaXun() {
+
+				},
+				//查询未结算
+				weiJieSuan() {
+					this.pagekehu(1, 4, this.input2);
+				},
+				//查询已结算
+				yiJieSuan() {
+					let _this = this;
+					$.ajax("http://localhost:9999/api/yj/selectJiesJiePage", {
+						type: "post",
+						data: {
+							"pageNum": 1,
+							"pageSize": 4,
+							"chePaiHao": this.input2,
+						},
+						dataType: "json",
+						success(yjdata) {
+							if(yjdata.code == 200) {
+								_this.JieSuanPage = yjdata.data;
+								_this.status = false;
+								_this.status2 = true;
+							}
+						}
+					})
+
+				},
 			},
-			mounted(){
-				
+			mounted() {
+				this.pagekehu(1, 4, this.input2);
 			},
 		}).$mount("#vmJieSuan");
 	</script>
-=======
 	</body>
->>>>>>> parent of 7c3c284... 杨剑修改权限
+
 </html>

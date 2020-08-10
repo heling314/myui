@@ -26,7 +26,7 @@
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
 							</template>
-							<el-menu-item v-for="(item2,j) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  :disabled="qxkz.wxjc == 0 ? true : false" @click="huiYuan(item2.controlleraction)">{{item2.menuname}}</el-menu-item>
+							<el-menu-item v-for="(item2,j) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  :disabled="qxkz.wxjc == 0 ? true : false" @click="jiesuan(item2.controlleraction)">{{item2.menuname}}</el-menu-item>
 						</el-submenu>
 						
 
@@ -75,8 +75,7 @@
 					_this.textcolor = '';
 					_this.activetextcolor = '';
 				},
-				huiYuan(code){
-					this.qxkz=0;
+				jiesuan(code){
 					$(".nerong").load(menuMapping[code]);
 				}
 			}
