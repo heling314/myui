@@ -25,9 +25,15 @@
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
 							</template>
+<<<<<<< HEAD
 							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc(item2.controlleraction)">
 							{{item2.menuname}}
 							</el-menu-item>
+=======
+							<el-menu-item index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="wxjc">维修接车</el-menu-item>
+							<el-menu-item :disabled="qxkz.jgjy == 0 ? true : false" index="2-2" @click="weixiu">竣工检验</el-menu-item>
+							<el-menu-item :disabled="qxkz.jgjy == 0 ? true : false" index="2-3" @click="linshi">临时显示</el-menu-item>
+>>>>>>> hl
 						</el-submenu>
 						
 					</el-menu>
@@ -63,25 +69,38 @@
 			},
 			methods: {
 				handleOpen(key, keyPath) {
-			
+
 				},
 				handleClose(key, keyPath) {
-					
+
 				},
 				yansehei() {
 					let _this = this;
 					_this.backgroundcolor = '#1a1e1a';
 					_this.textcolor = '#fff';
 					_this.activetextcolor = '#ffd04b';
-				},yansebai(){
+				},
+				yansebai() {
 					let _this = this;
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
+<<<<<<< HEAD
 				},wxjc(code){
 					$(".nerong").load(menuMapping[code]); //ajax加载页面信息
+=======
+				},
+				wxjc() {
+					$(".nerong").load("hl/接车订单.html"); //ajax加载页面信息
+				},
+				linshi() {
+					/*$(".nerong").load("hl/站外接车.html"); //ajax加载页面信息*/
+				},
+				weixiu() {
+					$(".nerong").load("hl/竣工检验.html"); //ajax加载页面信息
+>>>>>>> hl
 				}
-				
+
 			}
 		}).$mount("#wx");
 	</script>
