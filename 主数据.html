@@ -35,7 +35,7 @@
 						</el-menu-item>
 						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
-							<span slot="title">商品资料</span>
+							<span slot="title" @click="spzl">商品资料</span>
 						</el-menu-item>
 						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
 							<i class="el-icon-platform-eleme"></i>
@@ -81,6 +81,9 @@
 				});
 			},
 			methods: {
+				spzl(){
+					$(".nerong").load("zyw/商品资料.html");	
+				},
 				pp(){
 				$(".nerong").load("zyw/品牌.html");	
 				},

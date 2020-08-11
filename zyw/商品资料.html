@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="spzl">
+			<el-form :inline="true" :model="spzl" class="demo-form-inline">
+				<el-form-item label="">
+					<el-input v-model="spzl.ppname" placeholder="商品名称"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="ons">查询</el-button>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="insopen">新增</el-button>
+				</el-form-item>
+			</el-form>
+			
+			<el-dialog title="商品资料添加" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+				<el-form ref="spxx" :model="spxx" :rules="rules" label-width="100px">
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="登记门店" prop="djmd">
+								<el-input v-model="spxx.djmd"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="商品编号" prop="spxxbm">
+								<el-input v-model="spxx.spxxbm"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="商品品牌" prop="options"> 
+								<el-select v-model="spxx.spxxpp" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.wxtypename" :label="item.wxtypename" :value="item.wxtypename">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="商品类型" prop="options1">
+								<el-select v-model="spxx.spxxtype" placeholder="请选择">
+									<el-option v-for="item in options1" :key="item.wxtypename" :label="item.wxtypename" :value="item.wxtypename">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12" >
+									<el-form-item label="商品名称" prop="jsxmname">
+								<el-input v-model="spxx.jsxmname"></el-input>
+							</el-form-item>
+							</el-col >
+							<el-col :span="12">
+									<el-form-item label="数量单位" prop="spxxdw">
+								<el-input v-model="spxx.spxxdw"></el-input>
+							</el-form-item>
+							</el-col >
+						</el-row>
+							<el-row>
+							<el-col :span="12">
+									<el-form-item label="数量" prop="spxxzl">
+								<el-input v-model="spxx.spxxzl"></el-input>
+							</el-form-item>
+							</el-col >
+							<el-col :span="12">
+									<el-form-item label="进货价" prop="spxxjhj">
+								<el-input v-model="spxx.spxxjhj"></el-input>
+							</el-form-item>
+							</el-col >
+						</el-row>
+						
+						<el-row>
+							<el-col :span="12">
+								<el-form-item label="vip进货价" prop="spxxvipj">
+								<el-input v-model="spxx.spxxvipj"></el-input>
+							</el-form-item>
+							</el-col>
+						</el-row>																		
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary"  @click="insert">确 定</el-button>
+  </span>
+			</el-dialog>
+			<template>
+				<el-table :data="tableData.list" border style="width: 80%">
+
+					<el-table-column prop="djmd" label="登记门店" width="120">
+					</el-table-column>
+					<el-table-column fixed prop="spxxbm" label="商品编码" width="150">
+					</el-table-column>
+					<el-table-column prop="spxxpp" label="商品品牌" width="120">
+					</el-table-column>
+					<el-table-column prop="jsxmname" label="商品名称" width="120">
+					</el-table-column>
+					<el-table-column prop="spxxdw" label="数量单位" width="120">
+					</el-table-column>
+					<el-table-column prop="spxxzl" label="数量" width="120">
+					</el-table-column>
+					<el-table-column prop="spxxjhj" label="进货价" width="120">
+					</el-table-column>
+					<el-table-column prop="spxxvipj" label="商品vip价" width="120">
+					</el-table-column>
+					<el-table-column fixed="right" label="操作" width="100">
+						<template slot-scope="scope">
+							<el-button @click="Updateopen(scope.row)" type="text" size="small">修改</el-button>
+							<el-button type="text" @click="delClick(scope.row.spxxid)" size="small">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</template>
+			<el-pagination style="padding-left: 150px;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
+			</el-pagination>
+						<el-dialog title="商品资料修改" :visible.sync="dialogVisible1" width="60%" :before-close="handleClose">
+				<el-form ref="form" :model="spxx" label-width="100px">
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="登记门店">
+								<el-input v-model="spxx.djmd"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="商品编号">
+								<el-input v-model="spxx.spxxbm"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="商品品牌">
+								<el-select v-model="spxx.spxxpp" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.wxtypename" :label="item.wxtypename" :value="item.wxtypename">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="商品类型">
+								<el-select v-model="spxx.spxxtype" placeholder="请选择">
+									<el-option v-for="item in options1" :key="item.wxtypename" :label="item.wxtypename" :value="item.wxtypename">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+									<el-form-item label="商品名称">
+								<el-input v-model="spxx.jsxmname"></el-input>
+							</el-form-item>
+							</el-col >
+							<el-col :span="12">
+									<el-form-item label="数量单位">
+								<el-input v-model="spxx.spxxdw"></el-input>
+							</el-form-item>
+							</el-col >
+						</el-row>
+							<el-row>
+							<el-col :span="12">
+									<el-form-item label="数量">
+								<el-input v-model="spxx.spxxzl"></el-input>
+							</el-form-item>
+							</el-col >
+							<el-col :span="12">
+									<el-form-item label="进货价">
+								<el-input v-model="spxx.spxxjhj"></el-input>
+							</el-form-item>
+							</el-col >
+						</el-row>
+						
+						<el-row>
+							<el-col :span="12">
+								<el-form-item label="vip进货价">
+								<el-input v-model="spxx.spxxvipj"></el-input>
+							</el-form-item>
+							</el-col>
+						</el-row>																		
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+    <el-button @click="quxiao">取 消</el-button>
+    <el-button type="primary"  @click="UpdateClick">确 定</el-button>
+  </span>
+			</el-dialog>
+		</div>
+		<script>
+			new Vue({
+				el: "#spzl",
+				data: {
+					rules:{
+						
+					},
+					tableData: [],
+					spzl: {},
+					pages: 1,
+					dialogVisible: false,
+					dialogVisible1:false,
+					spxx: {},
+					options: [{
+						wxtypename: "宝马"
+					}, {
+						wxtypename: "奥迪"
+					}, {
+						wxtypename: "特斯拉"
+					}, {
+						wxtypename: "米其林"
+					}, {
+						wxtypename: "捷豹"
+					}, ],
+					options1: [{
+							wxtypename: "车身"
+						}, {
+							wxtypename: "制动系统"
+						}, {
+							wxtypename: "转向系统"
+						}, {
+							wxtypename: "行使系统"
+						}, {
+							wxtypename: "传动系统"
+						}, {
+							wxtypename: "通用件与标准件"
+						}, {
+							wxtypename: "发动机"
+						}, {
+							wxtypename: "电气"
+						}, {
+							wxtypename: "轮胎"
+						},
+						{
+							wxtypename: "油品"
+						},
+						{
+							wxtypename: "汽车用品"
+						},
+						{
+							wxtypename: "油漆"
+						},
+						{
+							wxtypename: "汽油发电机"
+						}, {
+							wxtypename: "柴油发电机"
+						}, {
+							wxtypename: "燃气轮机"
+						}, {
+							wxtypename: "发电组件"
+						},
+					]
+				},
+				methods: {
+					quxiao(){
+						this.spxx={};
+						this.dialogVisible1= false;
+					},
+					query() {
+						let _this = this;
+						$.getJSON("http://127.0.0.1:9999/api/zyw/queryspzl?pageNum=" + _this.pages + "&spzl=" + _this.spzl.ppname, function(it) {
+							_this.tableData = it;
+						})
+					},ons(){
+						this.query();
+					},
+					insopen() {
+						this.dialogVisible = true;
+					},
+					Updateopen(i) {
+						this.spxx=i;
+              this.dialogVisible1=true;
+					},
+					insert() {
+						let _this = this;
+						$.ajax('http://127.0.0.1:9999/api/zyw/insspxx', {
+							type: "post",
+							data: _this.spxx,
+							success(message) {
+								if(message.code == 200) {
+									_this.$message({
+										message: '新增成功',
+										type: 'success'
+									});
+									_this.dialogVisible = false;
+									_this.spxx = {};
+									_this.query();
+								}
+							}
+						});
+					},
+					delClick(i) {
+						let _this = this;
+						$.getJSON("http://127.0.0.1:9999/api/zyw/removespxx?spid=" + i, function(it) {
+							if(it.code == 200) {
+								_this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								_this.query();
+							}
+						})
+
+					},
+					UpdateClick() {
+						let _this = this;
+						$.ajax('http://127.0.0.1:9999/api/zyw/updatespzl', {
+							type: "post",
+							data: _this.spxx,
+							success(message) {
+								if(message.code == 200 ) {
+									_this.$message({
+										message: '修改成功',
+										type: 'success'
+									});
+									_this.dialogVisible1 = false;
+									_this.query();
+									_this.spxx = {};
+								}
+							}
+						});
+					},
+					handleSizeChange(val) {
+						console.log(`每页 ${val} 条`);
+					},
+					handleCurrentChange(val) {
+						this.pages = val;
+						this.query();
+						console.log(`当前页: ${val}`);
+					},
+					handleClose(done) {
+						this.$confirm('确认关闭？')
+							.then(_ => {
+								done();
+							})
+							.catch(_ => {});
+					}
+				},
+				mounted() {
+					this.query();
+				}
+
+			})
+		</script>
+	</body>
+
+</html>

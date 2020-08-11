@@ -5,29 +5,30 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<style>
-			#pp{
-			margin-left: 50px;
+			#pp {
+				margin-left: 50px;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div id="pp"><template>
-			<el-form :inline="true" :model="formInline" class="demo-form-inline">
-  <el-form-item label="品牌名称">
-    <el-input v-model="formInline.ppname" placeholder="品牌名称"></el-input>
-  </el-form-item>
-   <el-form-item label="首字母">
-    <el-input v-model="formInline.szm" placeholder="首字母"></el-input>
-  </el-form-item>
-   <el-form-item>
-    <el-button type="success" @click="onSubmit">查询</el-button>
-  </el-form-item>
-  <el-form-item>
-   <el-button type="success" @click="insert">新增</el-button>
-  </el-form-item>
-  </el-form>
-			
+		<div id="pp">
+			<template>
+				<el-form :inline="true" :model="formInline" class="demo-form-inline">
+					<el-form-item label="品牌名称">
+						<el-input v-model="formInline.ppname" placeholder="品牌名称"></el-input>
+					</el-form-item>
+					<el-form-item label="首字母">
+						<el-input v-model="formInline.szm" placeholder="首字母"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="success" @click="onSubmit">查询</el-button>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="success" @click="insert">新增</el-button>
+					</el-form-item>
+				</el-form>
+
 				<el-table :data="tableData.list" style="width: 100%">
 					<el-table-column prop="clppid" label="品牌id" width="180">
 					</el-table-column>
@@ -42,11 +43,11 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				
+
 				<div class="block">
 					<el-pagination style="padding-left: 150px;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="tableData.pageNum" :page-sizes="[]" :page-size="tableData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.total">
 					</el-pagination>
-						<el-dialog title="修改" :visible.sync="xgai" width="30%" :before-close="handleClose">
+					<el-dialog title="修改" :visible.sync="xgai" width="30%" :before-close="handleClose">
 						<el-form ref="form" :model="cl" label-width="100px">
 							<el-form-item label="品牌名称">
 								<el-input v-model="cl.clppname"></el-input>
@@ -60,26 +61,24 @@
     <el-button type="primary"  @click="x">确 定</el-button>
   </span>
 					</el-dialog>
-					
-					<el-dialog title="新增" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-						<el-form ref="form" :model="clpp" label-width="100px">
-							<el-form-item label="品牌名称">
+
+					<el-dialog title="品牌添加" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+						<el-form ref="clpp" :rules="rules" :model="clpp" label-width="100px">
+							<el-form-item label="品牌名称" prop="clppname">
 								<el-input v-model="clpp.clppname"></el-input>
 							</el-form-item>
-							<el-form-item label="品牌首字母">
+							<el-form-item label="品牌首字母" prop="clppszm">
 								<el-input v-model="clpp.clppszm"></el-input>
 							</el-form-item>
 						</el-form>
 						<span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary"  @click="ins">确 定</el-button>
+    <el-button type="primary"  @click="ins('clpp')">确 定</el-button>
   </span>
 					</el-dialog>
 				</div>
 			</template>
 			<el-row style="margin-top: 20px;">
-
-				
 
 			</el-row>
 		</div>
@@ -96,40 +95,71 @@
 				return {
 					tableData: [],
 					dialogVisible: false,
-					xgai:false,
-					pagen:"",
+					xgai: false,
+					pagen: "",
 					clpp: {
 						clppname: "",
 						clppszm: ""
-					},cl: {
+					},
+					cl: {
 						clppname: "",
 						clppszm: ""
 					},
-					formInline:{
-						ppname:"",
-						szm:""
+					formInline: {
+						ppname: "",
+						szm: ""
+					},
+					rules: {
+						clppname: [{
+								required: true,
+								message: '请输入品牌名称',
+								trigger: 'blur'
+							},
+							{
+								min: 3,
+								max: 5,
+								message: '长度在 3 到 5 个字符',
+								trigger: 'blur'
+							}
+						],clppszm: [{
+								required: true,
+								message: '请输入品牌首字母',
+								trigger: 'blur'
+							},
+							{
+								min: 1,
+								max: 5,
+								message: '长度在 1到 5 个字符',
+								trigger: 'blur'
+							}
+						]
 					}
+
 				}
 			},
 			methods: {
 				cha(i) {
 					let _this = this;
-					$.getJSON("http://127.0.0.1:9999/api/zyw/pp?pageNum=" + i+"&name="+_this.formInline.ppname+"&szm="+_this.formInline.szm, function(it) {
+					$.getJSON("http://127.0.0.1:9999/api/zyw/pp?pageNum=" + i + "&name=" + _this.formInline.ppname + "&szm=" + _this.formInline.szm, function(it) {
 						_this.tableData = it;
 					})
-				},onSubmit(){
+				},
+				onSubmit() {
 					this.cha(1);
-				},xiu(){
+				},
+				xiu() {
 					this.cha(1);
 					this.xgai = false;
 				},
 				insert() {
 					this.dialogVisible = true;
-				},xg(i){
-					this.cl=i;
+				},
+				xg(i) {
+					this.cl = i;
 					this.xgai = true;
-				},x(){
-						let _this = this;
+				},
+				x() {
+					let _this = this;
 					$.ajax('http://127.0.0.1:9999/api/zyw/upda', {
 						type: "post",
 						data: _this.cl,
@@ -139,54 +169,65 @@
 									message: '修改成功',
 									type: 'success'
 								});
-								_this.xgai=false;
+								_this.xgai = false;
 								_this.cha(1);
 							}
 						}
 					});
 				},
-				ins() {
-					let _this = this;
-					$.ajax('http://127.0.0.1:9999/api/zyw/ins', {
-						type: "post",
-						data: _this.clpp,
-						success(message) {
-							if(message == 1) {
-								_this.$message({
-									message: '新增成功',
-									type: 'success'
-								});
-								_this.dialogVisible=false;
-								_this.clpp.clppname="";
-									_this.clpp.clppszm="";
-								_this.cha(1);
-							}
+				ins(clpp) {
+					this.$refs[clpp].validate((valid) => {
+						if(valid) {
+
+							let _this = this;
+							$.ajax('http://127.0.0.1:9999/api/zyw/ins', {
+								type: "post",
+								data: _this.clpp,
+								success(message) {
+									if(message == 1) {
+										_this.$message({
+											message: '新增成功',
+											type: 'success'
+										});
+										_this.dialogVisible = false;
+										_this.clpp.clppname = "";
+										_this.clpp.clppszm = "";
+										_this.cha(1);
+									}
+								}
+							});
+						} else {
+							console.log('error submit!!');
+							return false;
 						}
 					});
-				},  handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-     },handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-      	this.pagen=val;
-      	this.cha(val);
-        console.log(`当前页: ${val}`);
-      },sc(i){
-      	let _this=this;
-//    	alert(i)
-      	$.getJSON("http://127.0.0.1:9999/api/zyw/sc?ppid=" + i, function(it) {
+				},
+				handleClose(done) {
+					this.$confirm('确认关闭？')
+						.then(_ => {
+							done();
+						})
+						.catch(_ => {});
+				},
+				handleSizeChange(val) {
+					console.log(`每页 ${val} 条`);
+				},
+				handleCurrentChange(val) {
+					this.pagen = val;
+					this.cha(val);
+					console.log(`当前页: ${val}`);
+				},
+				sc(i) {
+					let _this = this;
+					//    	alert(i)
+					$.getJSON("http://127.0.0.1:9999/api/zyw/sc?ppid=" + i, function(it) {
 						_this.$message({
-									message: '删除成功',
-									type: 'success'
-							});
-								_this.cha(_this.pagen);
+							message: '删除成功',
+							type: 'success'
+						});
+						_this.cha(_this.pagen);
 					})
-      }
+				}
 			},
 			mounted() {
 				this.cha(1);
