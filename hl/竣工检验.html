@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>竣工检验</title>
+		<style>
+			.demo-table-expand {
+				font-size: 0;
+			}
+			
+			.demo-table-expand label {
+				width: 90px;
+				color: #99a9bf;
+			}
+			
+			.demo-table-expand .el-form-item {
+				margin-right: 0;
+				margin-bottom: 0;
+				width: 50%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="vmjgjy">
+			<el-form ref="form" :model="form" label-width="80px">
+				<el-row>
+
+					<el-col :span="5">
+						<div class="grid-content bg-purple-dark">
+							<el-form-item label="维修编码">
+								<el-input v-model="form.weixiujlbm"></el-input>
+							</el-form-item>
+						</div>
+					</el-col>
+					<el-col :span="5">
+						<div class="grid-content bg-purple-dark">
+							<el-form-item label="客户车牌">
+								<el-input v-model="form.khclph"></el-input>
+							</el-form-item>
+						</div>
+					</el-col>
+					<el-col :span="5">
+						<div class="grid-content bg-purple-dark">
+							<el-form-item label="客户名称">
+								<el-input v-model="form.clzr"></el-input>
+							</el-form-item>
+						</div>
+					</el-col>
+					<el-col :span="5">
+						<div class="grid-content bg-purple-dark">
+							<el-form-item label="状态">
+								<el-select v-model="form.wxjlzt" placeholder="请选择活动区域" @change="selectWorkName">
+									<el-option key="全部" value="0" label="全部" />
+									<el-option label="站内维修" value="1"></el-option>
+									<el-option label="站外维修" value="2"></el-option>
+								</el-select>
+							</el-form-item>
+						</div>
+					</el-col>
+					<el-col :span="3" :offset="1">
+						<div class="grid-content bg-purple-dark">
+							<el-button type="primary" icon="el-icon-search" @click="sousuo">搜索</el-button>
+						</div>
+					</el-col>
+
+				</el-row>
+				<el-row>
+					<el-col style="  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+						<template>
+							<el-table :data="pageInfo.list" style="width: 100%">
+								<el-table-column type="expand">
+									<template slot-scope="props">
+										<div v-for="(item, index) in props.row.weixiusp" :key="index">
+											<el-form label-position="left" inline class="demo-table-expand">
+												<el-form-item label="编号">
+													<span>{{ index+1 }}</span>
+												</el-form-item>
+												<el-form-item label="商品名称">
+													<span>{{ item.weixiuspname }}</span>
+												</el-form-item>
+												<el-form-item label="商品价格">
+													<span>{{ item.weixiuspbzpice }}</span>
+												</el-form-item>
+											</el-form>
+										</div>
+
+									</template>
+								</el-table-column>
+								<el-table-column label="维修记录编码" prop="weixiujlbm">
+								</el-table-column>
+								<el-table-column label="维修记录编号" prop="weixiujlid">
+								</el-table-column>
+								<el-table-column label="客户车辆品牌" prop="khclph">
+								</el-table-column>
+								<el-table-column label="总价" prop="weixiujlpice">
+								</el-table-column>
+								<el-table-column label="维修备注" prop="weixiujlbz">
+								</el-table-column>
+								<el-table-column label="维修技工" prop="weixiuzrr">
+								</el-table-column>
+								<el-table-column label="开始时间" prop="starttime">
+								</el-table-column>
+								<el-table-column label="结束时间" prop="endstart">
+								</el-table-column>
+								<el-table-column label="车辆主人" prop="clzr">
+								</el-table-column>
+								<el-table-column label="车辆驾驶员" prop="cljsy">
+								</el-table-column>
+								<el-table-column label="车辆品牌" prop="clpp">
+								</el-table-column>
+								<el-table-column label="操作">
+									<!--作用域插槽-->
+									<template slot-scope="temp">
+										<el-button type="warning" @click="dialogVisi(temp.row.weixiujlbm)" plain>工程检验</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+						<el-dialog title="提示" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+							<div>
+								<el-row>
+									<el-col :span="12" :offset="10">
+										<div class="grid-content bg-purple-dark">
+											<el-radio v-model="radio1" label="1" @change="agreeChange" border>竣工</el-radio>
+											<el-radio v-model="radio1" label="2" @change="agreeChange" border>返工</el-radio>
+										</div>
+									</el-col>
+								</el-row>
+								<el-row v-show="show1" style="margin-top: 10px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); height: 100px;">
+									<el-col :span="12" :offset="10">
+										<div class="grid-content bg-purple-dark">
+											<el-row>
+												<el-col :span="12">
+													<el-link type="danger" disabled>请确认提交订单没有问题在竣工</el-link>
+												</el-col>
+												<el-row>
+													<el-col :span="12" :offset="3" style="margin-top: 20px;">
+														<el-button type="warning" @click="jungong">竣工</el-button>
+													</el-col>
+												</el-row>
+										</div>
+									</el-col>
+									</el-row>
+									<el-row v-show="show2" style="margin-top: 10px; ">
+										<el-col :span="12" :offset="3" style="margin-top: 10px;">
+											<div class="grid-content bg-purple-dark">
+												<el-form-item label="返工原因">
+													<el-input type="textarea" v-model="weixiujl.weixiujlfg" placeholder="请输入内容" v-model="form.desc" maxlength="200" show-word-limit>
+
+												</el-form-item>
+
+											</div>
+										</el-col>
+										<el-col :span="6" style="margin-top: 13px; margin-left: 10px;">
+											<el-switch style="display: block" v-model="value2" active-color="#13ce66" inactive-color="#ff4949" active-text="非我方原因" inactive-text="我方原因" @change="danji">
+											</el-switch>
+										</el-col>
+									</el-row>
+									<el-row v-show="show3" style="margin-top: 10px; ">
+										<el-row>
+											<el-col :span="12" :offset="3" style="margin-top: 10px;">
+												<el-form-item label="责任人">
+													<el-input v-model="weixiujl.weixiuzrr"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="12" :offset="3" style="margin-top: 10px;">
+												<el-form-item label="处罚金额">
+													<el-input v-model="weixiujl.weixiucfje"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-row>
+									<el-row v-show="show3" style="margin-top: 10px; ">
+
+										<el-row>
+											<el-col :span="12" :offset="3" style="margin-top: 10px;">
+												<el-button type="primary" @click="wofangfangong">确 定</el-button>
+											</el-col>
+
+										</el-row>
+									</el-row>
+
+							</div>
+							<span slot="footer" class="dialog-footer">
+    								<el-button @click="dialogVisible = false">取 消</el-button>
+    								<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  							</span>
+						</el-dialog>
+					</el-col>
+					</el-row>
+					<el-row style="margin-top: 10px;">
+						<el-col :span="10" :offset="6">
+							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.pageNum" :page-sizes="[1, 3, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
+						</el-pagination>
+						</el-col>
+					</el-row>
+
+			</el-form>
+		</div>
+	</body>
+	<script>
+		var vmwxjc = new Vue({
+			data: {
+				//临时form数据
+				form: {
+					//查询条件
+					weixiujlbm: '',
+					khclph: '',
+					clzr: '',
+					weixiutype: 0,
+					wxjlzt: ''
+				},
+				pageInfo: {
+
+				},
+				dialogVisible: false,
+				radio1: '1',
+				show1: true,
+				show2: false,
+				xiugaibm: 1,
+				value2: true,
+				show3: false,
+				weixiujl: {}
+			},
+			mounted() {
+				this.goToPage(1, 3);
+			},
+			methods: {
+				handleSizeChange(val) {
+					console.log(`每页 ${val} 条`);
+					this.pageInfo.pageSize = val;
+					this.goToPage(this.pageInfo.pageNum, val);
+				},
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.pageInfo.pageNum = val;
+					this.goToPage(val, this.pageInfo.pageSize);
+				},
+				goToPage(p, s) {
+					let _this = this; //非常重要
+					$.getJSON("http://127.0.0.1:9999/api/hl/selectByPrimary", "pageNum=" + p + "&pageSize=" + s + "&weixiujlbm=" + _this.form.weixiujlbm + "&khclph=" + _this.form.khclph + "&clzr=" + _this.form.clzr + "&weixiutype=" + _this.form.weixiutype + "", function(data) {
+						_this.pageInfo = data;
+					});
+				},
+				selectWorkName(val) {
+					let _this = this; //非常重要
+					alert(val);
+					_this.form.weixiutype = val;
+				},
+				sousuo() {
+					this.goToPage(this.pageInfo.pageNum, this.pageInfo.pageSize);
+				},
+				handleClose(done) {
+					this.$confirm('确认关闭？')
+						.then(_ => {
+							done();
+						})
+						.catch(_ => {});
+				},
+				dialogVisi(weixiujlbm) {
+					let _this = this; //非常重要
+					_this.xiugaibm = weixiujlbm;
+					_this.dialogVisible = true;
+
+				},
+				agreeChange(val) {
+					alert(val);
+					let _this = this; //非常重要
+					if(val == 1) {
+						_this.show1 = true;
+						_this.show2 = false;
+					} else {
+						_this.show1 = false;
+						_this.show2 = true;
+						$.getJSON("http://127.0.0.1:9999/api/hl/querydlByweixiujlbm/" + _this.xiugaibm + "", function(data) {
+							_this.weixiujl = data;
+						});
+					}
+
+				},
+				jungong() {
+					this.$confirm('确定竣工吗？').then(_ => {
+						let _this = this; //非常重要
+						$.ajax('http://localhost:9999/api/hl/updateBybm/' + 1 + '/' + _this.xiugaibm + '', {
+							type: 'put',
+							dataType: 'json',
+							contentType: 'application/json',
+							success(msg) {
+								if(msg.code == "200") {
+									vmsy.$message({
+										message: '恭喜你，修改成功',
+										type: 'success'
+									});
+									_this.goToPage(1, 3);
+								}
+							}
+						});
+					}).catch(_ => {});
+
+				},
+				danji() {
+					let _this = this; //非常重要
+					if(_this.value2) {
+						_this.show3 = false;
+					} else {
+						_this.show3 = true;
+					}
+				},
+				wofangfangong() {
+					let _this = this; //非常重要
+
+					$.ajax('http://localhost:9999/api/hl/updateBybime/' + _this.weixiujl.weixiujlfg + '/' +_this.weixiujl.weixiucfje  + '/' + _this.xiugaibm + '', {
+						type: 'put',
+						dataType: 'json',
+						contentType: 'application/json',
+						success(msg) {
+							if(msg.code == "200") {
+								vmsy.$message({
+									message: '恭喜你，修改成功',
+									type: 'success'
+								});
+								_this.goToPage(1, 3);
+							}
+						}
+					});
+					_this.dialogVisible = false;
+				}
+			}
+		}).$mount("#vmjgjy");
+	</script>
+
+</html>
