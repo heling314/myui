@@ -21,32 +21,7 @@
 							<span slot="title">首页</span>
 						</el-menu-item>
 
-						
-						<el-menu-item index="2" :disabled="qxkz.fdjpp == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="pp">车辆品牌</span>
-						</el-menu-item>
-						<el-menu-item index="3" :disabled="qxkz.cxda == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="cheliang">车型档案</span>
-						</el-menu-item>
-						<el-menu-item index="4" :disabled="qxkz.wxxmid == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="weixiu">维修项目</span>
-						</el-menu-item>
-						<el-menu-item index="5" :disabled="qxkz.sqzl == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="spzl">商品资料</span>
-						</el-menu-item>
-						<el-menu-item index="6" :disabled="qxkz.ghdwid == 0 ? true : false">
-							<i class="el-icon-platform-eleme"></i>
-							<span slot="title" @click="gonghuo">供货单位</span>
-						</el-menu-item>
-					<el-submenu index="2">
-
-
 						<el-submenu :index="i+1" v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
-
 							<template slot="title">
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
@@ -82,26 +57,6 @@
 				_this.caiDanList2 = vmsy.caiDanList;
 			},
 			methods: {
-
-				spzl(){
-					$(".nerong").load("zyw/商品资料.html");	
-				},
-				pp(){
-				$(".nerong").load("zyw/品牌.html");	
-
-				pp() {
-					$(".nerong").load("zyw/品牌.html");
-				},
-				weixiu() {
-					$(".nerong").load("zyw/维修项目.html");
-
-				},
-				cheliang() {
-					$(".nerong").load("zyw/车型.html");
-				},
-				gonghuo() {
-					$(".nerong").load("zyw/供货单位.html");
-				},
 				handleOpen(key, keyPath) {
 					console.log(key, keyPath);
 				},
