@@ -8,10 +8,10 @@
 		<div id="appu">
 			<h1 style="background: silver;">外勤车辆</h1>
 			<el-row>
-				<el-button type="primary" @click="dialogVisiblea=true">添加外勤车辆</el-button>
+				<el-button type="primary" @click="dialogVisible=true">添加外勤车辆</el-button>
 			</el-row>
 			<el-table :data="pageInfo.list" style="width:100%" border>
-				<el-table-column prop="waiqinid" label="外勤车辆编号"></el-table-column>+ vb
+				<el-table-column prop="waiqinid" label="外勤车辆编号"></el-table-column>
 				<el-table-column prop="jiescph" label="车牌号"></el-table-column>
 				<el-table-column prop="waiqinpp" label="品牌"></el-table-column>
 				<el-table-column prop="waiqinlc" label="当前里程"></el-table-column>
@@ -28,12 +28,70 @@
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="[1, 2, 3 , 4, 5, 6, 10]" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.total">
 				</el-pagination>
 			</div>
+			
+			<!--描述：模态框--> 
+			<el-dialog title="添加外勤车辆" :visible.sync="dialogVisible" width="30%" >
+				<el-form  label-width="80px">
+					<el-form-item label="车牌号">
+						<el-input v-model="Waiqin.jiescph"></el-input>
+					</el-form-item>
+					<el-form-item label="品牌">
+						<el-input v-model="Waiqin.waiqinpp"></el-input>
+					</el-form-item>
+					<el-form-item label="当前里程">
+						<el-input v-model="Waiqin.waiqinlc"></el-input>
+					</el-form-item>
+					<el-form-item label="归属班组">
+						<template>
+							<el-select v-model="Waiqin.bzid" placeholder="请选择">
+								<el-option v-for="item in Banzu" :key="item.bzid" :label="item.bzname" :value="item.bzid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisible = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="onSubmit">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
+			
+			<el-dialog title="修改外勤车辆" :visible.sync="dialogVisibles" width="30%" >
+				<el-form  label-width="80px">
+					<el-form-item label="车牌号">
+						<el-input v-model="Waiqins.jiescph"></el-input>
+					</el-form-item>
+					<el-form-item label="品牌">
+						<el-input v-model="Waiqins.waiqinpp"></el-input>
+					</el-form-item>
+					<el-form-item label="当前里程">
+						<el-input v-model="Waiqins.waiqinlc"></el-input>
+					</el-form-item>
+					<el-form-item label="归属班组">
+						<template>
+							<el-select v-model="Waiqins.bzid" placeholder="请选择">
+								<el-option v-for="item in Banzu" :key="item.bzid" :label="item.bzname" :value="item.bzid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="dialogVisibles = false">取 消</el-button>
+    		  			<el-button type="primary"  @click="updateWaqin">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
 		</div>
 	</body>
 	<script>
 		new Vue({
 			data:{
-				pageInfo:{}
+				pageInfo:{},
+				dialogVisible:false,
+				Waiqin:{},
+				Banzu:{},
+				Waiqins:{},
+				dialogVisibles:false
 			},
 			methods:{
 				goToPage(p, s) {
@@ -51,15 +109,85 @@
 					this.goToPage(val, this.pageInfo.pageSize);
 				},
 				xiugai(waiqinid){
-					
+					let _this=this;
+					_this.dialogVisibles=true;
+					$.getJSON('http://127.0.0.1:9999/api/wlw/queryByWaqiqinid/' + waiqinid + '', function(data) {
+						_this.Waiqins = data;
+					});
 				},
 				deletel(waiqinid){
-					
+					let _this = this; //非常重要				
+					$.ajax('http://127.0.0.1:9999/api/wlw/deleteWaiqin/'+waiqinid+'', {
+						type: "get",
+						success(message) {
+							if(message.code == "200") {
+								_this.$message.error('删除成功');
+								_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					});
+				},
+				onSubmit(){
+					let _this = this; //非常重要
+					if(_this.Waiqin.jiescph == null){
+						_this.$message.error('车牌号不能为空');
+						return;
+					};
+					if(_this.Waiqin.waiqinpp == null){
+						_this.$message.error('品牌不能为空');
+						return;
+					};
+					if(_this.Waiqin.waiqinlc == null){
+						_this.$message.error('里程不能为空');
+						return;
+					};
+					if(_this.Waiqin.bzid == null){
+						_this.$message.error('班组不能为空');
+						return;
+					};
+					$.ajax('http://127.0.0.1:9999/api/wlw/addWaiqin', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.Waiqin),
+						dataType: "json",
+						success(message) {
+							if(message.code==200) {
+								_this.$message({
+         							message: '添加成功',
+         						 	type: 'success'
+        						});
+        						_this.dialogVisible=false;
+								_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					});
+				},
+				updateWaqin(){
+					let _this = this; //非常重要
+					$.ajax('http://127.0.0.1:9999/api/wlw/updateWaiqin', {
+						type: "post",
+						contentType: "application/json",
+						data: JSON.stringify(_this.Waiqins),
+						dataType: "json",
+						success(message) {
+							if(message.code==200) {
+								_this.$message({
+         							message: '修改成功',
+         						 	type: 'success'
+        						});
+        						_this.dialogVisibles=false;
+								_this.goToPage(_this.pageInfo.pageNum,_this.pageInfo.pageSize);
+							}
+						}
+					});
 				}
 			},
 			mounted(){
 				let _this=this;
 				_this.goToPage(1,3);
+				$.getJSON('http://127.0.0.1:9999/api/wlw/queryBanzu',function(data){
+					_this.Banzu=data;
+				})
 			}
 		}).$mount("#appu")
 	</script>
