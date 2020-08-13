@@ -26,7 +26,7 @@ var menuMapping = {
 	"yj0017": "zyw/维修项目.html",
 	"yj0018": "zyw/商品资料.html",
 	"yj0019": "zyw/供货单位.html",
-
+	
 //	"yj0020": "",
 //	"yj0021": "",
 //	"yj0022": "",

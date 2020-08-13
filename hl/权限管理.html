@@ -197,10 +197,9 @@
 				//修改权限
 				genxinquanxian() {
 					let _this = this; //非常重要
-
+					if(_this.attffId!=''){
 					_this.scCaiDan.arrc = _this.arrlist;
 					_this.scCaiDan.id = _this.attffId;
-					alert(JSON.stringify(_this.scCaiDan));
 					$.ajax('http://localhost:9999/api/show/updateByPrimaryKeySelective', {
 						type: 'Put',
 						data: JSON.stringify(_this.scCaiDan),
@@ -209,10 +208,16 @@
 						success(msg) {
 							if(msg.code == "200") {
 								_this.$alert("修改权限成功");
+							}else if(msg.code=="501"){
+								_this.$alert("权限不足");
 							}
 						}
 					});
+					}else{
+						_this.$alert("请选择用户");
+					}
 				},
+				
 			}
 		}).$mount("#qxgl");
 	</script>
