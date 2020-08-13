@@ -30,28 +30,31 @@
 								</el-form-item>
 							</el-form>
 								<el-dialog title="新增" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-								<el-form ref="form" :model="ghdw" label-width="100px">
-									<el-form-item label="供货商名称">
-										<el-input v-model="ghdw.ghdwName"></el-input>
+								<el-form ref="ghdw" :model="ghdw"  :rules="rules"	 label-width="100px">
+									<el-form-item label="供货商名称" prop="ghdwname">
+										<el-input v-model="ghdw.ghdwname"></el-input>
 									</el-form-item>
-									<el-form-item label="供货商地址">
+									<el-form-item label="供货商地址" prop="options">
 										<el-select v-model="ghdw.ghdwpawss" placeholder="请选择">
 											<el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
 											</el-option>
 										</el-select>
 									</el-form-item>
 
-									<el-form-item label="厂商编码">
+									<el-form-item label="厂商编码" prop="spxxcsbm">
 										<el-input v-model="ghdw.spxxcsbm"></el-input>
 									</el-form-item>
-									<el-form-item label="网址">
+									<el-form-item label="网址" prop="ghdwurl">
 										<el-input v-model="ghdw.ghdwurl"></el-input>
 									</el-form-item>
-									<el-form-item label="公司电话">
+									<el-form-item label="公司电话" prop="ghdwgsdh">
 										<el-input v-model="ghdw.ghdwgsdh"></el-input>
 									</el-form-item>
-									<el-form-item label="联系人">
+									<el-form-item label="联系人" prop="ghdwlxr">
 										<el-input v-model="ghdw.ghdwlxr"></el-input>
+									</el-form-item>
+									<el-form-item label="联系电话" prop="ghdwlxdh">
+										<el-input v-model="ghdw.ghdwlxdh"></el-input>
 									</el-form-item>
 									</el-form-item>
 									<el-form-item label="供货备注">
@@ -59,14 +62,14 @@
 									</el-form-item>
 								</el-form>
 								<span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary"  @click="que">确 定</el-button>
+    <el-button @click="insquxiao">取 消</el-button>
+    <el-button type="primary"  @click="que('ghdw')">确 定</el-button>
   </span>
 							</el-dialog>
 									<el-dialog title="修改" :visible.sync="dialogVisible1" width="30%" :before-close="handleClose">
 								<el-form ref="form" :model="ghdw" label-width="100px">
 									<el-form-item label="供货商名称">
-										<el-input v-model="ghdw.ghdwName"></el-input>
+										<el-input v-model="ghdw.ghdwname"></el-input>
 									</el-form-item>
 									<el-form-item label="供货商地址">
 										<el-select v-model="ghdw.ghdwpawss" placeholder="请选择">
@@ -115,7 +118,7 @@
 						<el-table-column label="操作" width="120">
 							<template slot-scope="temp">
 								<el-button type="primary" icon="el-icon-edit" circle @click="xg(temp.row)"></el-button>
-								<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.wxxmid)"></el-button>
+								<el-button type="danger" icon="el-icon-delete" circle @click="sc(temp.row.ghdwbh)"></el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -146,12 +149,88 @@
 					tableData: [],
 					pages: 1,
 					dialogVisible:false,
-					dialogVisible1:false
+					dialogVisible1:false,
+					rules:{
+							options:[
+						  { required: true, message: '请选择供应商地址', trigger: 'change' }
+						],
+							ghdwname: [{
+								required: true,
+								message: '请输入供应商名称',
+								trigger: 'blur'
+							},
+							{
+								min: 1,
+								max: 15,
+								message: '长度在 1 到1 5 个字符',
+								trigger: 'blur'
+							}
+						],spxxcsbm: [{
+								required: true,
+								message: '请输入产商编码',
+								trigger: 'blur'
+							},
+							{
+								min: 1,
+								max: 10,
+								message: '长度在 1到10 个字符',
+								trigger: 'blur'
+							}
+						],ghdwurl: [{
+								required: true,
+								message: '请输入网址',
+								trigger: 'blur'
+							},
+							{
+								min: 1,
+								max: 10,
+								message: '长度在 1到10 个字符',
+								trigger: 'blur'
+							}
+						],ghdwgsdh: [{
+								required: true,
+								message: '请输入公司电话',
+								trigger: 'blur'
+							},
+							{
+								min: 11,
+								max: 11,
+								message: '长度在 11个字符',
+								trigger: 'blur'
+							}
+						],ghdwlxr: [{
+								required: true,
+								message: '请输入联系人',
+								trigger: 'blur'
+							},
+							{
+								min: 1,
+								max: 10,
+								message: '长度在 1到10 个字符',
+								trigger: 'blur'
+							}
+						],ghdwlxdh: [{
+								required: true,
+								message: '请输入联系人电话',
+								trigger: 'blur'
+							},
+							{
+								min: 11,
+								max: 11,
+								message: '长度在 11个字符',
+								trigger: 'blur'
+							}
+						]
+					}
 				},
 				methods: {
+					insquxiao(){
+						this.ghdw={};
+						this.dialogVisible = false;
+					},
 					diz() {
 						let _this = this;
-						$.getJSON("http://127.0.0.1:9999/api/zyw/ghdwquery?pageNum=" + _this.pages + "&wxdz=" + _this.dizhi, function(it) {
+						$.getJSON("http://127.0.0.1:9999/api/zyw/ghdwquery?pageNum=" + _this.pages + "&wxdz=" + _this.dizhi+"&gwdwname="+_this.gh.name, function(it) {
 							_this.tableData = it
 						})
 					},xg(i){
@@ -192,7 +271,9 @@ this.ghdw={};
 							}
 						}
 					});
-					},que(){
+					},que(ghdw){
+						this.$refs[ghdw].validate((valid) => {
+						if(valid) {
 							let _this = this;
 					$.ajax('http://127.0.0.1:9999/api/zyw/insghdw', {
 						type: "post",
@@ -207,6 +288,11 @@ this.ghdw={};
 								_this.ghdw = {};
 								_this.diz();
 							}
+						}
+					});
+							} else {
+							console.log('error submit!!');
+							return false;
 						}
 					});
 					},

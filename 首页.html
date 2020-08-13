@@ -32,6 +32,8 @@
 						<el-menu-item v-for="(item,i) in caiDanList" v-if="item.caidanidfu==0" class="xuanze" index="i+1" @click="yjAlod(item.controlleraction,item.caidanid)">{{item.menuname}}</el-menu-item>
 
 						<el-menu-item index="7" @click="zti" class="xuanze"><span class="el-icon-s-grid"></span>{{zhuti}}</el-menu-item>
+
+						<el-menu-item index="8" class="xuanze"><span class="el-icon-s-tools"></span>操作</el-menu-item>
 						<el-dropdown style="float: right; margin-right: 100px;">
 							<span class="el-dropdown-link">
 								<span class="el-icon-s-custom"></span> {{staff.staffname}} {{staff.staffid}} {{staff.jiaose.jiaosename}}
@@ -114,7 +116,6 @@
 			methods: {
 				yjAlod(code, caidanid){
 					this.caidanid = caidanid;
-					
 					$(".elaside").load(menuMapping[code]); //ajax加载页面
 
 				},
