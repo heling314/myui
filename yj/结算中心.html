@@ -4,6 +4,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style>
+			.yjcs2 {
+				margin-bottom: 5px;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -22,16 +27,19 @@
 			</el-row>
 			<el-row>
 				<el-col :span="24">
-					<el-table :data="this.JieSuanPage.list" style="width: 100%">
+					<el-table :data="this.JieSuanPage.list" style="width: 100%" @expand-change="expandChange">
 						<el-table-column type="expand">
-								<el-form label-position="left" inline class="demo-table-expand">
-									<el-form-item label="项目名称">
-										<span></span>
-									</el-form-item>
-									<el-form-item label="金额">
-										<span></span>
-									</el-form-item>
-								</el-form>
+							<el-row>
+								<el-col :span="11" push="6">
+									<el-table :data="this.Jsxm" border style="width: 100%">
+										<el-table-column prop="jsxmname" label="项目名称" width="250">
+										</el-table-column>
+										<el-table-column prop="jsxmpice" label="金额" width="250">
+										</el-table-column>
+									</el-table>
+								</el-col>
+
+							</el-row>
 						</el-table-column>
 						<el-table-column label="车牌号" prop="jiescph">
 						</el-table-column>
@@ -44,8 +52,9 @@
 						<el-table-column label="操作">
 							<template slot-scope="scope">
 								<el-button v-show="status2" @click="" type="primary" size="mini">回复结算</el-button>
-								<el-button v-show="status" @click="shouYing(scope.row.jiesid)" type="primary" size="mini">收银</el-button>
-								<el-button type="primary" @click="open(scope.row.jiesid)" size="mini">获取数据</el-button>
+
+								<el-button v-show="status" @click="shouYing(scope.row)" type="primary" size="mini">收银</el-button>
+								<el-button @click="open(scope.row.jiesid)" type="primary" size="mini">获取数据</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -57,42 +66,136 @@
 					</el-pagination>
 				</el-col>
 			</el-row>
-			<!--新增车俩模态框-->
-			<!--<el-dialog title="录入会员信息" :visible.sync="dialogFormVisibleyj" width="500px" style="">
-				<el-form :inline="true" :model="huiYuang" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;" width="200">
-					<h4>录入会员</h4>
-					<el-form-item label="会员名" class="yjcs2">
-						<el-input v-model="huiYuang.huiyuanname" size="mini" placeholder="会员名" class="yjcs1"></el-input>
-					</el-form-item>
-					<el-form-item label="电话" class="yjcs2">
-						<el-input v-model="huiYuang.phone" size="mini" placeholder="电话" class="yjcs1"></el-input>
-					</el-form-item>
-					<el-form-item label="密码" class="yjcs2">
-						<el-input v-model="huiYuang.huiyuanpwd" size="mini" placeholder="密码 " class="yjcs1"></el-input>
-					</el-form-item>
-					<el-form-item label="充值金额" class="yjcs2">
-						<el-input v-model="huiYuang.jifen" size="mini" placeholder="充值金额" class="yjcs1"></el-input>
-					</el-form-item>
-					<div style="color: red;margin-bottom: 20px;margin-left: 40px;"><span>充值大于500送100</span><span>,充值大于1000送300</span></div>
-				</el-form>
-				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
-					<el-button type="primary" @click="insertCl">确 定</el-button>
+			<!--会员输入-->
+			<el-dialog title="会员" :visible.sync="dialogFormVisibleyj" width="400px">
+				<div v-show="yjJie">
+					<el-form :inline="true" class="demo-form-inline" style="border:1px #CCCCCC solid;padding-left: 10px;" width="200">
+						<h4>会员验证</h4>
+						<el-form-item label="会员名" class="yjcs2">
+							<el-input v-model="huiyuanname" size="mini" placeholder="会员名" class="yjcs1"></el-input>
+						</el-form-item>
+						<el-form-item label="会员密码" class="yjcs2">
+							<el-input v-model="huiyuanpwd" size="mini" placeholder="密码" class="yjcs1"></el-input>
+						</el-form-item>
+					</el-form>
+					<div slot="footer" class="dialog-footer" style="margin-top: 20px;" align="right">
+						<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
+						<el-button type="primary" @click="yjSelectHuiYuang">确 定</el-button>
+					</div>
 				</div>
-			</el-dialog>-->
+				<div v-show="yjJie2">
+					<div>
+						<p>会员名称:<span style="margin-right: 40px;color: red;margin-left: 20px;">{{HuiYuang.huiyuanname}}</span>余额:<span style="color: red;margin-left: 20px;">{{HuiYuang.jifen}}</span></p>
+						<p>应收金额:<span style="margin-right: 40px;color: red;margin-left: 20px;">{{yingshou}}</span>折扣:<span style="color: red;margin-left: 20px;">0.98折</span></p>
+						<p>折后价格:<span style="margin-right: 40px;color: red;margin-left: 20px;">{{zhekoujia}}</span></p>
+						<p>结算方式:
+							<input style="margin-left: 40px;" type="radio" name="1" value="1" v-model="zhiFu" checked="checked" />会员卡余额支付
+							<input type="radio" name="1" value="2" v-model="zhiFu">现金支付</p>
+					</div>
+
+					<div slot="footer" class="dialog-footer" style="margin-top: 20px;" align="right">
+						<el-button @click="dialogFormVisibleyj = false">取 消</el-button>
+						<el-button type="primary" @click="jieSuang">确 定</el-button>
+					</div>
+				</div>
+			</el-dialog>
+			<!--会员输入-->
+			<el-dialog title="结算" :visible.sync="dialogFormVisibleyj2" width="300px">
+				<div>
+					<p>应收金额:<span style="margin-right: 40px;color: red;margin-left: 20px;">{{yingshou}}</span></p>
+					<p>结算方式:<input type="radio" name="1" value="1" v-model="zhiFu" checked>现金支付
+						<input type="radio" name="1" value="2" v-model="zhiFu" checked>支付宝</p>
+				</div>
+
+				<div slot="footer" class="dialog-footer" style="margin-top: 20px;" align="right">
+					<el-button @click="dialogFormVisibleyj2 = false">取 消</el-button>
+					<el-button type="primary" @click="jieSuang2">确 定</el-button>
+				</div>
+
+			</el-dialog>
 		</div>
 	</body>
 	<script>
 		var vmJieSuan = new Vue({
 			data: {
+				zhiFu: "1", //支付反式
+				yjJie: true,
+				yjJie2: false,
 				input2: "",
-				JieSuanPage: [],
+				JieSuanPage: [], //所有结算
 				dialogFormVisibleyj: false,
+				dialogFormVisibleyj2: false,
 				status: true,
 				status2: false,
+				Jsxm: [], //结算显目
+				huiyuanname: "",
+				huiyuanpwd: "",
+				HuiYuang: {}, //会员对象
+				yingshou: "",
+				zhekoujia: "",
+				jieSuangid: "" //结算id
 			},
 			methods: {
-				//分页查询会员
+				//不是会员结算
+				jieSuang2() {
+					//非会员支付
+					let _this = this;
+					$.getJSON(`http://localhost:9999/api/yj/updateFeiHuiYuang/${_this.jieSuangid}/${_this.yingshou}`,
+						function(yjData) {
+							if(yjData.code == 200) {
+								_this.$alert("支付成功...");
+								_this.dialogFormVisibleyj2 = false;
+								_this.pagekehu(1, 4, _this.input2);
+							}
+						});
+				},
+				//点击结算
+				jieSuang() {
+					let _this = this;
+					if(_this.HuiYuang.jifen > _this.zhekoujia) {
+						var jieSuanHouManey = _this.HuiYuang.jifen - _this.zhekoujia;
+						if(_this.zhiFu == 1) {
+							//会员卡支付
+							$.getJSON(`http://localhost:9999/api/yj/updateHuiYuang/${_this.HuiYuang.huiyuanid}/${jieSuanHouManey}/${_this.jieSuangid}/${_this.zhekoujia}`,
+								function(yjData) {
+									if(yjData.code == 200) {
+										_this.$alert("支付成功...");
+										_this.dialogFormVisibleyj2 = false;
+										_this.pagekehu(1, 4, _this.input2);
+									}
+								});
+						} else if(_this.zhiFu == 2) {
+							alert("不支持现金支付");
+							//会员现金支付
+							//						$.getJSON(`http://localhost:9999/api/yj/yjSeleteHuiYuang/${_this.huiyuanname}`,
+							//							function(yjData) {
+							//
+							//							});
+						}
+					} else {
+						_this.$alert("余额不足,请充值");
+					}
+				},
+				//查询会员信息
+				yjSelectHuiYuang() {
+					let _this = this;
+					$.ajax(`http://localhost:9999/api/yj/yjSeleteHuiYuang/${_this.huiyuanname}/${_this.huiyuanpwd}`, {
+						type: "post",
+						dataType: "json",
+						success(yjData) {
+							if(yjData.code == 200) {
+								_this.HuiYuang = yjData.data;
+								_this.yjJie = false;
+								_this.yjJie2 = true;
+								_this.zhekoujia = _this.yingshou * 0.98;
+							} else if(yjData.code == 202) {
+								_this.open4("会员账号或密码错误");
+							}
+						}
+
+					});
+				},
+				//分页查询项目
 				pagekehu(pageNum, pageSize, input2) {
 					let _this = this;
 					$.ajax("http://localhost:9999/api/yj/selectJiesWeiPage", {
@@ -112,26 +215,45 @@
 						}
 					})
 				},
+				expandChange(row, rowList) {
+
+				},
 				handleCurrentChange(val) {
 					this.pagekehu(val, this.JieSuanPage.pageSize, this.input2);
 				},
 				handleSizeChange(val) {
 					this.pagekehu(this.JieSuanPage.pageNum, val, this.input2);
 				},
+				//收银
 				shouYing(id) {
-
+					this.$confirm('是否会员').then(() => {
+						this.dialogFormVisibleyj = true;
+						this.yjJie = true;
+						this.yjJie2 = false;
+						this.yingshou = id.jieswxje;
+						this.jieSuangid = id.jiesid;
+					}).catch(() => {
+						//不是会员结算
+						this.dialogFormVisibleyj2 = true;
+						this.yingshou = id.jieswxje;
+						this.jieSuangid = id.jiesid;
+					})
+				},
+				open4(me) {
+					this.$message.error(me);
 				},
 				//打开子数据
 				open(id) {
-					$.getJSON(`http://localhost:9999/api/yj/selectJiesJiePage/${id}`,
-					function(yjDate){
-						
-					})
+					let _this = this;
+					$.getJSON(`http://localhost:9999/api/yj/yjSelectJsxm/${id}`,
+						function(yjData) {
+							_this.Jsxm = yjData.data;
+						});
 				},
+
 				chaXun() {
 
-				},
-				//查询未结算
+				}, //查询未结算
 				weiJieSuan() {
 					this.pagekehu(1, 4, this.input2);
 				},
