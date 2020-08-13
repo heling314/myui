@@ -17,14 +17,12 @@
 							<i class="el-icon-platform-eleme"></i>
 							<span slot="title">首页</span>
 						</el-menu-item>
-						<el-submenu :index="i+1" v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
-							<template slot="title">
+						<el-submenu :index="i+1"   v-for="(item,i) in caiDanList2" v-if="item.dengji==2&&item.fuCaiDan.caidanid==caidanid">
+							<template slot="title" >
 								<i class="el-icon-location"></i>
 								<span slot="title">{{item.menuname}}</span>
 							</template>
-							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid" index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="shuju(item2.controlleraction)">
-								{{item2.menuname}}
-							</el-menu-item>
+							<el-menu-item v-for="(item2,i) in caiDanList2" v-if="item2.dengji==3&&item2.fuCaiDan.caidanid==item.caidanid"  index="2-1" :disabled="qxkz.wxjc == 0 ? true : false" @click="keFu(item2.controlleraction)">{{item2.menuname}}</el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</el-col>
@@ -67,7 +65,8 @@
 					_this.backgroundcolor = '';
 					_this.textcolor = '';
 					_this.activetextcolor = '';
-				},shuju(code){
+				}
+				,keFu(code){
 					$(".nerong").load(menuMapping[code]); //ajax加载页面信息
 				}
 			}
