@@ -15,10 +15,7 @@
 		<div id="appe">
 			<h1 style="background: silver;">组织机构</h1>
 			<el-container>
-				<el-aside width="200px">
-					<el-tree :data="data" accordion @node-click="handleNodeClick">
-					</el-tree>
-				</el-aside>
+			
 				<el-main>
 					<el-row>
 						<el-button type="primary" disabled >员工姓名：</el-button>
@@ -33,7 +30,7 @@
             	描述：//:data="pageInfo.list"
             -->
 					<el-table :data="pageInfo.list" style="width:100%;margin-top: 50px;" border fixed>
-						<el-table-column width="120px" prop="tstore" label="机构"></el-table-column>
+						<el-table-column width="120px" prop="tstore" label="机构" fixed="left"></el-table-column>
 						<el-table-column prop="sectionbh" label="部门编号"></el-table-column>
 						<el-table-column prop="sectionname" label="部门名称"></el-table-column>
 						<el-table-column prop="staffid" label="员工编号"></el-table-column>
@@ -52,7 +49,7 @@
 						<el-table-column prop="xjdz" label="现住地址"></el-table-column>
 						<el-table-column width="120px" prop="staff" label="联系电话"></el-table-column>
 						<el-table-column width="170px" prop="entrytime" label="入职日期"></el-table-column>
-						<el-table-column width="120px" label="操作">
+						<el-table-column width="120px" label="操作"  fixed="right">
 							<!--作用域插槽-->
 							<template slot-scope="temp">
 								<el-button circle icon="el-icon-search" @click="xiugai(temp.row.staffid)"></el-button>
@@ -111,6 +108,14 @@
 						<template>
 							<el-select v-model="staff.postid" placeholder="请选择">
 								<el-option v-for="item in Post" :key="item.postid" :label="item.postname" :value="item.postid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+					<el-form-item label="班组">
+						<template>
+							<el-select v-model="staff.bzid" placeholder="请选择">
+								<el-option v-for="item in Banzu" :key="item.bzid" :label="item.bzname" :value="item.bzid">
 								</el-option>
 							</el-select>
 						</template>
@@ -226,22 +231,6 @@
 	<script>
 		new Vue({
 			data: {
-				data: [{
-					label: '株洲酒廊山汽修',
-					children: [{
-							label: '人事部',
-						},
-						{
-							label: '财务部',
-						},
-						{
-							label: '销售部',
-						},
-						{
-							label: '总经办',
-						}
-					]
-				}],
 				defaultProps: {
 					children: 'children',
 					label: 'label'
@@ -256,7 +245,8 @@
 				staffname: "",
 				Post: {},
 				staff: {},
-				Staffs:{}
+				Staffs:{},
+				Banzu:{}
 			},
 			methods: {
 				handleNodeClick(data) {
@@ -411,6 +401,10 @@
 				$.getJSON('http://127.0.0.1:9999/api/wlw/queryPosts', function(data) {
 					_this.Post = data;
 				});
+				
+				$.getJSON('http://127.0.0.1:9999/api/wlw/queryBanzu',function(data){
+					_this.Banzu=data;
+				})
 			},
 			filters: {
 				chesex(val) {

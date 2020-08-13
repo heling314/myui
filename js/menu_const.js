@@ -13,7 +13,14 @@ var menuMapping = {
 	"yj0011": "客服.html",
 	"yj0012": "",//客户档案
 	"yj0013": "yj/客户资料与车辆信息.html",/*会员管理*/
-
+	"yj0020": "人事.html",
+	"yj0022": "wlw/组织机构.html",
+	"yj0023": "wlw/岗位定义.html",
+	"yj0024": "wlw/离职登记.html",
+	"yj0025": "wlw/通讯名录.html",
+	"yj0028": "wlw/班组技工.html",
+	"yj0027": "wlw/技工星级.html",
+	"yj0029": "wlw/外勤车辆.html",
 	"yj0030": "操作.html",//操作
 	"yj0031": "",//员工权限控制
 	"yj0032": "hl/权限管理.html",//权限设置
